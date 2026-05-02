@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -41,11 +41,15 @@
     .challenge-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .spice-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(255,255,255,0.08); }
     .total-pts-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(255,209,102,0.15); color: var(--yellow); }
-    .validate-row { display: flex; align-items: center; justify-content: space-between; }
+    .rerolled-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(138,43,226,0.2); color: #c084fc; border: 1px solid rgba(138,43,226,0.3); }
+    .card-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .validate-label { font-size: 14px; color: var(--muted); font-weight: 600; }
     .checkbox-wrap input[type="checkbox"] { display: none; }
     .checkbox-custom { width: 32px; height: 32px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 16px; }
     .checkbox-wrap input:checked + .checkbox-custom { background: var(--green); border-color: var(--green); box-shadow: 0 0 16px rgba(45,198,83,0.4); }
+    .btn-reroll { display: flex; align-items: center; gap: 6px; background: rgba(138,43,226,0.2); border: 1px solid rgba(138,43,226,0.4); border-radius: 10px; padding: 8px 14px; font-size: 13px; font-weight: 700; color: #c084fc; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-reroll:hover { background: rgba(138,43,226,0.35); }
+    .btn-reroll:disabled { opacity: 0.4; cursor: not-allowed; }
     .card.validated { border-color: rgba(45,198,83,0.3); }
     .card.validated::after { content: ''; position: absolute; inset: 0; background: rgba(45,198,83,0.04); pointer-events: none; }
     .leaderboard { padding: 0 20px; }
@@ -63,14 +67,38 @@
     .lb-stat { text-align: center; }
     .lb-stat-val { font-weight: 900; font-size: 16px; }
     .lb-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .rules { padding: 0 20px; margin-top: 8px; }
+
+    /* SUGGEST */
+    .suggest { padding: 0 20px; }
+    .suggest-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+    .suggest-header { padding: 16px 20px; background: rgba(45,198,83,0.08); border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+    .suggest-header h3 { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: var(--green); }
+    .suggest-toggle { font-size: 18px; transition: transform 0.3s; }
+    .suggest-toggle.open { transform: rotate(180deg); }
+    .suggest-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+    .suggest-body.open { max-height: 600px; padding: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+    .form-input { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 16px; color: var(--text); font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600; outline: none; transition: border-color 0.2s; }
+    .form-input:focus { border-color: var(--green); }
+    .spice-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .spice-option { display: none; }
+    .spice-option + label { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; background: rgba(255,255,255,0.04); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 700; text-align: center; transition: all 0.2s; }
+    .spice-option:checked + label { border-color: var(--green); background: rgba(45,198,83,0.1); }
+    .spice-emoji { font-size: 22px; }
+    .btn-suggest { width: 100%; background: linear-gradient(135deg, var(--green), #1db954); border: none; border-radius: 12px; padding: 14px; font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: white; cursor: pointer; transition: transform 0.15s; }
+    .btn-suggest:active { transform: scale(0.97); }
+    .btn-suggest:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* RULES */
+    .rules { padding: 0 20px; margin-top: 0; }
     .rules-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
     .rules-header { padding: 16px 20px; background: rgba(230,57,70,0.1); border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
     .rules-header h3 { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: var(--red); }
     .rules-toggle { font-size: 18px; transition: transform 0.3s; }
     .rules-toggle.open { transform: rotate(180deg); }
     .rules-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
-    .rules-body.open { max-height: 1200px; padding: 20px; }
+    .rules-body.open { max-height: 1400px; padding: 20px; }
     .rule-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .rule-item:last-child { border-bottom: none; }
     .rule-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
@@ -81,6 +109,7 @@
     .streak-row:last-child { border-bottom: none; }
     .streak-row span:first-child { color: var(--orange); font-weight: 700; }
     .streak-row span:last-child { color: var(--yellow); font-weight: 900; }
+
     .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; }
     .spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -92,7 +121,7 @@
   </style>
 </head>
 <body>
-<div class="app"><div id="root"><div class="loading"><div class="spinner"></div><p>Chargement des défis...</p></div></div></div>
+<div class="app"><div id="root"><div class="loading"><div class="spinner"></div><p>Loading challenges...</p></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
   const CONFIG = {
@@ -106,17 +135,26 @@
     { name: 'Y',                    emoji: '⚡', color: '#FFD166' },
     { name: 'Nico multimilionario', emoji: '💰', color: '#F4A261' },
   ];
+  const SPICE_POINTS = { '🌱 Mild': 1, '🌶️ Spicy': 2, '🔥 Hot': 3, '⚡ Atomic': 5 };
   function streakBonus(s) { return s >= 10 ? 3 : s >= 5 ? 2 : s >= 3 ? 1 : 0; }
+  function spiceColor(pts) { return pts >= 5 ? '#E63946' : pts >= 3 ? '#F4A261' : pts >= 2 ? '#FFD166' : '#2DC653'; }
+
   async function notionQuery(dbId, body = {}) {
     const res = await fetch('/api/notion?endpoint=databases/' + dbId + '/query', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Erreur Notion');
+    if (!res.ok) throw new Error(data.message || 'Notion error');
     return data.results;
   }
   async function notionPatch(pageId, properties) {
     const res = await fetch('/api/notion?endpoint=pages/' + pageId, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ properties }) });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Erreur mise à jour');
+    if (!res.ok) throw new Error(data.message || 'Update error');
+    return data;
+  }
+  async function notionCreate(dbId, properties) {
+    const res = await fetch('/api/notion?endpoint=pages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ parent: { database_id: dbId }, properties }) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Create error');
     return data;
   }
   function getProp(page, name, type) {
@@ -130,85 +168,167 @@
     if (type === 'select') return p.select?.name ?? '';
     return null;
   }
-  function showToast(msg) {
+  function showToast(msg, color) {
     const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
+    t.textContent = msg;
+    t.style.background = color || 'var(--green)';
+    t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
-  function spiceColor(pts) { return pts >= 5 ? '#E63946' : pts >= 3 ? '#F4A261' : pts >= 2 ? '#FFD166' : '#2DC653'; }
-  let STATE = { dayCounter: 1, systemPageId: null, challenges: {}, assignments: [] };
+
+  let STATE = { dayCounter: 1, systemPageId: null, challenges: {}, assignments: [], allChallengeIds: [] };
+
   async function loadData() {
     const sysPages = await notionQuery(CONFIG.db_system);
     const sys = sysPages[0];
     STATE.systemPageId = sys.id;
     STATE.dayCounter = getProp(sys, 'Day_Counter', 'number');
+
     const chPages = await notionQuery(CONFIG.db_challenges);
     STATE.challenges = {};
+    STATE.allChallengeIds = [];
     for (const p of chPages) {
       const id = getProp(p, 'ID_Global', 'number');
-      STATE.challenges[id] = { id, name: getProp(p, 'Name', 'title'), points: getProp(p, 'Points', 'number'), spice: getProp(p, 'Spice_Level', 'formula_string') || getProp(p, 'Spice_Level', 'select') };
+      const status = getProp(p, 'Status', 'select');
+      if (status === '✅ Active' || !status) {
+        STATE.challenges[id] = { id, name: getProp(p, 'Name', 'title'), points: getProp(p, 'Points', 'number'), spice: getProp(p, 'Spice_Level', 'formula_string') || getProp(p, 'Spice_Level', 'select') };
+        STATE.allChallengeIds.push(id);
+      }
     }
+
     const asgPages = await notionQuery(CONFIG.db_assignments);
     STATE.assignments = asgPages.map(p => ({
-      pageId: p.id, name: getProp(p, 'Name', 'title'), playerIndex: getProp(p, 'Player_Index', 'number'),
-      winStreak: getProp(p, 'Win_Streak', 'number'), totalScore: getProp(p, 'Total_Score', 'number'),
-      defisReussis: getProp(p, 'Defis_Reussis', 'number'), isValidated: getProp(p, 'Is_Validated', 'checkbox'),
+      pageId: p.id,
+      name: getProp(p, 'Name', 'title'),
+      playerIndex: getProp(p, 'Player_Index', 'number'),
+      winStreak: getProp(p, 'Win_Streak', 'number'),
+      totalScore: getProp(p, 'Total_Score', 'number'),
+      defisReussis: getProp(p, 'Defis_Reussis', 'number'),
+      isValidated: getProp(p, 'Is_Validated', 'checkbox'),
       challengeId: getProp(p, 'Challenge_ID_Today', 'formula_number'),
+      hasRerolled: getProp(p, 'Has_Rerolled', 'checkbox'),
+      rerollChallengeId: getProp(p, 'Reroll_Challenge_ID', 'number'),
     })).sort((a, b) => a.playerIndex - b.playerIndex);
   }
+
+  function getEffectiveChallengeId(asg) {
+    return (asg.rerollChallengeId && asg.rerollChallengeId > 0) ? asg.rerollChallengeId : asg.challengeId;
+  }
+
   async function toggleValidation(pageId, current) {
     const newVal = !current;
     await notionPatch(pageId, { Is_Validated: { checkbox: newVal } });
     const asg = STATE.assignments.find(a => a.pageId === pageId);
     if (asg) asg.isValidated = newVal;
     render();
-    showToast(newVal ? '✅ Défi validé !' : '❌ Validation retirée');
+    showToast(newVal ? '✅ Challenge validated!' : '❌ Validation removed');
   }
+
+  async function reroll(pageId) {
+    const asg = STATE.assignments.find(a => a.pageId === pageId);
+    if (!asg || asg.hasRerolled) return;
+
+    // Pick a random challenge different from current
+    const current = getEffectiveChallengeId(asg);
+    const available = STATE.allChallengeIds.filter(id => id !== current);
+    if (available.length === 0) { showToast('No other challenges available!', 'var(--orange)'); return; }
+    const newId = available[Math.floor(Math.random() * available.length)];
+
+    await notionPatch(pageId, {
+      Has_Rerolled: { checkbox: true },
+      Reroll_Challenge_ID: { number: newId },
+      Win_Streak: { number: 0 }, // streak penalty
+    });
+
+    asg.hasRerolled = true;
+    asg.rerollChallengeId = newId;
+    asg.winStreak = 0;
+    render();
+    showToast('🎲 Rerolled! Streak reset to 0.', '#c084fc');
+  }
+
   async function nextDay() {
     const btn = document.getElementById('btn-next');
-    btn.disabled = true; btn.textContent = '⏳ Mise à jour...';
+    btn.disabled = true; btn.textContent = '⏳ Updating...';
     try {
       for (const asg of STATE.assignments) {
-        const challenge = STATE.challenges[asg.challengeId];
+        const effectiveId = getEffectiveChallengeId(asg);
+        const challenge = STATE.challenges[effectiveId];
         const pts = challenge?.points ?? 0;
         const bonus = asg.isValidated ? streakBonus(asg.winStreak) : 0;
         await notionPatch(asg.pageId, {
-          Total_Score:   { number: asg.isValidated ? asg.totalScore + pts + bonus : asg.totalScore },
-          Win_Streak:    { number: asg.isValidated ? asg.winStreak + 1 : 0 },
-          Defis_Reussis: { number: asg.isValidated ? asg.defisReussis + 1 : asg.defisReussis },
-          Is_Validated:  { checkbox: false },
+          Total_Score:        { number: asg.isValidated ? asg.totalScore + pts + bonus : asg.totalScore },
+          Win_Streak:         { number: asg.isValidated ? asg.winStreak + 1 : 0 },
+          Defis_Reussis:      { number: asg.isValidated ? asg.defisReussis + 1 : asg.defisReussis },
+          Is_Validated:       { checkbox: false },
+          Has_Rerolled:       { checkbox: false },
+          Reroll_Challenge_ID:{ number: 0 },
         });
       }
       await notionPatch(STATE.systemPageId, { Day_Counter: { number: STATE.dayCounter + 1 } });
-      showToast('🌶️ Nouveau jour ! Nouveaux défis !');
+      showToast('🌶️ New day! New challenges!');
       await loadData(); render();
-    } catch(e) { showToast('❌ Erreur : ' + e.message); btn.disabled = false; }
+    } catch(e) { showToast('❌ Error: ' + e.message, 'var(--red)'); btn.disabled = false; }
   }
-  function toggleRules() {
-    document.getElementById('rules-body').classList.toggle('open');
-    document.getElementById('rules-toggle').classList.toggle('open');
+
+  async function suggestChallenge() {
+    const nameEl = document.getElementById('suggest-name');
+    const spiceEl = document.querySelector('input[name="spice"]:checked');
+    if (!nameEl.value.trim()) { showToast('⚠️ Enter a challenge name!', 'var(--orange)'); return; }
+    if (!spiceEl) { showToast('⚠️ Pick a spice level!', 'var(--orange)'); return; }
+
+    const btn = document.getElementById('btn-suggest');
+    btn.disabled = true; btn.textContent = 'Sending...';
+
+    const spiceLabel = spiceEl.value;
+    const pts = SPICE_POINTS[spiceLabel] || 1;
+
+    try {
+      await notionCreate(CONFIG.db_challenges, {
+        Name:        { title: [{ text: { content: nameEl.value.trim() } }] },
+        Points:      { number: pts },
+        Status:      { select: { name: '⏳ Pending' } },
+      });
+      showToast('💡 Challenge suggested! Awaiting approval.');
+      nameEl.value = '';
+      if (spiceEl) spiceEl.checked = false;
+    } catch(e) {
+      showToast('❌ Error: ' + e.message, 'var(--red)');
+    }
+    btn.disabled = false; btn.textContent = '💡 SUGGEST CHALLENGE';
   }
+
+  function toggleSection(bodyId, toggleId) {
+    document.getElementById(bodyId).classList.toggle('open');
+    document.getElementById(toggleId).classList.toggle('open');
+  }
+
   function render() {
     const root = document.getElementById('root');
     const lb = [...STATE.assignments].sort((a, b) => b.totalScore - a.totalScore);
     const rankEmoji = ['🥇','🥈','🥉','4️⃣'];
+
     root.innerHTML = `
       <div class="header">
         <span class="header-mascot">🌶️</span>
         <h1>ZEST YOUR DAY</h1>
         <div class="header-sub">Mexico Edition</div>
-        <div class="day-badge">📅 Jour ${STATE.dayCounter}</div>
+        <div class="day-badge">📅 Day ${STATE.dayCounter}</div>
       </div>
+
       <div class="next-day-wrap">
         <button class="btn-next" id="btn-next" onclick="nextDay()">⏭️ NEXT DAY</button>
       </div>
-      <div class="section-title">🎯 Défis du jour</div>
+
+      <div class="section-title">🎯 Today's Challenges</div>
       <div class="cards">
         ${STATE.assignments.map(asg => {
           const player = PLAYERS[asg.playerIndex] || { name: asg.name, emoji: '🎮', color: '#8892A4' };
-          const challenge = STATE.challenges[asg.challengeId];
+          const effectiveId = getEffectiveChallengeId(asg);
+          const challenge = STATE.challenges[effectiveId];
           const pts = challenge?.points ?? 0;
           const bonus = streakBonus(asg.winStreak);
+          const isRerolled = asg.rerollChallengeId > 0;
           return `
           <div class="card ${asg.isValidated ? 'validated' : ''}" style="--player-color: ${player.color}">
             <div class="card-header">
@@ -216,34 +336,40 @@
                 <span class="player-emoji">${player.emoji}</span>
                 <span class="player-name">${player.name}</span>
               </div>
-              <div style="display:flex;align-items:center">
+              <div style="display:flex;align-items:center;gap:4px">
                 <div class="player-streak">🔥 ${asg.winStreak}</div>
-                ${bonus > 0 ? `<span class="streak-bonus">⚡ +${bonus} bonus</span>` : ''}
+                ${bonus > 0 ? `<span class="streak-bonus">⚡ +${bonus}</span>` : ''}
               </div>
             </div>
             <div class="challenge-box">
-              <div class="challenge-id">Défi #${asg.challengeId}</div>
-              <div class="challenge-name">${challenge?.name ?? '⏳ Chargement...'}</div>
+              <div class="challenge-id">Challenge #${effectiveId} ${isRerolled ? '<span class="rerolled-badge">🎲 Rerolled</span>' : ''}</div>
+              <div class="challenge-name">${challenge?.name ?? '⏳ Loading...'}</div>
               <div class="challenge-meta">
                 <span class="spice-badge" style="color:${spiceColor(pts)}">${challenge?.spice ?? ''} · ${pts} pt${pts > 1 ? 's' : ''}</span>
-                ${bonus > 0 ? `<span class="total-pts-badge">⚡ Total : ${pts + bonus} pts</span>` : ''}
+                ${bonus > 0 ? `<span class="total-pts-badge">⚡ Total: ${pts + bonus} pts</span>` : ''}
               </div>
             </div>
-            <div class="validate-row">
-              <span class="validate-label">Défi réussi ?</span>
-              <label class="checkbox-wrap">
-                <input type="checkbox" ${asg.isValidated ? 'checked' : ''} onchange="toggleValidation('${asg.pageId}', ${asg.isValidated})" />
-                <div class="checkbox-custom">${asg.isValidated ? '✓' : ''}</div>
-              </label>
+            <div class="card-actions">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span class="validate-label">Done?</span>
+                <label class="checkbox-wrap">
+                  <input type="checkbox" ${asg.isValidated ? 'checked' : ''} onchange="toggleValidation('${asg.pageId}', ${asg.isValidated})" />
+                  <div class="checkbox-custom">${asg.isValidated ? '✓' : ''}</div>
+                </label>
+              </div>
+              <button class="btn-reroll" onclick="reroll('${asg.pageId}')" ${asg.hasRerolled ? 'disabled' : ''}>
+                🎲 ${asg.hasRerolled ? 'Rerolled' : 'Reroll'}
+              </button>
             </div>
           </div>`;
         }).join('')}
       </div>
+
       <div class="divider"></div>
       <div class="section-title">🏆 Leaderboard</div>
       <div class="leaderboard">
         <div class="lb-card">
-          <div class="lb-header-row"><span>#</span><span>Joueur</span><span>Score</span><span>Streak</span><span>✅</span></div>
+          <div class="lb-header-row"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>✅</span></div>
           ${lb.map((asg, i) => {
             const player = PLAYERS[asg.playerIndex] || { name: asg.name, emoji: '🎮' };
             return `<div class="lb-row">
@@ -251,32 +377,65 @@
               <div class="lb-player"><span class="lb-emoji">${player.emoji}</span><span class="lb-name">${player.name}</span></div>
               <div class="lb-stat"><div class="lb-stat-val" style="color:var(--yellow)">${asg.totalScore}</div><div class="lb-stat-label">pts</div></div>
               <div class="lb-stat"><div class="lb-stat-val" style="color:var(--orange)">${asg.winStreak}🔥</div><div class="lb-stat-label">streak</div></div>
-              <div class="lb-stat"><div class="lb-stat-val" style="color:var(--green)">${asg.defisReussis}</div><div class="lb-stat-label">faits</div></div>
+              <div class="lb-stat"><div class="lb-stat-val" style="color:var(--green)">${asg.defisReussis}</div><div class="lb-stat-label">done</div></div>
             </div>`;
           }).join('')}
         </div>
       </div>
+
       <div class="divider"></div>
-      <div class="section-title">📖 Règles</div>
+      <div class="section-title">💡 Suggest a Challenge</div>
+      <div class="suggest">
+        <div class="suggest-card">
+          <div class="suggest-header" onclick="toggleSection('suggest-body','suggest-toggle')">
+            <h3>➕ NEW CHALLENGE IDEA</h3>
+            <span class="suggest-toggle" id="suggest-toggle">▼</span>
+          </div>
+          <div class="suggest-body" id="suggest-body">
+            <div class="form-group">
+              <label class="form-label">Challenge name</label>
+              <input class="form-input" id="suggest-name" type="text" placeholder="e.g. Sing your order at a restaurant..." maxlength="100" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Spice level</label>
+              <div class="spice-selector">
+                <input type="radio" name="spice" id="s1" value="🌱 Mild" class="spice-option">
+                <label for="s1"><span class="spice-emoji">🌱</span>Mild<br><small>1 pt</small></label>
+                <input type="radio" name="spice" id="s2" value="🌶️ Spicy" class="spice-option">
+                <label for="s2"><span class="spice-emoji">🌶️</span>Spicy<br><small>2 pts</small></label>
+                <input type="radio" name="spice" id="s3" value="🔥 Hot" class="spice-option">
+                <label for="s3"><span class="spice-emoji">🔥</span>Hot<br><small>3 pts</small></label>
+                <input type="radio" name="spice" id="s4" value="⚡ Atomic" class="spice-option">
+                <label for="s4"><span class="spice-emoji">⚡</span>Atomic<br><small>5 pts</small></label>
+              </div>
+            </div>
+            <button class="btn-suggest" id="btn-suggest" onclick="suggestChallenge()">💡 SUGGEST CHALLENGE</button>
+            <p style="font-size:12px;color:var(--muted);margin-top:12px;text-align:center">Your suggestion will be reviewed before appearing in the game ✅</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-title">📖 Rules</div>
       <div class="rules">
         <div class="rules-card">
-          <div class="rules-header" onclick="toggleRules()">
-            <h3>📜 COMMENT ÇA MARCHE ?</h3>
+          <div class="rules-header" onclick="toggleSection('rules-body','rules-toggle')">
+            <h3>📜 HOW IT WORKS</h3>
             <span class="rules-toggle" id="rules-toggle">▼</span>
           </div>
           <div class="rules-body" id="rules-body">
             <div class="rule-item">
               <div class="rule-icon">🎯</div>
               <div class="rule-content">
-                <div class="rule-title">Un défi par jour</div>
-                <div class="rule-desc">Chaque joueur reçoit un défi unique chaque jour. Les défis tournent automatiquement — impossible d'avoir le même que ton voisin !</div>
+                <div class="rule-title">One challenge per day</div>
+                <div class="rule-desc">Each player gets a unique challenge every day. Challenges rotate automatically — no two players get the same one!</div>
               </div>
             </div>
             <div class="rule-item">
               <div class="rule-icon">🌶️</div>
               <div class="rule-content">
-                <div class="rule-title">Niveaux de piment</div>
-                <div class="rule-desc">Chaque défi a un niveau de difficulté qui détermine les points gagnés.</div>
+                <div class="rule-title">Spice levels</div>
+                <div class="rule-desc">Each challenge has a difficulty level that determines how many points you earn if you complete it.</div>
                 <div class="streak-table">
                   <div class="streak-row"><span>🌱 Mild</span><span>1 pt</span></div>
                   <div class="streak-row"><span>🌶️ Spicy</span><span>2 pts</span></div>
@@ -288,34 +447,48 @@
             <div class="rule-item">
               <div class="rule-icon">🔥</div>
               <div class="rule-content">
-                <div class="rule-title">Bonus de streak</div>
-                <div class="rule-desc">Enchaîne les défis réussis pour débloquer des points bonus ! La streak repart à 0 si tu rates un jour.</div>
+                <div class="rule-title">Streak bonuses</div>
+                <div class="rule-desc">Complete challenges on consecutive days to unlock bonus points! Your streak resets to 0 if you miss a day.</div>
                 <div class="streak-table">
-                  <div class="streak-row"><span>🔥 3 jours d'affilée</span><span>+1 pt bonus</span></div>
-                  <div class="streak-row"><span>🔥 5 jours d'affilée</span><span>+2 pts bonus</span></div>
-                  <div class="streak-row"><span>🔥 10 jours d'affilée</span><span>+3 pts bonus</span></div>
+                  <div class="streak-row"><span>🔥 3 days in a row</span><span>+1 pt bonus</span></div>
+                  <div class="streak-row"><span>🔥 5 days in a row</span><span>+2 pts bonus</span></div>
+                  <div class="streak-row"><span>🔥 10 days in a row</span><span>+3 pts bonus</span></div>
                 </div>
+              </div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-icon">🎲</div>
+              <div class="rule-content">
+                <div class="rule-title">Reroll (once per day)</div>
+                <div class="rule-desc">Not feeling your challenge? Hit Reroll to get a random new one. But beware — your streak resets to 0! You only get one reroll per day.</div>
               </div>
             </div>
             <div class="rule-item">
               <div class="rule-icon">✅</div>
               <div class="rule-content">
-                <div class="rule-title">Validation des défis</div>
-                <div class="rule-desc">Le maître du jeu coche la case de chaque joueur qui a réussi son défi. Soyez honnêtes — la honte est la vraie punition 😈</div>
+                <div class="rule-title">Challenge validation</div>
+                <div class="rule-desc">The game master checks the box for each player who completed their challenge. Be honest — shame is the real punishment 😈</div>
               </div>
             </div>
             <div class="rule-item">
               <div class="rule-icon">⏭️</div>
               <div class="rule-content">
-                <div class="rule-title">Bouton Next Day</div>
-                <div class="rule-desc">En fin de journée, le maître du jeu appuie sur Next Day. Les scores sont mis à jour, les streaks calculées, et de nouveaux défis sont attribués pour le lendemain.</div>
+                <div class="rule-title">Next Day button</div>
+                <div class="rule-desc">At the end of the day, the game master presses Next Day. Scores are updated, streaks calculated, and new challenges are assigned for tomorrow.</div>
+              </div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-icon">💡</div>
+              <div class="rule-content">
+                <div class="rule-title">Suggest a challenge</div>
+                <div class="rule-desc">Got a wild idea? Submit it using the form above. The game master reviews it before it enters the rotation.</div>
               </div>
             </div>
             <div class="rule-item">
               <div class="rule-icon">🏆</div>
               <div class="rule-content">
                 <div class="rule-title">Leaderboard</div>
-                <div class="rule-desc">Le classement est mis à jour en temps réel. Le joueur avec le plus de points à la fin remporte la gloire éternelle 🌶️</div>
+                <div class="rule-desc">Rankings update in real time. The player with the most points at the end wins eternal glory 🌶️</div>
               </div>
             </div>
           </div>
@@ -323,9 +496,10 @@
       </div>
     `;
   }
+
   async function init() {
     try { await loadData(); render(); }
-    catch(e) { document.getElementById('root').innerHTML = '<div class="error-box">❌ Erreur de connexion.<br><br>Vérifie que NOTION_TOKEN est bien configuré dans les variables Vercel.<br><br>Détail : ' + e.message + '</div>'; }
+    catch(e) { document.getElementById('root').innerHTML = '<div class="error-box">❌ Connection error.<br><br>Make sure NOTION_TOKEN is set in your Vercel environment variables.<br><br>Details: ' + e.message + '</div>'; }
   }
   init();
 </script>
