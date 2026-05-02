@@ -8,129 +8,300 @@
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --red: #E63946; --orange: #F4A261; --yellow: #FFD166;
-      --green: #2DC653; --darker: #0F0F1A; --card: #16213E;
-      --text: #F5F5F5; --muted: #8892A4;
+      --red: #FF2D4B; --orange: #FF6B1A; --yellow: #FFD700;
+      --green: #00FF88; --purple: #BF00FF; --cyan: #00EEFF;
+      --darker: #080810; --dark: #0D0D1A; --card: #0F0F20;
+      --text: #F5F5F5; --muted: #6B7280;
+      --glow-red: 0 0 20px rgba(255,45,75,0.6);
+      --glow-green: 0 0 20px rgba(0,255,136,0.6);
+      --glow-orange: 0 0 20px rgba(255,107,26,0.5);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Nunito', sans-serif; background: var(--darker); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-    body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at 20% 20%, rgba(230,57,70,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(244,162,97,0.1) 0%, transparent 50%); pointer-events: none; z-index: 0; }
-    .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 0 100px; }
 
-    /* BANNER */
-    .banner {
-      width: 100%;
-      max-width: 480px;
-      aspect-ratio: 21/9;
-      object-fit: cover;
-      display: block;
-      border-radius: 0 0 24px 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    /* NEON GRID BACKGROUND */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,45,75,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,45,75,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 15%, rgba(255,45,75,0.12) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 80%, rgba(0,255,136,0.08) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(191,0,255,0.05) 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
     }
 
-    .header { padding: 20px 20px 16px; text-align: center; }
-    .header-mascot { font-size: 64px; display: block; animation: bounce 2s infinite; }
-    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .header h1 { font-family: 'Bangers', cursive; font-size: 48px; letter-spacing: 3px; background: linear-gradient(135deg, var(--red), var(--orange), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 4px; }
-    .header-sub { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
-    .day-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,209,102,0.15); border: 1px solid rgba(255,209,102,0.3); border-radius: 20px; padding: 6px 16px; font-size: 14px; font-weight: 700; color: var(--yellow); margin-top: 12px; }
-    .next-day-wrap { padding: 0 20px 24px; }
-    .btn-next { width: 100%; background: linear-gradient(135deg, var(--red), var(--orange)); border: none; border-radius: 16px; padding: 18px; font-family: 'Bangers', cursive; font-size: 24px; letter-spacing: 2px; color: white; cursor: pointer; box-shadow: 0 8px 32px rgba(230,57,70,0.4); transition: transform 0.15s; }
-    .btn-next:active { transform: scale(0.97); }
-    .btn-next:disabled { opacity: 0.6; cursor: not-allowed; }
-    .section-title { font-family: 'Bangers', cursive; font-size: 22px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; padding: 0 20px 12px; }
-    .cards { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
-    .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.06); position: relative; overflow: hidden; }
-    .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--player-color); }
-    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .player-info { display: flex; align-items: center; gap: 10px; }
-    .player-emoji { font-size: 28px; }
-    .player-name { font-weight: 900; font-size: 18px; }
-    .player-streak { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: var(--orange); background: rgba(244,162,97,0.15); border-radius: 10px; padding: 4px 10px; }
-    .streak-bonus { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--yellow); background: rgba(255,209,102,0.15); border: 1px solid rgba(255,209,102,0.3); border-radius: 8px; padding: 2px 8px; margin-left: 6px; }
-    .challenge-box { background: rgba(255,255,255,0.04); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
-    .challenge-id { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-    .challenge-name { font-weight: 700; font-size: 16px; line-height: 1.4; margin-bottom: 8px; }
-    .challenge-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .spice-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(255,255,255,0.08); }
-    .total-pts-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(255,209,102,0.15); color: var(--yellow); }
-    .rerolled-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px; background: rgba(138,43,226,0.2); color: #c084fc; border: 1px solid rgba(138,43,226,0.3); }
-    .card-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .validate-label { font-size: 14px; color: var(--muted); font-weight: 600; }
+    .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 0 120px; }
+
+    /* BANNER */
+    .banner-wrap { position: relative; }
+    .banner { width: 100%; aspect-ratio: 21/9; object-fit: cover; display: block; border-radius: 0 0 28px 28px; }
+    .banner-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, var(--darker) 100%);
+      border-radius: 0 0 28px 28px;
+    }
+
+    /* HEADER */
+    .header { padding: 0 20px 20px; text-align: center; margin-top: -20px; position: relative; }
+    .header-mascot { font-size: 72px; display: block; animation: bounce 2s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(255,107,26,0.8)); }
+    @keyframes bounce { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-12px) rotate(3deg); } }
+    .header h1 {
+      font-family: 'Bangers', cursive; font-size: 52px; letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--red), var(--orange), var(--yellow));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1; margin: 4px 0;
+      filter: drop-shadow(0 0 30px rgba(255,107,26,0.4));
+    }
+    .header-sub { font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: 4px; font-weight: 700; }
+    .day-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.4);
+      border-radius: 20px; padding: 6px 18px; font-size: 14px; font-weight: 900;
+      color: var(--yellow); margin-top: 14px;
+      box-shadow: 0 0 16px rgba(255,215,0,0.2);
+      animation: pulse-yellow 3s infinite;
+    }
+    @keyframes pulse-yellow { 0%, 100% { box-shadow: 0 0 16px rgba(255,215,0,0.2); } 50% { box-shadow: 0 0 30px rgba(255,215,0,0.4); } }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 3px;
+      text-transform: uppercase; padding: 0 20px 14px;
+      display: flex; align-items: center; gap: 10px;
+      color: var(--muted);
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(255,45,75,0.3), transparent); }
+
+    /* CARDS */
+    .cards { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.05);
+      position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .card:active { transform: scale(0.98); }
+
+    /* Color band top */
+    .card-band {
+      height: 4px;
+      background: var(--player-color);
+      box-shadow: 0 0 20px var(--player-color);
+    }
+
+    /* Player cover */
+    .card-cover {
+      height: 80px;
+      background: linear-gradient(135deg, var(--player-color-dark), var(--darker));
+      display: flex; align-items: center; padding: 0 20px; gap: 14px;
+      position: relative; overflow: hidden;
+    }
+    .card-cover::after {
+      content: var(--player-emoji);
+      position: absolute; right: -10px; top: -10px;
+      font-size: 80px; opacity: 0.15;
+      line-height: 1;
+    }
+    .player-name-big { font-family: 'Bangers', cursive; font-size: 28px; letter-spacing: 2px; }
+    .player-emoji-big { font-size: 36px; }
+
+    .card-body { padding: 16px 20px 20px; }
+
+    .streak-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .streak-pill {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(255,107,26,0.12); border: 1px solid rgba(255,107,26,0.3);
+      border-radius: 20px; padding: 4px 12px;
+      font-size: 13px; font-weight: 900; color: var(--orange);
+    }
+    .bonus-pill {
+      display: flex; align-items: center; gap: 4px;
+      background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.4);
+      border-radius: 20px; padding: 4px 10px;
+      font-size: 12px; font-weight: 900; color: var(--yellow);
+      box-shadow: 0 0 10px rgba(255,215,0,0.2);
+      animation: pulse-yellow 2s infinite;
+    }
+    .rerolled-pill {
+      display: flex; align-items: center; gap: 4px;
+      background: rgba(191,0,255,0.1); border: 1px solid rgba(191,0,255,0.4);
+      border-radius: 20px; padding: 4px 10px;
+      font-size: 12px; font-weight: 900; color: #e879f9;
+    }
+
+    .challenge-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; padding: 16px; margin-bottom: 16px;
+      position: relative;
+    }
+    .challenge-num { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+    .challenge-name { font-weight: 900; font-size: 17px; line-height: 1.4; margin-bottom: 10px; }
+    .spice-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; padding: 4px 12px;
+      border-radius: 10px; background: rgba(255,255,255,0.06);
+    }
+    .total-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 900; padding: 4px 12px;
+      border-radius: 10px; background: rgba(255,215,0,0.1);
+      color: var(--yellow); border: 1px solid rgba(255,215,0,0.3);
+      margin-left: 6px;
+    }
+
+    .card-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+    .done-wrap { display: flex; align-items: center; gap: 10px; }
+    .done-label { font-size: 13px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
     .checkbox-wrap input[type="checkbox"] { display: none; }
-    .checkbox-custom { width: 32px; height: 32px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 16px; }
-    .checkbox-wrap input:checked + .checkbox-custom { background: var(--green); border-color: var(--green); box-shadow: 0 0 16px rgba(45,198,83,0.4); }
-    .btn-reroll { display: flex; align-items: center; gap: 6px; background: rgba(138,43,226,0.2); border: 1px solid rgba(138,43,226,0.4); border-radius: 10px; padding: 8px 14px; font-size: 13px; font-weight: 700; color: #c084fc; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-    .btn-reroll:hover { background: rgba(138,43,226,0.35); }
-    .btn-reroll:disabled { opacity: 0.4; cursor: not-allowed; }
-    .card.validated { border-color: rgba(45,198,83,0.3); }
-    .card.validated::after { content: ''; position: absolute; inset: 0; background: rgba(45,198,83,0.04); pointer-events: none; }
-    .leaderboard { padding: 0 20px; }
-    .lb-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
-    .lb-header-row { display: grid; grid-template-columns: 36px 1fr 60px 60px 60px; gap: 8px; padding: 10px 16px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .lb-header-row span { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; text-align: center; font-weight: 700; }
+    .checkbox-custom {
+      width: 36px; height: 36px; border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.25s; font-size: 18px;
+      background: rgba(255,255,255,0.03);
+    }
+    .checkbox-wrap input:checked + .checkbox-custom {
+      background: var(--green); border-color: var(--green);
+      box-shadow: var(--glow-green);
+      animation: check-pop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes check-pop { 0% { transform: scale(0.8); } 100% { transform: scale(1); } }
+
+    .btn-reroll {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(191,0,255,0.1); border: 1px solid rgba(191,0,255,0.4);
+      border-radius: 12px; padding: 10px 16px;
+      font-size: 13px; font-weight: 900; color: #e879f9;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+      font-family: 'Nunito', sans-serif;
+    }
+    .btn-reroll:hover { background: rgba(191,0,255,0.2); box-shadow: 0 0 16px rgba(191,0,255,0.3); }
+    .btn-reroll:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
+
+    .card.validated { border-color: rgba(0,255,136,0.2); box-shadow: 0 0 30px rgba(0,255,136,0.08); }
+
+    /* LEADERBOARD */
+    .leaderboard { padding: 0 16px; }
+    .lb-card { background: var(--card); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+    .lb-header-row {
+      display: grid; grid-template-columns: 40px 1fr 64px 64px 56px;
+      gap: 8px; padding: 12px 18px;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .lb-header-row span { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; text-align: center; font-weight: 700; }
     .lb-header-row span:nth-child(2) { text-align: left; }
-    .lb-row { display: grid; grid-template-columns: 36px 1fr 60px 60px 60px; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .lb-row {
+      display: grid; grid-template-columns: 40px 1fr 64px 64px 56px;
+      align-items: center; gap: 8px; padding: 14px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      transition: background 0.2s;
+    }
     .lb-row:last-child { border-bottom: none; }
-    .lb-row:first-child { background: rgba(255,209,102,0.08); }
-    .lb-rank { font-family: 'Bangers', cursive; font-size: 20px; text-align: center; }
-    .lb-player { display: flex; align-items: center; gap: 8px; }
-    .lb-emoji { font-size: 20px; }
-    .lb-name { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lb-row:first-child { background: rgba(255,215,0,0.05); }
+    .lb-rank { font-family: 'Bangers', cursive; font-size: 22px; text-align: center; }
+    .lb-player { display: flex; align-items: center; gap: 10px; }
+    .lb-emoji { font-size: 22px; }
+    .lb-name { font-weight: 900; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .lb-stat { text-align: center; }
-    .lb-stat-val { font-weight: 900; font-size: 16px; }
-    .lb-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .suggest { padding: 0 20px; }
-    .suggest-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
-    .suggest-header { padding: 16px 20px; background: rgba(45,198,83,0.08); border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
-    .suggest-header h3 { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: var(--green); }
-    .suggest-toggle { font-size: 18px; transition: transform 0.3s; }
-    .suggest-toggle.open { transform: rotate(180deg); }
-    .suggest-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
-    .suggest-body.open { max-height: 600px; padding: 20px; }
+    .lb-val { font-weight: 900; font-size: 17px; }
+    .lb-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* SUGGEST */
+    .suggest, .rules { padding: 0 16px; }
+    .collapsible-card { background: var(--card); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+    .collapsible-header { padding: 18px 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s; }
+    .collapsible-header:hover { background: rgba(255,255,255,0.02); }
+    .collapsible-header h3 { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; }
+    .collapsible-toggle { font-size: 16px; transition: transform 0.3s; color: var(--muted); }
+    .collapsible-toggle.open { transform: rotate(180deg); }
+    .collapsible-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+    .collapsible-body.open { max-height: 1600px; padding: 20px; }
+
     .form-group { margin-bottom: 16px; }
-    .form-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-    .form-input { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 16px; color: var(--text); font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600; outline: none; transition: border-color 0.2s; }
-    .form-input:focus { border-color: var(--green); }
+    .form-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; display: block; }
+    .form-input {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;
+      padding: 14px 16px; color: var(--text);
+      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus { border-color: var(--green); box-shadow: 0 0 16px rgba(0,255,136,0.1); }
     .spice-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .spice-option { display: none; }
-    .spice-option + label { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; background: rgba(255,255,255,0.04); border: 2px solid transparent; border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 700; text-align: center; transition: all 0.2s; }
-    .spice-option:checked + label { border-color: var(--green); background: rgba(45,198,83,0.1); }
-    .spice-emoji { font-size: 22px; }
-    .btn-suggest { width: 100%; background: linear-gradient(135deg, var(--green), #1db954); border: none; border-radius: 12px; padding: 14px; font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: white; cursor: pointer; transition: transform 0.15s; }
-    .btn-suggest:active { transform: scale(0.97); }
-    .btn-suggest:disabled { opacity: 0.6; cursor: not-allowed; }
-    .rules { padding: 0 20px; }
-    .rules-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
-    .rules-header { padding: 16px 20px; background: rgba(230,57,70,0.1); border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
-    .rules-header h3 { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: var(--red); }
-    .rules-toggle { font-size: 18px; transition: transform 0.3s; }
-    .rules-toggle.open { transform: rotate(180deg); }
-    .rules-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
-    .rules-body.open { max-height: 1400px; padding: 20px; }
-    .rule-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .spice-option + label {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 12px 6px; background: rgba(255,255,255,0.03);
+      border: 2px solid rgba(255,255,255,0.06); border-radius: 14px;
+      cursor: pointer; font-size: 11px; font-weight: 700; text-align: center;
+      transition: all 0.2s;
+    }
+    .spice-option:checked + label { border-color: var(--green); background: rgba(0,255,136,0.08); box-shadow: 0 0 16px rgba(0,255,136,0.15); }
+    .spice-emoji { font-size: 24px; }
+    .btn-suggest {
+      width: 100%; background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,238,255,0.1));
+      border: 1px solid rgba(0,255,136,0.4); border-radius: 14px; padding: 16px;
+      font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px;
+      color: var(--green); cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 0 20px rgba(0,255,136,0.1);
+    }
+    .btn-suggest:hover { box-shadow: 0 0 30px rgba(0,255,136,0.25); }
+    .btn-suggest:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* RULES */
+    .rule-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .rule-item:last-child { border-bottom: none; }
-    .rule-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
-    .rule-title { font-weight: 900; font-size: 15px; margin-bottom: 4px; }
-    .rule-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
-    .streak-table { margin-top: 10px; background: rgba(255,255,255,0.04); border-radius: 10px; overflow: hidden; }
-    .streak-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
-    .streak-row:last-child { border-bottom: none; }
-    .streak-row span:first-child { color: var(--orange); font-weight: 700; }
-    .streak-row span:last-child { color: var(--yellow); font-weight: 900; }
+    .rule-icon { font-size: 26px; flex-shrink: 0; }
+    .rule-title { font-weight: 900; font-size: 15px; margin-bottom: 4px; color: var(--text); }
+    .rule-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .neon-table { margin-top: 10px; background: rgba(255,255,255,0.03); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+    .neon-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
+    .neon-row:last-child { border-bottom: none; }
+    .neon-row span:first-child { color: var(--orange); font-weight: 700; }
+    .neon-row span:last-child { color: var(--yellow); font-weight: 900; }
+
+    /* CONFETTI */
+    .confetti-piece {
+      position: fixed; width: 8px; height: 8px; border-radius: 2px;
+      animation: confetti-fall 1.5s ease-out forwards;
+      pointer-events: none; z-index: 999;
+    }
+    @keyframes confetti-fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* UTILS */
     .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; }
-    .spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .spinner { width: 48px; height: 48px; border: 3px solid rgba(255,45,75,0.2); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; box-shadow: var(--glow-red); }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading p { color: var(--muted); font-weight: 600; }
-    .error-box { margin: 20px; padding: 20px; background: rgba(230,57,70,0.1); border: 1px solid rgba(230,57,70,0.3); border-radius: 16px; color: var(--red); font-weight: 600; font-size: 14px; line-height: 1.6; }
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); color: white; font-weight: 700; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 999; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap; }
+    .loading p { color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 13px; }
+    .error-box { margin: 20px; padding: 20px; background: rgba(255,45,75,0.08); border: 1px solid rgba(255,45,75,0.3); border-radius: 20px; color: var(--red); font-weight: 600; font-size: 14px; line-height: 1.6; }
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(120px); color: white; font-weight: 900; padding: 14px 28px; border-radius: 50px; font-size: 14px; z-index: 9999; transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; letter-spacing: 0.5px; }
     .toast.show { transform: translateX(-50%) translateY(0); }
-    .divider { height: 1px; background: rgba(255,255,255,0.06); margin: 24px 20px; }
+    .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(255,45,75,0.2), transparent); margin: 28px 16px; }
   </style>
 </head>
 <body>
 <div class="app">
-  <img class="banner" src="Gemini_Generated_Image_4m0fhc4m0fhc4m0f.png" alt="Zest Your Day Banner" />
+  <div class="banner-wrap">
+    <img class="banner" src="Gemini_Generated_Image_4m0fhc4m0fhc4m0f.png" alt="Zest Your Day" />
+    <div class="banner-overlay"></div>
+  </div>
   <div id="root"><div class="loading"><div class="spinner"></div><p>Loading challenges...</p></div></div>
 </div>
 <div class="toast" id="toast"></div>
@@ -141,14 +312,25 @@
     db_assignments: '354403dde0e380f797ccfb85ad5a072e',
   };
   const PLAYERS = [
-    { name: 'Banuu',                emoji: '🌵', color: '#2DC653' },
-    { name: 'Luzz',                 emoji: '🔥', color: '#E63946' },
-    { name: 'Y',                    emoji: '⚡', color: '#FFD166' },
-    { name: 'Nico multimilionario', emoji: '💰', color: '#F4A261' },
+    { name: 'Banuu',                emoji: '🌵', color: '#00FF88', colorDark: 'rgba(0,255,136,0.15)' },
+    { name: 'Luzz',                 emoji: '🔥', color: '#FF2D4B', colorDark: 'rgba(255,45,75,0.15)' },
+    { name: 'Y',                    emoji: '⚡', color: '#FFD700', colorDark: 'rgba(255,215,0,0.15)' },
+    { name: 'Nico multimilionario', emoji: '💰', color: '#FF6B1A', colorDark: 'rgba(255,107,26,0.15)' },
   ];
   const SPICE_POINTS = { '🌱 Mild': 1, '🌶️ Spicy': 2, '🔥 Hot': 3, '⚡ Atomic': 5 };
   function streakBonus(s) { return s >= 10 ? 3 : s >= 5 ? 2 : s >= 3 ? 1 : 0; }
-  function spiceColor(pts) { return pts >= 5 ? '#E63946' : pts >= 3 ? '#F4A261' : pts >= 2 ? '#FFD166' : '#2DC653'; }
+  function spiceColor(pts) { return pts >= 5 ? '#FF2D4B' : pts >= 3 ? '#FF6B1A' : pts >= 2 ? '#FFD700' : '#00FF88'; }
+
+  function confetti() {
+    const colors = ['#FF2D4B','#FF6B1A','#FFD700','#00FF88','#00EEFF','#BF00FF'];
+    for (let i = 0; i < 40; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `left:${Math.random()*100}%;top:0;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*0.5}s;animation-duration:${1+Math.random()}s`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2000);
+    }
+  }
 
   async function notionQuery(dbId, body = {}) {
     const res = await fetch('/api/notion?endpoint=databases/' + dbId + '/query', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -181,8 +363,8 @@
   }
   function showToast(msg, color) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.style.background = color || '#2DC653';
+    t.textContent = msg; t.style.background = color || '#00FF88';
+    t.style.boxShadow = `0 0 30px ${color || '#00FF88'}80`;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
@@ -195,8 +377,7 @@
     STATE.systemPageId = sys.id;
     STATE.dayCounter = getProp(sys, 'Day_Counter', 'number');
     const chPages = await notionQuery(CONFIG.db_challenges);
-    STATE.challenges = {};
-    STATE.allChallengeIds = [];
+    STATE.challenges = {}; STATE.allChallengeIds = [];
     for (const p of chPages) {
       const id = getProp(p, 'ID_Global', 'number');
       const status = getProp(p, 'Status', 'select');
@@ -225,8 +406,9 @@
     await notionPatch(pageId, { Is_Validated: { checkbox: newVal } });
     const asg = STATE.assignments.find(a => a.pageId === pageId);
     if (asg) asg.isValidated = newVal;
+    if (newVal) confetti();
     render();
-    showToast(newVal ? '✅ Challenge validated!' : '❌ Validation removed');
+    showToast(newVal ? '🎉 Challenge completed!' : '❌ Validation removed', newVal ? '#00FF88' : '#FF2D4B');
   }
 
   async function reroll(pageId) {
@@ -234,60 +416,30 @@
     if (!asg || asg.hasRerolled) return;
     const current = getEffectiveChallengeId(asg);
     const available = STATE.allChallengeIds.filter(id => id !== current);
-    if (available.length === 0) { showToast('No other challenges available!', '#F4A261'); return; }
+    if (available.length === 0) { showToast('No other challenges available!', '#FF6B1A'); return; }
     const newId = available[Math.floor(Math.random() * available.length)];
-    await notionPatch(pageId, {
-      Has_Rerolled: { checkbox: true },
-      Reroll_Challenge_ID: { number: newId },
-    });
-    asg.hasRerolled = true;
-    asg.rerollChallengeId = newId;
+    await notionPatch(pageId, { Has_Rerolled: { checkbox: true }, Reroll_Challenge_ID: { number: newId } });
+    asg.hasRerolled = true; asg.rerollChallengeId = newId;
     render();
-    showToast('🎲 New challenge! Streak kept 🔥', '#c084fc');
-  }
-
-  async function nextDay() {
-    const btn = document.getElementById('btn-next');
-    btn.disabled = true; btn.textContent = '⏳ Updating...';
-    try {
-      for (const asg of STATE.assignments) {
-        const effectiveId = getEffectiveChallengeId(asg);
-        const challenge = STATE.challenges[effectiveId];
-        const pts = challenge?.points ?? 0;
-        const bonus = asg.isValidated ? streakBonus(asg.winStreak) : 0;
-        await notionPatch(asg.pageId, {
-          Total_Score:         { number: asg.isValidated ? asg.totalScore + pts + bonus : asg.totalScore },
-          Win_Streak:          { number: asg.isValidated ? asg.winStreak + 1 : 0 },
-          Defis_Reussis:       { number: asg.isValidated ? asg.defisReussis + 1 : asg.defisReussis },
-          Is_Validated:        { checkbox: false },
-          Has_Rerolled:        { checkbox: false },
-          Reroll_Challenge_ID: { number: 0 },
-        });
-      }
-      await notionPatch(STATE.systemPageId, { Day_Counter: { number: STATE.dayCounter + 1 } });
-      showToast('🌶️ New day! New challenges!');
-      await loadData(); render();
-    } catch(e) { showToast('❌ Error: ' + e.message, '#E63946'); btn.disabled = false; }
+    showToast('🎲 Rerolled! Streak kept 🔥', '#BF00FF');
   }
 
   async function suggestChallenge() {
     const nameEl = document.getElementById('suggest-name');
     const spiceEl = document.querySelector('input[name="spice"]:checked');
-    if (!nameEl.value.trim()) { showToast('⚠️ Enter a challenge name!', '#F4A261'); return; }
-    if (!spiceEl) { showToast('⚠️ Pick a spice level!', '#F4A261'); return; }
+    if (!nameEl.value.trim()) { showToast('⚠️ Enter a challenge name!', '#FF6B1A'); return; }
+    if (!spiceEl) { showToast('⚠️ Pick a spice level!', '#FF6B1A'); return; }
     const btn = document.getElementById('btn-suggest');
     btn.disabled = true; btn.textContent = 'Sending...';
     const pts = SPICE_POINTS[spiceEl.value] || 1;
     try {
       await notionCreate(CONFIG.db_challenges, {
-        Name:   { title: [{ text: { content: nameEl.value.trim() } }] },
-        Points: { number: pts },
-        Status: { select: { name: '⏳ Pending' } },
+        Name: { title: [{ text: { content: nameEl.value.trim() } }] },
+        Points: { number: pts }, Status: { select: { name: '⏳ Pending' } },
       });
-      showToast('💡 Suggestion sent! Awaiting approval.');
-      nameEl.value = '';
-      if (spiceEl) spiceEl.checked = false;
-    } catch(e) { showToast('❌ Error: ' + e.message, '#E63946'); }
+      showToast('💡 Suggestion sent!', '#00FF88');
+      nameEl.value = ''; if (spiceEl) spiceEl.checked = false;
+    } catch(e) { showToast('❌ Error: ' + e.message, '#FF2D4B'); }
     btn.disabled = false; btn.textContent = '💡 SUGGEST CHALLENGE';
   }
 
@@ -300,6 +452,7 @@
     const root = document.getElementById('root');
     const lb = [...STATE.assignments].sort((a, b) => b.totalScore - a.totalScore);
     const rankEmoji = ['🥇','🥈','🥉','4️⃣'];
+
     root.innerHTML = `
       <div class="header">
         <span class="header-mascot">🌶️</span>
@@ -307,82 +460,80 @@
         <div class="header-sub">Mexico Edition</div>
         <div class="day-badge">📅 Day ${STATE.dayCounter}</div>
       </div>
-      <div class="next-day-wrap">
-        <button class="btn-next" id="btn-next" onclick="nextDay()">⏭️ NEXT DAY</button>
-      </div>
+
+      <div class="divider"></div>
       <div class="section-title">🎯 Today's Challenges</div>
       <div class="cards">
         ${STATE.assignments.map(asg => {
-          const player = PLAYERS[asg.playerIndex] || { name: asg.name, emoji: '🎮', color: '#8892A4' };
+          const player = PLAYERS[asg.playerIndex] || { name: asg.name, emoji: '🎮', color: '#8892A4', colorDark: 'rgba(136,146,164,0.15)' };
           const effectiveId = getEffectiveChallengeId(asg);
           const challenge = STATE.challenges[effectiveId];
           const pts = challenge?.points ?? 0;
           const bonus = streakBonus(asg.winStreak);
           const isRerolled = asg.rerollChallengeId > 0;
           return `
-          <div class="card ${asg.isValidated ? 'validated' : ''}" style="--player-color: ${player.color}">
-            <div class="card-header">
-              <div class="player-info">
-                <span class="player-emoji">${player.emoji}</span>
-                <span class="player-name">${player.name}</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:4px">
-                <div class="player-streak">🔥 ${asg.winStreak}</div>
-                ${bonus > 0 ? `<span class="streak-bonus">⚡ +${bonus}</span>` : ''}
-              </div>
+          <div class="card ${asg.isValidated ? 'validated' : ''}">
+            <div class="card-band" style="background:${player.color};box-shadow:0 0 20px ${player.color}80"></div>
+            <div class="card-cover" style="--player-color-dark:${player.colorDark}" >
+              <span style="font-size:38px">${player.emoji}</span>
+              <span class="player-name-big" style="color:${player.color};text-shadow:0 0 20px ${player.color}80">${player.name}</span>
             </div>
-            <div class="challenge-box">
-              <div class="challenge-id">
-                Challenge #${effectiveId}
-                ${isRerolled ? '<span class="rerolled-badge">🎲 Rerolled</span>' : ''}
+            <div class="card-body">
+              <div class="streak-row">
+                <div class="streak-pill">🔥 ${asg.winStreak} streak</div>
+                ${bonus > 0 ? `<div class="bonus-pill">⚡ +${bonus} bonus</div>` : ''}
+                ${isRerolled ? `<div class="rerolled-pill">🎲 Rerolled</div>` : ''}
               </div>
-              <div class="challenge-name">${challenge?.name ?? '⏳ Loading...'}</div>
-              <div class="challenge-meta">
+              <div class="challenge-box">
+                <div class="challenge-num">Challenge #${effectiveId}</div>
+                <div class="challenge-name">${challenge?.name ?? '⏳ Loading...'}</div>
                 <span class="spice-badge" style="color:${spiceColor(pts)}">${challenge?.spice ?? ''} · ${pts} pt${pts > 1 ? 's' : ''}</span>
-                ${bonus > 0 ? `<span class="total-pts-badge">⚡ Total: ${pts + bonus} pts</span>` : ''}
+                ${bonus > 0 ? `<span class="total-badge">⚡ ${pts + bonus} pts total</span>` : ''}
               </div>
-            </div>
-            <div class="card-actions">
-              <div style="display:flex;align-items:center;gap:10px">
-                <span class="validate-label">Done?</span>
-                <label class="checkbox-wrap">
-                  <input type="checkbox" ${asg.isValidated ? 'checked' : ''} onchange="toggleValidation('${asg.pageId}', ${asg.isValidated})" />
-                  <div class="checkbox-custom">${asg.isValidated ? '✓' : ''}</div>
-                </label>
+              <div class="card-actions">
+                <div class="done-wrap">
+                  <span class="done-label">Done?</span>
+                  <label class="checkbox-wrap">
+                    <input type="checkbox" ${asg.isValidated ? 'checked' : ''} onchange="toggleValidation('${asg.pageId}', ${asg.isValidated})" />
+                    <div class="checkbox-custom">${asg.isValidated ? '✓' : ''}</div>
+                  </label>
+                </div>
+                <button class="btn-reroll" onclick="reroll('${asg.pageId}')" ${asg.hasRerolled ? 'disabled' : ''}>
+                  🎲 ${asg.hasRerolled ? 'Rerolled' : 'Reroll'}
+                </button>
               </div>
-              <button class="btn-reroll" onclick="reroll('${asg.pageId}')" ${asg.hasRerolled ? 'disabled' : ''}>
-                🎲 ${asg.hasRerolled ? 'Rerolled' : 'Reroll'}
-              </button>
             </div>
           </div>`;
         }).join('')}
       </div>
+
       <div class="divider"></div>
       <div class="section-title">🏆 Leaderboard</div>
       <div class="leaderboard">
         <div class="lb-card">
           <div class="lb-header-row"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>✅</span></div>
           ${lb.map((asg, i) => {
-            const player = PLAYERS[asg.playerIndex] || { name: asg.name, emoji: '🎮' };
+            const player = PLAYERS[asg.playerIndex] || { name: asg.name, emoji: '🎮', color: '#8892A4' };
             return `<div class="lb-row">
               <div class="lb-rank">${rankEmoji[i] ?? i+1}</div>
-              <div class="lb-player"><span class="lb-emoji">${player.emoji}</span><span class="lb-name">${player.name}</span></div>
-              <div class="lb-stat"><div class="lb-stat-val" style="color:var(--yellow)">${asg.totalScore}</div><div class="lb-stat-label">pts</div></div>
-              <div class="lb-stat"><div class="lb-stat-val" style="color:var(--orange)">${asg.winStreak}🔥</div><div class="lb-stat-label">streak</div></div>
-              <div class="lb-stat"><div class="lb-stat-val" style="color:var(--green)">${asg.defisReussis}</div><div class="lb-stat-label">done</div></div>
+              <div class="lb-player"><span class="lb-emoji">${player.emoji}</span><span class="lb-name" style="color:${player.color}">${player.name}</span></div>
+              <div class="lb-stat"><div class="lb-val" style="color:#FFD700">${asg.totalScore}</div><div class="lb-lbl">pts</div></div>
+              <div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">${asg.winStreak}🔥</div><div class="lb-lbl">streak</div></div>
+              <div class="lb-stat"><div class="lb-val" style="color:#00FF88">${asg.defisReussis}</div><div class="lb-lbl">done</div></div>
             </div>`;
           }).join('')}
         </div>
       </div>
+
       <div class="divider"></div>
-      <div class="section-title">💡 Suggest a Challenge</div>
+      <div class="section-title">💡 Suggest</div>
       <div class="suggest">
-        <div class="suggest-card">
-          <div class="suggest-header" onclick="toggleSection('suggest-body','suggest-toggle')">
-            <h3>➕ NEW CHALLENGE IDEA</h3>
-            <span class="suggest-toggle" id="suggest-toggle">▼</span>
+        <div class="collapsible-card">
+          <div class="collapsible-header" onclick="toggleSection('suggest-body','suggest-toggle')" style="border-bottom:1px solid rgba(0,255,136,0.1)">
+            <h3 style="color:#00FF88">➕ NEW CHALLENGE IDEA</h3>
+            <span class="collapsible-toggle" id="suggest-toggle">▼</span>
           </div>
-          <div class="suggest-body" id="suggest-body">
+          <div class="collapsible-body" id="suggest-body">
             <div class="form-group">
               <label class="form-label">Challenge name</label>
               <input class="form-input" id="suggest-name" type="text" placeholder="e.g. Sing your order at a restaurant..." maxlength="100" />
@@ -391,96 +542,37 @@
               <label class="form-label">Spice level</label>
               <div class="spice-selector">
                 <input type="radio" name="spice" id="s1" value="🌱 Mild" class="spice-option">
-                <label for="s1"><span class="spice-emoji">🌱</span>Mild<br><small>1 pt</small></label>
+                <label for="s1"><span class="spice-emoji">🌱</span>Mild<br><small style="color:#6B7280">1 pt</small></label>
                 <input type="radio" name="spice" id="s2" value="🌶️ Spicy" class="spice-option">
-                <label for="s2"><span class="spice-emoji">🌶️</span>Spicy<br><small>2 pts</small></label>
+                <label for="s2"><span class="spice-emoji">🌶️</span>Spicy<br><small style="color:#6B7280">2 pts</small></label>
                 <input type="radio" name="spice" id="s3" value="🔥 Hot" class="spice-option">
-                <label for="s3"><span class="spice-emoji">🔥</span>Hot<br><small>3 pts</small></label>
+                <label for="s3"><span class="spice-emoji">🔥</span>Hot<br><small style="color:#6B7280">3 pts</small></label>
                 <input type="radio" name="spice" id="s4" value="⚡ Atomic" class="spice-option">
-                <label for="s4"><span class="spice-emoji">⚡</span>Atomic<br><small>5 pts</small></label>
+                <label for="s4"><span class="spice-emoji">⚡</span>Atomic<br><small style="color:#6B7280">5 pts</small></label>
               </div>
             </div>
             <button class="btn-suggest" id="btn-suggest" onclick="suggestChallenge()">💡 SUGGEST CHALLENGE</button>
-            <p style="font-size:12px;color:var(--muted);margin-top:12px;text-align:center">Your suggestion will be reviewed before appearing in the game ✅</p>
+            <p style="font-size:12px;color:#6B7280;margin-top:12px;text-align:center">Reviewed by the game master before entering the rotation ✅</p>
           </div>
         </div>
       </div>
+
       <div class="divider"></div>
       <div class="section-title">📖 Rules</div>
       <div class="rules">
-        <div class="rules-card">
-          <div class="rules-header" onclick="toggleSection('rules-body','rules-toggle')">
-            <h3>📜 HOW IT WORKS</h3>
-            <span class="rules-toggle" id="rules-toggle">▼</span>
+        <div class="collapsible-card">
+          <div class="collapsible-header" onclick="toggleSection('rules-body','rules-toggle')" style="border-bottom:1px solid rgba(255,45,75,0.1)">
+            <h3 style="color:#FF2D4B">📜 HOW IT WORKS</h3>
+            <span class="collapsible-toggle" id="rules-toggle">▼</span>
           </div>
-          <div class="rules-body" id="rules-body">
-            <div class="rule-item">
-              <div class="rule-icon">🎯</div>
-              <div class="rule-content">
-                <div class="rule-title">One challenge per day</div>
-                <div class="rule-desc">Each player gets a unique challenge every day. Challenges rotate automatically — no two players get the same one!</div>
-              </div>
-            </div>
-            <div class="rule-item">
-              <div class="rule-icon">🌶️</div>
-              <div class="rule-content">
-                <div class="rule-title">Spice levels</div>
-                <div class="rule-desc">Each challenge has a difficulty level that determines how many points you earn.</div>
-                <div class="streak-table">
-                  <div class="streak-row"><span>🌱 Mild</span><span>1 pt</span></div>
-                  <div class="streak-row"><span>🌶️ Spicy</span><span>2 pts</span></div>
-                  <div class="streak-row"><span>🔥 Hot</span><span>3 pts</span></div>
-                  <div class="streak-row"><span>⚡ Atomic</span><span>5 pts</span></div>
-                </div>
-              </div>
-            </div>
-            <div class="rule-item">
-              <div class="rule-icon">🔥</div>
-              <div class="rule-content">
-                <div class="rule-title">Streak bonuses</div>
-                <div class="rule-desc">Complete challenges on consecutive days to unlock bonus points! Your streak resets to 0 if you miss a day.</div>
-                <div class="streak-table">
-                  <div class="streak-row"><span>🔥 3 days in a row</span><span>+1 pt bonus</span></div>
-                  <div class="streak-row"><span>🔥 5 days in a row</span><span>+2 pts bonus</span></div>
-                  <div class="streak-row"><span>🔥 10 days in a row</span><span>+3 pts bonus</span></div>
-                </div>
-              </div>
-            </div>
-            <div class="rule-item">
-              <div class="rule-icon">🎲</div>
-              <div class="rule-content">
-                <div class="rule-title">Reroll (once per day)</div>
-                <div class="rule-desc">Not feeling your challenge? Hit Reroll to get a random new one — no streak penalty! You only get one reroll per day, so use it wisely.</div>
-              </div>
-            </div>
-            <div class="rule-item">
-              <div class="rule-icon">✅</div>
-              <div class="rule-content">
-                <div class="rule-title">Challenge validation</div>
-                <div class="rule-desc">The game master checks the box for each player who completed their challenge. Be honest — shame is the real punishment 😈</div>
-              </div>
-            </div>
-            <div class="rule-item">
-              <div class="rule-icon">⏭️</div>
-              <div class="rule-content">
-                <div class="rule-title">Next Day button</div>
-                <div class="rule-desc">At the end of the day, the game master presses Next Day. Scores update, streaks are calculated, and new challenges are assigned for tomorrow.</div>
-              </div>
-            </div>
-            <div class="rule-item">
-              <div class="rule-icon">💡</div>
-              <div class="rule-content">
-                <div class="rule-title">Suggest a challenge</div>
-                <div class="rule-desc">Got a wild idea? Submit it using the form above. The game master reviews it before it enters the rotation.</div>
-              </div>
-            </div>
-            <div class="rule-item">
-              <div class="rule-icon">🏆</div>
-              <div class="rule-content">
-                <div class="rule-title">Leaderboard</div>
-                <div class="rule-desc">Rankings update in real time. The player with the most points at the end wins eternal glory 🌶️</div>
-              </div>
-            </div>
+          <div class="collapsible-body" id="rules-body">
+            <div class="rule-item"><div class="rule-icon">🎯</div><div><div class="rule-title">One challenge per day</div><div class="rule-desc">Each player gets a unique challenge every day. Challenges rotate automatically — no two players get the same one!</div></div></div>
+            <div class="rule-item"><div class="rule-icon">🌶️</div><div><div class="rule-title">Spice levels</div><div class="rule-desc">Each challenge has a difficulty level that determines how many points you earn.</div><div class="neon-table"><div class="neon-row"><span>🌱 Mild</span><span>1 pt</span></div><div class="neon-row"><span>🌶️ Spicy</span><span>2 pts</span></div><div class="neon-row"><span>🔥 Hot</span><span>3 pts</span></div><div class="neon-row"><span>⚡ Atomic</span><span>5 pts</span></div></div></div></div>
+            <div class="rule-item"><div class="rule-icon">🔥</div><div><div class="rule-title">Streak bonuses</div><div class="rule-desc">Complete challenges on consecutive days to unlock bonus points! Streak resets to 0 if you miss a day.</div><div class="neon-table"><div class="neon-row"><span>🔥 3 days in a row</span><span>+1 pt</span></div><div class="neon-row"><span>🔥 5 days in a row</span><span>+2 pts</span></div><div class="neon-row"><span>🔥 10 days in a row</span><span>+3 pts</span></div></div></div></div>
+            <div class="rule-item"><div class="rule-icon">🎲</div><div><div class="rule-title">Reroll (once per day)</div><div class="rule-desc">Not feeling your challenge? Hit Reroll to get a random new one — no streak penalty! One reroll per day, use it wisely.</div></div></div>
+            <div class="rule-item"><div class="rule-icon">✅</div><div><div class="rule-title">Challenge validation</div><div class="rule-desc">The game master checks the box for each player who completed their challenge. Be honest — shame is the real punishment 😈</div></div></div>
+            <div class="rule-item"><div class="rule-icon">💡</div><div><div class="rule-title">Suggest a challenge</div><div class="rule-desc">Got a wild idea? Submit it using the form above. The game master reviews it before it enters the rotation.</div></div></div>
+            <div class="rule-item"><div class="rule-icon">🏆</div><div><div class="rule-title">Leaderboard</div><div class="rule-desc">Rankings update in real time. The player with the most points at the end wins eternal glory 🌶️</div></div></div>
           </div>
         </div>
       </div>
@@ -489,7 +581,7 @@
 
   async function init() {
     try { await loadData(); render(); }
-    catch(e) { document.getElementById('root').innerHTML = '<div class="error-box">❌ Connection error.<br><br>Make sure NOTION_TOKEN is set in your Vercel environment variables.<br><br>Details: ' + e.message + '</div>'; }
+    catch(e) { document.getElementById('root').innerHTML = '<div class="error-box">❌ Connection error.<br><br>Make sure NOTION_TOKEN is set in Vercel environment variables.<br><br>Details: ' + e.message + '</div>'; }
   }
   init();
 </script>
