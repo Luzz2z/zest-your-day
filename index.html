@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌶️ Zest Your Day</title>
+  <link rel="icon" type="image/png" href="LOGOZEST.png" />
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -15,10 +16,20 @@
     body { font-family: 'Nunito', sans-serif; background: var(--darker); color: var(--text); min-height: 100vh; overflow-x: hidden; }
     body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at 20% 20%, rgba(230,57,70,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(244,162,97,0.1) 0%, transparent 50%); pointer-events: none; z-index: 0; }
     .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 0 100px; }
-    .header { padding: 32px 20px 20px; text-align: center; }
-    .header-mascot { font-size: 56px; display: block; animation: bounce 2s infinite; }
-    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    .header h1 { font-family: 'Bangers', cursive; font-size: 48px; letter-spacing: 3px; background: linear-gradient(135deg, var(--red), var(--orange), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin: 8px 0 4px; }
+
+    /* BANNER */
+    .banner {
+      width: 100%;
+      max-width: 480px;
+      aspect-ratio: 21/9;
+      object-fit: cover;
+      display: block;
+      border-radius: 0 0 24px 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    .header { padding: 20px 20px 16px; text-align: center; }
+    .header h1 { font-family: 'Bangers', cursive; font-size: 48px; letter-spacing: 3px; background: linear-gradient(135deg, var(--red), var(--orange), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 4px; }
     .header-sub { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
     .day-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,209,102,0.15); border: 1px solid rgba(255,209,102,0.3); border-radius: 20px; padding: 6px 16px; font-size: 14px; font-weight: 700; color: var(--yellow); margin-top: 12px; }
     .next-day-wrap { padding: 0 20px 24px; }
@@ -36,12 +47,12 @@
     .player-streak { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: var(--orange); background: rgba(244,162,97,0.15); border-radius: 10px; padding: 4px 10px; }
     .streak-bonus { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--yellow); background: rgba(255,209,102,0.15); border: 1px solid rgba(255,209,102,0.3); border-radius: 8px; padding: 2px 8px; margin-left: 6px; }
     .challenge-box { background: rgba(255,255,255,0.04); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
-    .challenge-id { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .challenge-id { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
     .challenge-name { font-weight: 700; font-size: 16px; line-height: 1.4; margin-bottom: 8px; }
     .challenge-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .spice-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(255,255,255,0.08); }
     .total-pts-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(255,209,102,0.15); color: var(--yellow); }
-    .rerolled-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(138,43,226,0.2); color: #c084fc; border: 1px solid rgba(138,43,226,0.3); }
+    .rerolled-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px; background: rgba(138,43,226,0.2); color: #c084fc; border: 1px solid rgba(138,43,226,0.3); }
     .card-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .validate-label { font-size: 14px; color: var(--muted); font-weight: 600; }
     .checkbox-wrap input[type="checkbox"] { display: none; }
@@ -67,8 +78,6 @@
     .lb-stat { text-align: center; }
     .lb-stat-val { font-weight: 900; font-size: 16px; }
     .lb-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-
-    /* SUGGEST */
     .suggest { padding: 0 20px; }
     .suggest-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
     .suggest-header { padding: 16px 20px; background: rgba(45,198,83,0.08); border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
@@ -89,9 +98,7 @@
     .btn-suggest { width: 100%; background: linear-gradient(135deg, var(--green), #1db954); border: none; border-radius: 12px; padding: 14px; font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: white; cursor: pointer; transition: transform 0.15s; }
     .btn-suggest:active { transform: scale(0.97); }
     .btn-suggest:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    /* RULES */
-    .rules { padding: 0 20px; margin-top: 0; }
+    .rules { padding: 0 20px; }
     .rules-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
     .rules-header { padding: 16px 20px; background: rgba(230,57,70,0.1); border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
     .rules-header h3 { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: var(--red); }
@@ -109,19 +116,21 @@
     .streak-row:last-child { border-bottom: none; }
     .streak-row span:first-child { color: var(--orange); font-weight: 700; }
     .streak-row span:last-child { color: var(--yellow); font-weight: 900; }
-
     .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; }
     .spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading p { color: var(--muted); font-weight: 600; }
     .error-box { margin: 20px; padding: 20px; background: rgba(230,57,70,0.1); border: 1px solid rgba(230,57,70,0.3); border-radius: 16px; color: var(--red); font-weight: 600; font-size: 14px; line-height: 1.6; }
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--green); color: white; font-weight: 700; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 999; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap; }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); color: white; font-weight: 700; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 999; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap; }
     .toast.show { transform: translateX(-50%) translateY(0); }
     .divider { height: 1px; background: rgba(255,255,255,0.06); margin: 24px 20px; }
   </style>
 </head>
 <body>
-<div class="app"><div id="root"><div class="loading"><div class="spinner"></div><p>Loading challenges...</p></div></div></div>
+<div class="app">
+  <img class="banner" src="Gemini_Generated_Image_4m0fhc4m0fhc4m0f.png" alt="Zest Your Day Banner" />
+  <div id="root"><div class="loading"><div class="spinner"></div><p>Loading challenges...</p></div></div>
+</div>
 <div class="toast" id="toast"></div>
 <script>
   const CONFIG = {
@@ -171,7 +180,7 @@
   function showToast(msg, color) {
     const t = document.getElementById('toast');
     t.textContent = msg;
-    t.style.background = color || 'var(--green)';
+    t.style.background = color || '#2DC653';
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
@@ -183,7 +192,6 @@
     const sys = sysPages[0];
     STATE.systemPageId = sys.id;
     STATE.dayCounter = getProp(sys, 'Day_Counter', 'number');
-
     const chPages = await notionQuery(CONFIG.db_challenges);
     STATE.challenges = {};
     STATE.allChallengeIds = [];
@@ -195,16 +203,11 @@
         STATE.allChallengeIds.push(id);
       }
     }
-
     const asgPages = await notionQuery(CONFIG.db_assignments);
     STATE.assignments = asgPages.map(p => ({
-      pageId: p.id,
-      name: getProp(p, 'Name', 'title'),
-      playerIndex: getProp(p, 'Player_Index', 'number'),
-      winStreak: getProp(p, 'Win_Streak', 'number'),
-      totalScore: getProp(p, 'Total_Score', 'number'),
-      defisReussis: getProp(p, 'Defis_Reussis', 'number'),
-      isValidated: getProp(p, 'Is_Validated', 'checkbox'),
+      pageId: p.id, name: getProp(p, 'Name', 'title'), playerIndex: getProp(p, 'Player_Index', 'number'),
+      winStreak: getProp(p, 'Win_Streak', 'number'), totalScore: getProp(p, 'Total_Score', 'number'),
+      defisReussis: getProp(p, 'Defis_Reussis', 'number'), isValidated: getProp(p, 'Is_Validated', 'checkbox'),
       challengeId: getProp(p, 'Challenge_ID_Today', 'formula_number'),
       hasRerolled: getProp(p, 'Has_Rerolled', 'checkbox'),
       rerollChallengeId: getProp(p, 'Reroll_Challenge_ID', 'number'),
@@ -227,24 +230,18 @@
   async function reroll(pageId) {
     const asg = STATE.assignments.find(a => a.pageId === pageId);
     if (!asg || asg.hasRerolled) return;
-
-    // Pick a random challenge different from current
     const current = getEffectiveChallengeId(asg);
     const available = STATE.allChallengeIds.filter(id => id !== current);
-    if (available.length === 0) { showToast('No other challenges available!', 'var(--orange)'); return; }
+    if (available.length === 0) { showToast('No other challenges available!', '#F4A261'); return; }
     const newId = available[Math.floor(Math.random() * available.length)];
-
     await notionPatch(pageId, {
       Has_Rerolled: { checkbox: true },
       Reroll_Challenge_ID: { number: newId },
-      Win_Streak: { number: 0 }, // streak penalty
     });
-
     asg.hasRerolled = true;
     asg.rerollChallengeId = newId;
-    asg.winStreak = 0;
     render();
-    showToast('🎲 Rerolled! Streak reset to 0.', '#c084fc');
+    showToast('🎲 New challenge! Streak kept 🔥', '#c084fc');
   }
 
   async function nextDay() {
@@ -257,44 +254,38 @@
         const pts = challenge?.points ?? 0;
         const bonus = asg.isValidated ? streakBonus(asg.winStreak) : 0;
         await notionPatch(asg.pageId, {
-          Total_Score:        { number: asg.isValidated ? asg.totalScore + pts + bonus : asg.totalScore },
-          Win_Streak:         { number: asg.isValidated ? asg.winStreak + 1 : 0 },
-          Defis_Reussis:      { number: asg.isValidated ? asg.defisReussis + 1 : asg.defisReussis },
-          Is_Validated:       { checkbox: false },
-          Has_Rerolled:       { checkbox: false },
-          Reroll_Challenge_ID:{ number: 0 },
+          Total_Score:         { number: asg.isValidated ? asg.totalScore + pts + bonus : asg.totalScore },
+          Win_Streak:          { number: asg.isValidated ? asg.winStreak + 1 : 0 },
+          Defis_Reussis:       { number: asg.isValidated ? asg.defisReussis + 1 : asg.defisReussis },
+          Is_Validated:        { checkbox: false },
+          Has_Rerolled:        { checkbox: false },
+          Reroll_Challenge_ID: { number: 0 },
         });
       }
       await notionPatch(STATE.systemPageId, { Day_Counter: { number: STATE.dayCounter + 1 } });
       showToast('🌶️ New day! New challenges!');
       await loadData(); render();
-    } catch(e) { showToast('❌ Error: ' + e.message, 'var(--red)'); btn.disabled = false; }
+    } catch(e) { showToast('❌ Error: ' + e.message, '#E63946'); btn.disabled = false; }
   }
 
   async function suggestChallenge() {
     const nameEl = document.getElementById('suggest-name');
     const spiceEl = document.querySelector('input[name="spice"]:checked');
-    if (!nameEl.value.trim()) { showToast('⚠️ Enter a challenge name!', 'var(--orange)'); return; }
-    if (!spiceEl) { showToast('⚠️ Pick a spice level!', 'var(--orange)'); return; }
-
+    if (!nameEl.value.trim()) { showToast('⚠️ Enter a challenge name!', '#F4A261'); return; }
+    if (!spiceEl) { showToast('⚠️ Pick a spice level!', '#F4A261'); return; }
     const btn = document.getElementById('btn-suggest');
     btn.disabled = true; btn.textContent = 'Sending...';
-
-    const spiceLabel = spiceEl.value;
-    const pts = SPICE_POINTS[spiceLabel] || 1;
-
+    const pts = SPICE_POINTS[spiceEl.value] || 1;
     try {
       await notionCreate(CONFIG.db_challenges, {
-        Name:        { title: [{ text: { content: nameEl.value.trim() } }] },
-        Points:      { number: pts },
-        Status:      { select: { name: '⏳ Pending' } },
+        Name:   { title: [{ text: { content: nameEl.value.trim() } }] },
+        Points: { number: pts },
+        Status: { select: { name: '⏳ Pending' } },
       });
-      showToast('💡 Challenge suggested! Awaiting approval.');
+      showToast('💡 Suggestion sent! Awaiting approval.');
       nameEl.value = '';
       if (spiceEl) spiceEl.checked = false;
-    } catch(e) {
-      showToast('❌ Error: ' + e.message, 'var(--red)');
-    }
+    } catch(e) { showToast('❌ Error: ' + e.message, '#E63946'); }
     btn.disabled = false; btn.textContent = '💡 SUGGEST CHALLENGE';
   }
 
@@ -307,19 +298,15 @@
     const root = document.getElementById('root');
     const lb = [...STATE.assignments].sort((a, b) => b.totalScore - a.totalScore);
     const rankEmoji = ['🥇','🥈','🥉','4️⃣'];
-
     root.innerHTML = `
       <div class="header">
-        <span class="header-mascot">🌶️</span>
         <h1>ZEST YOUR DAY</h1>
         <div class="header-sub">Mexico Edition</div>
         <div class="day-badge">📅 Day ${STATE.dayCounter}</div>
       </div>
-
       <div class="next-day-wrap">
         <button class="btn-next" id="btn-next" onclick="nextDay()">⏭️ NEXT DAY</button>
       </div>
-
       <div class="section-title">🎯 Today's Challenges</div>
       <div class="cards">
         ${STATE.assignments.map(asg => {
@@ -342,7 +329,10 @@
               </div>
             </div>
             <div class="challenge-box">
-              <div class="challenge-id">Challenge #${effectiveId} ${isRerolled ? '<span class="rerolled-badge">🎲 Rerolled</span>' : ''}</div>
+              <div class="challenge-id">
+                Challenge #${effectiveId}
+                ${isRerolled ? '<span class="rerolled-badge">🎲 Rerolled</span>' : ''}
+              </div>
               <div class="challenge-name">${challenge?.name ?? '⏳ Loading...'}</div>
               <div class="challenge-meta">
                 <span class="spice-badge" style="color:${spiceColor(pts)}">${challenge?.spice ?? ''} · ${pts} pt${pts > 1 ? 's' : ''}</span>
@@ -364,7 +354,6 @@
           </div>`;
         }).join('')}
       </div>
-
       <div class="divider"></div>
       <div class="section-title">🏆 Leaderboard</div>
       <div class="leaderboard">
@@ -382,7 +371,6 @@
           }).join('')}
         </div>
       </div>
-
       <div class="divider"></div>
       <div class="section-title">💡 Suggest a Challenge</div>
       <div class="suggest">
@@ -414,7 +402,6 @@
           </div>
         </div>
       </div>
-
       <div class="divider"></div>
       <div class="section-title">📖 Rules</div>
       <div class="rules">
@@ -435,7 +422,7 @@
               <div class="rule-icon">🌶️</div>
               <div class="rule-content">
                 <div class="rule-title">Spice levels</div>
-                <div class="rule-desc">Each challenge has a difficulty level that determines how many points you earn if you complete it.</div>
+                <div class="rule-desc">Each challenge has a difficulty level that determines how many points you earn.</div>
                 <div class="streak-table">
                   <div class="streak-row"><span>🌱 Mild</span><span>1 pt</span></div>
                   <div class="streak-row"><span>🌶️ Spicy</span><span>2 pts</span></div>
@@ -460,7 +447,7 @@
               <div class="rule-icon">🎲</div>
               <div class="rule-content">
                 <div class="rule-title">Reroll (once per day)</div>
-                <div class="rule-desc">Not feeling your challenge? Hit Reroll to get a random new one. But beware — your streak resets to 0! You only get one reroll per day.</div>
+                <div class="rule-desc">Not feeling your challenge? Hit Reroll to get a random new one — no streak penalty! You only get one reroll per day, so use it wisely.</div>
               </div>
             </div>
             <div class="rule-item">
@@ -474,7 +461,7 @@
               <div class="rule-icon">⏭️</div>
               <div class="rule-content">
                 <div class="rule-title">Next Day button</div>
-                <div class="rule-desc">At the end of the day, the game master presses Next Day. Scores are updated, streaks calculated, and new challenges are assigned for tomorrow.</div>
+                <div class="rule-desc">At the end of the day, the game master presses Next Day. Scores update, streaks are calculated, and new challenges are assigned for tomorrow.</div>
               </div>
             </div>
             <div class="rule-item">
