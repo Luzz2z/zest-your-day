@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌶️ Zest Admin</title>
+  <link rel="icon" type="image/png" href="LOGOZEST.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root { --red: #FF2D4B; --orange: #FF6B1A; --yellow: #FFD700; --green: #00FF88; --darker: #080810; --card: #0F0F20; --text: #F5F5F5; --muted: #6B7280; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: var(--darker); color: var(--text); min-height: 100vh; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(255,45,75,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,45,75,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+    .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 40px 20px 80px; }
+    .header { text-align: center; margin-bottom: 40px; }
+    .header-mascot { font-size: 56px; display: block; animation: bounce 2s ease-in-out infinite; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    h1 { font-family: 'Bangers', cursive; font-size: 42px; letter-spacing: 3px; background: linear-gradient(135deg, var(--red), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 8px 0 4px; }
+    .subtitle { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; }
+
+    .day-display { background: var(--card); border-radius: 24px; border: 1px solid rgba(255,45,75,0.2); padding: 28px; text-align: center; margin-bottom: 20px; box-shadow: 0 0 40px rgba(255,45,75,0.08); }
+    .day-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; }
+    .day-number { font-family: 'Bangers', cursive; font-size: 80px; color: var(--yellow); line-height: 1; text-shadow: 0 0 40px rgba(255,215,0,0.4); }
+
+    .btn-nextday {
+      width: 100%; background: linear-gradient(135deg, var(--red), var(--orange));
+      border: none; border-radius: 20px; padding: 22px;
+      font-family: 'Bangers', cursive; font-size: 28px; letter-spacing: 3px;
+      color: white; cursor: pointer;
+      box-shadow: 0 0 40px rgba(255,45,75,0.4), 0 8px 32px rgba(255,45,75,0.3);
+      transition: transform 0.15s, box-shadow 0.2s;
+      margin-bottom: 20px;
+    }
+    .btn-nextday:active { transform: scale(0.97); }
+    .btn-nextday:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .warning { background: rgba(255,107,26,0.08); border: 1px solid rgba(255,107,26,0.2); border-radius: 16px; padding: 14px 18px; font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+    .warning strong { color: var(--orange); }
+
+    .section-title { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; }
+
+    .players-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .player-row { background: var(--card); border-radius: 16px; padding: 16px 20px; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; }
+    .player-left { display: flex; align-items: center; gap: 12px; }
+    .player-emoji { font-size: 28px; }
+    .player-name { font-weight: 900; font-size: 16px; }
+    .player-stats { display: flex; gap: 12px; }
+    .stat { text-align: center; }
+    .stat-val { font-weight: 900; font-size: 16px; }
+    .stat-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    .checkbox-wrap input[type="checkbox"] { display: none; }
+    .checkbox-custom { width: 36px; height: 36px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.25s; font-size: 18px; }
+    .checkbox-wrap input:checked + .checkbox-custom { background: var(--green); border-color: var(--green); box-shadow: 0 0 20px rgba(0,255,136,0.5); }
+
+    .back-link { display: block; text-align: center; color: var(--muted); font-size: 13px; font-weight: 700; text-decoration: none; margin-top: 20px; }
+    .back-link:hover { color: var(--text); }
+
+    .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh; gap: 16px; }
+    .spinner { width: 48px; height: 48px; border: 3px solid rgba(255,45,75,0.2); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading p { color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 12px; }
+
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(120px); color: white; font-weight: 900; padding: 14px 28px; border-radius: 50px; font-size: 14px; z-index: 9999; transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <span class="header-mascot">⚙️</span>
+    <h1>ADMIN PANEL</h1>
+    <div class="subtitle">Game Master Only 🌶️</div>
+  </div>
+  <div id="root"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
+  <a href="/" class="back-link">← Back to player view</a>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  const CONFIG = {
+    db_system:      '354403dde0e380aa85bfe7d9fd139be5',
+    db_challenges:  '354403dde0e3804f8644d242a0ec6bf6',
+    db_assignments: '354403dde0e380f797ccfb85ad5a072e',
+  };
+  const PLAYERS = [
+    { name: 'Banuu',                emoji: '🌵', color: '#00FF88' },
+    { name: 'Luzz',                 emoji: '🔥', color: '#FF2D4B' },
+    { name: 'Y',                    emoji: '⚡', color: '#FFD700' },
+    { name: 'Nico multimilionario', emoji: '💰', color: '#FF6B1A' },
+  ];
+
+  async function notionQuery(dbId, body = {}) {
+    const res = await fetch('/api/notion?endpoint=databases/' + dbId + '/query', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+    return data.results;
+  }
+  async function notionPatch(pageId, properties) {
+    const res = await fetch('/api/notion?endpoint=pages/' + pageId, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ properties }) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+    return data;
+  }
+  function getProp(page, name, type) {
+    const p = page.properties[name];
+    if (!p) return null;
+    if (type === 'number') return p.number ?? 0;
+    if (type === 'title') return p.title?.[0]?.plain_text ?? '';
+    if (type === 'checkbox') return p.checkbox ?? false;
+    if (type === 'formula_number') return p.formula?.number ?? 0;
+    return null;
+  }
+  function showToast(msg, color) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.style.background = color || '#00FF88';
+    t.style.boxShadow = `0 0 30px ${color || '#00FF88'}80`;
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  let STATE = { dayCounter: 1, systemPageId: null, challenges: {}, assignments: [], allChallengeIds: [] };
+
+  async function loadData() {
+    const sysPages = await notionQuery(CONFIG.db_system);
+    const sys = sysPages[0];
+    STATE.systemPageId = sys.id;
+    STATE.dayCounter = getProp(sys, 'Day_Counter', 'number');
+    const chPages = await notionQuery(CONFIG.db_challenges);
+    STATE.challenges = {}; STATE.allChallengeIds = [];
+    for (const p of chPages) {
+      const id = getProp(p, 'ID_Global', 'number');
+      STATE.challenges[id] = { id, name: getProp(p, 'Name', 'title'), points: getProp(p, 'Points', 'number') };
+      STATE.allChallengeIds.push(id);
+    }
+    const asgPages = await notionQuery(CONFIG.db_assignments);
+    STATE.assignments = asgPages.map(p => ({
+      pageId: p.id, name: getProp(p, 'Name', 'title'), playerIndex: getProp(p, 'Player_Index', 'number'),
+      winStreak: getProp(p, 'Win_Streak', 'number'), totalScore: getProp(p, 'Total_Score', 'number'),
+      defisReussis: getProp(p, 'Defis_Reussis', 'number'), isValidated: getProp(p, 'Is_Validated', 'checkbox'),
+      challengeId: getProp(p, 'Challenge_ID_Today', 'formula_number'),
+      rerollChallengeId: getProp(p, 'Reroll_Challenge_ID', 'number'),
+    })).sort((a, b) => a.playerIndex - b.playerIndex);
+  }
+
+  function getEffectiveChallengeId(asg) {
+    return (asg.rerollChallengeId && asg.rerollChallengeId > 0) ? asg.rerollChallengeId : asg.challengeId;
+  }
+
+  async function toggleValidation(pageId, current) {
+    const newVal = !current;
+    await notionPatch(pageId, { Is_Validated: { checkbox: newVal } });
+    const asg = STATE.assignments.find(a => a.pageId === pageId);
+    if (asg) asg.isValidated = newVal;
+    render();
+    showToast(newVal ? '✅ Validated!' : '❌ Removed', newVal ? '#00FF88' : '#FF2D4B');
+  }
+
+  function streakBonus(s) { return s >= 10 ? 3 : s >= 5 ? 2 : s >= 3 ? 1 : 0; }
+
+  async function nextDay() {
+    const btn = document.getElementById('btn-nextday');
+    btn.disabled = true; btn.textContent = '⏳ UPDATING...';
+    try {
+      for (const asg of STATE.assignments) {
+        const effectiveId = getEffectiveChallengeId(asg);
+        const challenge = STATE.challenges[effectiveId];
+        const pts = challenge?.points ?? 0;
+        const bonus = asg.isValidated ? streakBonus(asg.winStreak) : 0;
+        await notionPatch(asg.pageId, {
+          Total_Score:         { number: asg.isValidated ? asg.totalScore + pts + bonus : asg.totalScore },
+          Win_Streak:          { number: asg.isValidated ? asg.winStreak + 1 : 0 },
+          Defis_Reussis:       { number: asg.isValidated ? asg.defisReussis + 1 : asg.defisReussis },
+          Is_Validated:        { checkbox: false },
+          Has_Rerolled:        { checkbox: false },
+          Reroll_Challenge_ID: { number: 0 },
+        });
+      }
+      await notionPatch(STATE.systemPageId, { Day_Counter: { number: STATE.dayCounter + 1 } });
+      showToast('🌶️ Day ' + (STATE.dayCounter + 1) + ' started!', '#FF6B1A');
+      await loadData(); render();
+    } catch(e) { showToast('❌ Error: ' + e.message, '#FF2D4B'); btn.disabled = false; btn.textContent = '⏭️ NEXT DAY'; }
+  }
+
+  function render() {
+    const root = document.getElementById('root');
+    root.innerHTML = `
+      <div class="day-display">
+        <div class="day-label">Current Day</div>
+        <div class="day-number">${STATE.dayCounter}</div>
+      </div>
+
+      <div class="warning">
+        <strong>⚠️ Next Day</strong> will save scores, reset checkboxes and rerolls, and move to Day ${STATE.dayCounter + 1}. Make sure all validations are done first!
+      </div>
+
+      <button class="btn-nextday" id="btn-nextday" onclick="nextDay()">⏭️ NEXT DAY</button>
+
+      <div class="section-title">✅ Today's Validations</div>
+      <div class="players-grid">
+        ${STATE.assignments.map(asg => {
+          const player = PLAYERS[asg.playerIndex] || { name: asg.name, emoji: '🎮', color: '#8892A4' };
+          const effectiveId = getEffectiveChallengeId(asg);
+          const challenge = STATE.challenges[effectiveId];
+          return `
+          <div class="player-row" style="border-color:${asg.isValidated ? 'rgba(0,255,136,0.2)' : 'rgba(255,255,255,0.05)'}">
+            <div class="player-left">
+              <span class="player-emoji">${player.emoji}</span>
+              <div>
+                <div class="player-name" style="color:${player.color}">${player.name}</div>
+                <div style="font-size:12px;color:#6B7280;margin-top:2px">${challenge?.name ?? '—'}</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px">
+              <div class="player-stats">
+                <div class="stat"><div class="stat-val" style="color:#FFD700">${asg.totalScore}</div><div class="stat-lbl">pts</div></div>
+                <div class="stat"><div class="stat-val" style="color:#FF6B1A">${asg.winStreak}🔥</div><div class="stat-lbl">streak</div></div>
+              </div>
+              <label class="checkbox-wrap">
+                <input type="checkbox" ${asg.isValidated ? 'checked' : ''} onchange="toggleValidation('${asg.pageId}', ${asg.isValidated})" />
+                <div class="checkbox-custom">${asg.isValidated ? '✓' : ''}</div>
+              </label>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  async function init() {
+    try { await loadData(); render(); }
+    catch(e) { document.getElementById('root').innerHTML = '<div style="color:#FF2D4B;padding:20px">❌ ' + e.message + '</div>'; }
+  }
+  init();
+</script>
+</body>
+</html>
