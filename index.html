@@ -7,375 +7,118 @@
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --red: #E63946;
-      --orange: #F4A261;
-      --yellow: #FFD166;
-      --green: #2DC653;
-      --dark: #1A1A2E;
-      --darker: #0F0F1A;
-      --card: #16213E;
-      --text: #F5F5F5;
-      --muted: #8892A4;
+      --red: #E63946; --orange: #F4A261; --yellow: #FFD166;
+      --green: #2DC653; --darker: #0F0F1A; --card: #16213E;
+      --text: #F5F5F5; --muted: #8892A4;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--darker);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 20%, rgba(230,57,70,0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(244,162,97,0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(45,198,83,0.05) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
+    body { font-family: 'Nunito', sans-serif; background: var(--darker); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at 20% 20%, rgba(230,57,70,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(244,162,97,0.1) 0%, transparent 50%); pointer-events: none; z-index: 0; }
     .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 0 100px; }
-
-    .header {
-      padding: 32px 20px 20px;
-      text-align: center;
-    }
-
+    .header { padding: 32px 20px 20px; text-align: center; }
     .header-mascot { font-size: 56px; display: block; animation: bounce 2s infinite; }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .header h1 {
-      font-family: 'Bangers', cursive;
-      font-size: 48px;
-      letter-spacing: 3px;
-      background: linear-gradient(135deg, var(--red), var(--orange), var(--yellow));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-      margin: 8px 0 4px;
-    }
-
-    .header-sub {
-      font-size: 13px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .day-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,209,102,0.15);
-      border: 1px solid rgba(255,209,102,0.3);
-      border-radius: 20px;
-      padding: 6px 16px;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--yellow);
-      margin-top: 12px;
-    }
-
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .header h1 { font-family: 'Bangers', cursive; font-size: 48px; letter-spacing: 3px; background: linear-gradient(135deg, var(--red), var(--orange), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin: 8px 0 4px; }
+    .header-sub { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
+    .day-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,209,102,0.15); border: 1px solid rgba(255,209,102,0.3); border-radius: 20px; padding: 6px 16px; font-size: 14px; font-weight: 700; color: var(--yellow); margin-top: 12px; }
     .next-day-wrap { padding: 0 20px 24px; }
-
-    .btn-next {
-      width: 100%;
-      background: linear-gradient(135deg, var(--red), var(--orange));
-      border: none;
-      border-radius: 16px;
-      padding: 18px;
-      font-family: 'Bangers', cursive;
-      font-size: 24px;
-      letter-spacing: 2px;
-      color: white;
-      cursor: pointer;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(230,57,70,0.4);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
+    .btn-next { width: 100%; background: linear-gradient(135deg, var(--red), var(--orange)); border: none; border-radius: 16px; padding: 18px; font-family: 'Bangers', cursive; font-size: 24px; letter-spacing: 2px; color: white; cursor: pointer; box-shadow: 0 8px 32px rgba(230,57,70,0.4); transition: transform 0.15s; }
     .btn-next:active { transform: scale(0.97); }
     .btn-next:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .section-title {
-      font-family: 'Bangers', cursive;
-      font-size: 22px;
-      letter-spacing: 2px;
-      color: var(--muted);
-      text-transform: uppercase;
-      padding: 0 20px 12px;
-    }
-
+    .section-title { font-family: 'Bangers', cursive; font-size: 22px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; padding: 0 20px 12px; }
     .cards { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
-
-    .card {
-      background: var(--card);
-      border-radius: 20px;
-      padding: 20px;
-      border: 1px solid rgba(255,255,255,0.06);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--player-color);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
+    .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.06); position: relative; overflow: hidden; }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--player-color); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
     .player-info { display: flex; align-items: center; gap: 10px; }
     .player-emoji { font-size: 28px; }
     .player-name { font-weight: 900; font-size: 18px; }
-
-    .player-streak {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--orange);
-      background: rgba(244,162,97,0.15);
-      border-radius: 10px;
-      padding: 4px 10px;
-    }
-
-    .challenge-box {
-      background: rgba(255,255,255,0.04);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 14px;
-    }
-
-    .challenge-id {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-    }
-
-    .challenge-name {
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 1.4;
-      margin-bottom: 8px;
-    }
-
-    .spice-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-    }
-
-    .validate-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
+    .player-streak { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: var(--orange); background: rgba(244,162,97,0.15); border-radius: 10px; padding: 4px 10px; }
+    .streak-bonus { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--yellow); background: rgba(255,209,102,0.15); border: 1px solid rgba(255,209,102,0.3); border-radius: 8px; padding: 2px 8px; margin-left: 6px; }
+    .challenge-box { background: rgba(255,255,255,0.04); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
+    .challenge-id { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .challenge-name { font-weight: 700; font-size: 16px; line-height: 1.4; margin-bottom: 8px; }
+    .challenge-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .spice-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(255,255,255,0.08); }
+    .total-pts-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: rgba(255,209,102,0.15); color: var(--yellow); }
+    .validate-row { display: flex; align-items: center; justify-content: space-between; }
     .validate-label { font-size: 14px; color: var(--muted); font-weight: 600; }
-
-    .checkbox-wrap { position: relative; }
     .checkbox-wrap input[type="checkbox"] { display: none; }
-
-    .checkbox-custom {
-      width: 32px; height: 32px;
-      border-radius: 10px;
-      border: 2px solid rgba(255,255,255,0.2);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 16px;
-    }
-
-    .checkbox-wrap input:checked + .checkbox-custom {
-      background: var(--green);
-      border-color: var(--green);
-      box-shadow: 0 0 16px rgba(45,198,83,0.4);
-    }
-
+    .checkbox-custom { width: 32px; height: 32px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 16px; }
+    .checkbox-wrap input:checked + .checkbox-custom { background: var(--green); border-color: var(--green); box-shadow: 0 0 16px rgba(45,198,83,0.4); }
     .card.validated { border-color: rgba(45,198,83,0.3); }
-    .card.validated::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(45,198,83,0.04);
-      pointer-events: none;
-    }
-
+    .card.validated::after { content: ''; position: absolute; inset: 0; background: rgba(45,198,83,0.04); pointer-events: none; }
     .leaderboard { padding: 0 20px; }
-
-    .lb-card {
-      background: var(--card);
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .lb-header-row {
-      display: grid;
-      grid-template-columns: 36px 1fr 60px 60px 60px;
-      gap: 8px;
-      padding: 10px 16px;
-      background: rgba(255,255,255,0.03);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .lb-header-row span {
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      text-align: center;
-      font-weight: 700;
-    }
+    .lb-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+    .lb-header-row { display: grid; grid-template-columns: 36px 1fr 60px 60px 60px; gap: 8px; padding: 10px 16px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .lb-header-row span { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; text-align: center; font-weight: 700; }
     .lb-header-row span:nth-child(2) { text-align: left; }
-
-    .lb-row {
-      display: grid;
-      grid-template-columns: 36px 1fr 60px 60px 60px;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
+    .lb-row { display: grid; grid-template-columns: 36px 1fr 60px 60px 60px; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .lb-row:last-child { border-bottom: none; }
     .lb-row:first-child { background: rgba(255,209,102,0.08); }
-
     .lb-rank { font-family: 'Bangers', cursive; font-size: 20px; text-align: center; }
     .lb-player { display: flex; align-items: center; gap: 8px; }
     .lb-emoji { font-size: 20px; }
     .lb-name { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
     .lb-stat { text-align: center; }
     .lb-stat-val { font-weight: 900; font-size: 16px; }
     .lb-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 60vh;
-      gap: 16px;
-    }
-
-    .spinner {
-      width: 48px; height: 48px;
-      border: 4px solid rgba(255,255,255,0.1);
-      border-top-color: var(--red);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
+    .rules { padding: 0 20px; margin-top: 8px; }
+    .rules-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+    .rules-header { padding: 16px 20px; background: rgba(230,57,70,0.1); border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+    .rules-header h3 { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; color: var(--red); }
+    .rules-toggle { font-size: 18px; transition: transform 0.3s; }
+    .rules-toggle.open { transform: rotate(180deg); }
+    .rules-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+    .rules-body.open { max-height: 1200px; padding: 20px; }
+    .rule-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .rule-item:last-child { border-bottom: none; }
+    .rule-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .rule-title { font-weight: 900; font-size: 15px; margin-bottom: 4px; }
+    .rule-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .streak-table { margin-top: 10px; background: rgba(255,255,255,0.04); border-radius: 10px; overflow: hidden; }
+    .streak-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
+    .streak-row:last-child { border-bottom: none; }
+    .streak-row span:first-child { color: var(--orange); font-weight: 700; }
+    .streak-row span:last-child { color: var(--yellow); font-weight: 900; }
+    .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; }
+    .spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading p { color: var(--muted); font-weight: 600; }
-
-    .error-box {
-      margin: 20px;
-      padding: 20px;
-      background: rgba(230,57,70,0.1);
-      border: 1px solid rgba(230,57,70,0.3);
-      border-radius: 16px;
-      color: var(--red);
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--green);
-      color: white;
-      font-weight: 700;
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-size: 14px;
-      z-index: 999;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      white-space: nowrap;
-    }
+    .error-box { margin: 20px; padding: 20px; background: rgba(230,57,70,0.1); border: 1px solid rgba(230,57,70,0.3); border-radius: 16px; color: var(--red); font-weight: 600; font-size: 14px; line-height: 1.6; }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--green); color: white; font-weight: 700; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 999; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap; }
     .toast.show { transform: translateX(-50%) translateY(0); }
-
     .divider { height: 1px; background: rgba(255,255,255,0.06); margin: 24px 20px; }
   </style>
 </head>
 <body>
-
-<div class="app">
-  <div id="root">
-    <div class="loading">
-      <div class="spinner"></div>
-      <p>Chargement des défis...</p>
-    </div>
-  </div>
-</div>
-
+<div class="app"><div id="root"><div class="loading"><div class="spinner"></div><p>Chargement des défis...</p></div></div></div>
 <div class="toast" id="toast"></div>
-
 <script>
   const CONFIG = {
     db_system:      '354403dde0e380aa85bfe7d9fd139be5',
     db_challenges:  '354403dde0e3804f8644d242a0ec6bf6',
     db_assignments: '354403dde0e380f797ccfb85ad5a072e',
   };
-
   const PLAYERS = [
-    { name: 'Banuu',               emoji: '🌵', color: '#2DC653' },
-    { name: 'Luzz',                emoji: '🔥', color: '#E63946' },
-    { name: 'Y',                   emoji: '⚡', color: '#FFD166' },
+    { name: 'Banuu',                emoji: '🌵', color: '#2DC653' },
+    { name: 'Luzz',                 emoji: '🔥', color: '#E63946' },
+    { name: 'Y',                    emoji: '⚡', color: '#FFD166' },
     { name: 'Nico multimilionario', emoji: '💰', color: '#F4A261' },
   ];
-
-  // Appels via notre proxy Vercel — le token reste côté serveur
+  function streakBonus(s) { return s >= 10 ? 3 : s >= 5 ? 2 : s >= 3 ? 1 : 0; }
   async function notionQuery(dbId, body = {}) {
-    const res = await fetch(`/api/notion?endpoint=databases/${dbId}/query`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
+    const res = await fetch('/api/notion?endpoint=databases/' + dbId + '/query', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Erreur Notion');
     return data.results;
   }
-
   async function notionPatch(pageId, properties) {
-    const res = await fetch(`/api/notion?endpoint=pages/${pageId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ properties }),
-    });
+    const res = await fetch('/api/notion?endpoint=pages/' + pageId, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ properties }) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Erreur mise à jour');
     return data;
   }
-
   function getProp(page, name, type) {
     const p = page.properties[name];
     if (!p) return null;
@@ -387,54 +130,32 @@
     if (type === 'select') return p.select?.name ?? '';
     return null;
   }
-
   function showToast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
+    t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
-
-  function spiceColor(pts) {
-    if (pts >= 5) return '#E63946';
-    if (pts >= 3) return '#F4A261';
-    if (pts >= 2) return '#FFD166';
-    return '#2DC653';
-  }
-
+  function spiceColor(pts) { return pts >= 5 ? '#E63946' : pts >= 3 ? '#F4A261' : pts >= 2 ? '#FFD166' : '#2DC653'; }
   let STATE = { dayCounter: 1, systemPageId: null, challenges: {}, assignments: [] };
-
   async function loadData() {
     const sysPages = await notionQuery(CONFIG.db_system);
     const sys = sysPages[0];
     STATE.systemPageId = sys.id;
     STATE.dayCounter = getProp(sys, 'Day_Counter', 'number');
-
     const chPages = await notionQuery(CONFIG.db_challenges);
     STATE.challenges = {};
     for (const p of chPages) {
       const id = getProp(p, 'ID_Global', 'number');
-      STATE.challenges[id] = {
-        id,
-        name: getProp(p, 'Name', 'title'),
-        points: getProp(p, 'Points', 'number'),
-        spice: getProp(p, 'Spice_Level', 'formula_string') || getProp(p, 'Spice_Level', 'select'),
-      };
+      STATE.challenges[id] = { id, name: getProp(p, 'Name', 'title'), points: getProp(p, 'Points', 'number'), spice: getProp(p, 'Spice_Level', 'formula_string') || getProp(p, 'Spice_Level', 'select') };
     }
-
     const asgPages = await notionQuery(CONFIG.db_assignments);
     STATE.assignments = asgPages.map(p => ({
-      pageId: p.id,
-      name: getProp(p, 'Name', 'title'),
-      playerIndex: getProp(p, 'Player_Index', 'number'),
-      winStreak: getProp(p, 'Win_Streak', 'number'),
-      totalScore: getProp(p, 'Total_Score', 'number'),
-      defisReussis: getProp(p, 'Defis_Reussis', 'number'),
-      isValidated: getProp(p, 'Is_Validated', 'checkbox'),
+      pageId: p.id, name: getProp(p, 'Name', 'title'), playerIndex: getProp(p, 'Player_Index', 'number'),
+      winStreak: getProp(p, 'Win_Streak', 'number'), totalScore: getProp(p, 'Total_Score', 'number'),
+      defisReussis: getProp(p, 'Defis_Reussis', 'number'), isValidated: getProp(p, 'Is_Validated', 'checkbox'),
       challengeId: getProp(p, 'Challenge_ID_Today', 'formula_number'),
     })).sort((a, b) => a.playerIndex - b.playerIndex);
   }
-
   async function toggleValidation(pageId, current) {
     const newVal = !current;
     await notionPatch(pageId, { Is_Validated: { checkbox: newVal } });
@@ -443,42 +164,34 @@
     render();
     showToast(newVal ? '✅ Défi validé !' : '❌ Validation retirée');
   }
-
   async function nextDay() {
     const btn = document.getElementById('btn-next');
-    btn.disabled = true;
-    btn.textContent = '⏳ Mise à jour...';
-
+    btn.disabled = true; btn.textContent = '⏳ Mise à jour...';
     try {
       for (const asg of STATE.assignments) {
         const challenge = STATE.challenges[asg.challengeId];
         const pts = challenge?.points ?? 0;
+        const bonus = asg.isValidated ? streakBonus(asg.winStreak) : 0;
         await notionPatch(asg.pageId, {
-          Total_Score:   { number: asg.isValidated ? asg.totalScore + pts : asg.totalScore },
+          Total_Score:   { number: asg.isValidated ? asg.totalScore + pts + bonus : asg.totalScore },
           Win_Streak:    { number: asg.isValidated ? asg.winStreak + 1 : 0 },
           Defis_Reussis: { number: asg.isValidated ? asg.defisReussis + 1 : asg.defisReussis },
           Is_Validated:  { checkbox: false },
         });
       }
-
-      await notionPatch(STATE.systemPageId, {
-        Day_Counter: { number: STATE.dayCounter + 1 },
-      });
-
+      await notionPatch(STATE.systemPageId, { Day_Counter: { number: STATE.dayCounter + 1 } });
       showToast('🌶️ Nouveau jour ! Nouveaux défis !');
-      await loadData();
-      render();
-    } catch(e) {
-      showToast('❌ Erreur : ' + e.message);
-      btn.disabled = false;
-    }
+      await loadData(); render();
+    } catch(e) { showToast('❌ Erreur : ' + e.message); btn.disabled = false; }
   }
-
+  function toggleRules() {
+    document.getElementById('rules-body').classList.toggle('open');
+    document.getElementById('rules-toggle').classList.toggle('open');
+  }
   function render() {
     const root = document.getElementById('root');
     const lb = [...STATE.assignments].sort((a, b) => b.totalScore - a.totalScore);
-    const rankEmoji = ['🥇', '🥈', '🥉', '4️⃣'];
-
+    const rankEmoji = ['🥇','🥈','🥉','4️⃣'];
     root.innerHTML = `
       <div class="header">
         <span class="header-mascot">🌶️</span>
@@ -486,20 +199,16 @@
         <div class="header-sub">Mexico Edition</div>
         <div class="day-badge">📅 Jour ${STATE.dayCounter}</div>
       </div>
-
       <div class="next-day-wrap">
-        <button class="btn-next" id="btn-next" onclick="nextDay()">
-          ⏭️ NEXT DAY
-        </button>
+        <button class="btn-next" id="btn-next" onclick="nextDay()">⏭️ NEXT DAY</button>
       </div>
-
       <div class="section-title">🎯 Défis du jour</div>
-
       <div class="cards">
         ${STATE.assignments.map(asg => {
           const player = PLAYERS[asg.playerIndex] || { name: asg.name, emoji: '🎮', color: '#8892A4' };
           const challenge = STATE.challenges[asg.challengeId];
           const pts = challenge?.points ?? 0;
+          const bonus = streakBonus(asg.winStreak);
           return `
           <div class="card ${asg.isValidated ? 'validated' : ''}" style="--player-color: ${player.color}">
             <div class="card-header">
@@ -507,77 +216,117 @@
                 <span class="player-emoji">${player.emoji}</span>
                 <span class="player-name">${player.name}</span>
               </div>
-              <div class="player-streak">🔥 ${asg.winStreak}</div>
+              <div style="display:flex;align-items:center">
+                <div class="player-streak">🔥 ${asg.winStreak}</div>
+                ${bonus > 0 ? `<span class="streak-bonus">⚡ +${bonus} bonus</span>` : ''}
+              </div>
             </div>
             <div class="challenge-box">
               <div class="challenge-id">Défi #${asg.challengeId}</div>
               <div class="challenge-name">${challenge?.name ?? '⏳ Chargement...'}</div>
-              <span class="spice-badge" style="color:${spiceColor(pts)}">
-                ${challenge?.spice ?? ''} · ${pts} pt${pts > 1 ? 's' : ''}
-              </span>
+              <div class="challenge-meta">
+                <span class="spice-badge" style="color:${spiceColor(pts)}">${challenge?.spice ?? ''} · ${pts} pt${pts > 1 ? 's' : ''}</span>
+                ${bonus > 0 ? `<span class="total-pts-badge">⚡ Total : ${pts + bonus} pts</span>` : ''}
+              </div>
             </div>
             <div class="validate-row">
               <span class="validate-label">Défi réussi ?</span>
               <label class="checkbox-wrap">
-                <input type="checkbox" ${asg.isValidated ? 'checked' : ''}
-                  onchange="toggleValidation('${asg.pageId}', ${asg.isValidated})" />
+                <input type="checkbox" ${asg.isValidated ? 'checked' : ''} onchange="toggleValidation('${asg.pageId}', ${asg.isValidated})" />
                 <div class="checkbox-custom">${asg.isValidated ? '✓' : ''}</div>
               </label>
             </div>
           </div>`;
         }).join('')}
       </div>
-
       <div class="divider"></div>
       <div class="section-title">🏆 Leaderboard</div>
-
       <div class="leaderboard">
         <div class="lb-card">
-          <div class="lb-header-row">
-            <span>#</span><span>Joueur</span><span>Score</span><span>Streak</span><span>✅</span>
-          </div>
+          <div class="lb-header-row"><span>#</span><span>Joueur</span><span>Score</span><span>Streak</span><span>✅</span></div>
           ${lb.map((asg, i) => {
             const player = PLAYERS[asg.playerIndex] || { name: asg.name, emoji: '🎮' };
-            return `
-            <div class="lb-row">
+            return `<div class="lb-row">
               <div class="lb-rank">${rankEmoji[i] ?? i+1}</div>
-              <div class="lb-player">
-                <span class="lb-emoji">${player.emoji}</span>
-                <span class="lb-name">${player.name}</span>
-              </div>
-              <div class="lb-stat">
-                <div class="lb-stat-val" style="color:var(--yellow)">${asg.totalScore}</div>
-                <div class="lb-stat-label">pts</div>
-              </div>
-              <div class="lb-stat">
-                <div class="lb-stat-val" style="color:var(--orange)">${asg.winStreak}🔥</div>
-                <div class="lb-stat-label">streak</div>
-              </div>
-              <div class="lb-stat">
-                <div class="lb-stat-val" style="color:var(--green)">${asg.defisReussis}</div>
-                <div class="lb-stat-label">faits</div>
-              </div>
+              <div class="lb-player"><span class="lb-emoji">${player.emoji}</span><span class="lb-name">${player.name}</span></div>
+              <div class="lb-stat"><div class="lb-stat-val" style="color:var(--yellow)">${asg.totalScore}</div><div class="lb-stat-label">pts</div></div>
+              <div class="lb-stat"><div class="lb-stat-val" style="color:var(--orange)">${asg.winStreak}🔥</div><div class="lb-stat-label">streak</div></div>
+              <div class="lb-stat"><div class="lb-stat-val" style="color:var(--green)">${asg.defisReussis}</div><div class="lb-stat-label">faits</div></div>
             </div>`;
           }).join('')}
         </div>
       </div>
+      <div class="divider"></div>
+      <div class="section-title">📖 Règles</div>
+      <div class="rules">
+        <div class="rules-card">
+          <div class="rules-header" onclick="toggleRules()">
+            <h3>📜 COMMENT ÇA MARCHE ?</h3>
+            <span class="rules-toggle" id="rules-toggle">▼</span>
+          </div>
+          <div class="rules-body" id="rules-body">
+            <div class="rule-item">
+              <div class="rule-icon">🎯</div>
+              <div class="rule-content">
+                <div class="rule-title">Un défi par jour</div>
+                <div class="rule-desc">Chaque joueur reçoit un défi unique chaque jour. Les défis tournent automatiquement — impossible d'avoir le même que ton voisin !</div>
+              </div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-icon">🌶️</div>
+              <div class="rule-content">
+                <div class="rule-title">Niveaux de piment</div>
+                <div class="rule-desc">Chaque défi a un niveau de difficulté qui détermine les points gagnés.</div>
+                <div class="streak-table">
+                  <div class="streak-row"><span>🌱 Mild</span><span>1 pt</span></div>
+                  <div class="streak-row"><span>🌶️ Spicy</span><span>2 pts</span></div>
+                  <div class="streak-row"><span>🔥 Hot</span><span>3 pts</span></div>
+                  <div class="streak-row"><span>⚡ Atomic</span><span>5 pts</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-icon">🔥</div>
+              <div class="rule-content">
+                <div class="rule-title">Bonus de streak</div>
+                <div class="rule-desc">Enchaîne les défis réussis pour débloquer des points bonus ! La streak repart à 0 si tu rates un jour.</div>
+                <div class="streak-table">
+                  <div class="streak-row"><span>🔥 3 jours d'affilée</span><span>+1 pt bonus</span></div>
+                  <div class="streak-row"><span>🔥 5 jours d'affilée</span><span>+2 pts bonus</span></div>
+                  <div class="streak-row"><span>🔥 10 jours d'affilée</span><span>+3 pts bonus</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-icon">✅</div>
+              <div class="rule-content">
+                <div class="rule-title">Validation des défis</div>
+                <div class="rule-desc">Le maître du jeu coche la case de chaque joueur qui a réussi son défi. Soyez honnêtes — la honte est la vraie punition 😈</div>
+              </div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-icon">⏭️</div>
+              <div class="rule-content">
+                <div class="rule-title">Bouton Next Day</div>
+                <div class="rule-desc">En fin de journée, le maître du jeu appuie sur Next Day. Les scores sont mis à jour, les streaks calculées, et de nouveaux défis sont attribués pour le lendemain.</div>
+              </div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-icon">🏆</div>
+              <div class="rule-content">
+                <div class="rule-title">Leaderboard</div>
+                <div class="rule-desc">Le classement est mis à jour en temps réel. Le joueur avec le plus de points à la fin remporte la gloire éternelle 🌶️</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     `;
   }
-
   async function init() {
-    try {
-      await loadData();
-      render();
-    } catch(e) {
-      document.getElementById('root').innerHTML = `
-        <div class="error-box">
-          ❌ Erreur de connexion.<br><br>
-          Vérifie que NOTION_TOKEN est bien configuré dans les variables d'environnement Vercel.<br><br>
-          Détail : ${e.message}
-        </div>`;
-    }
+    try { await loadData(); render(); }
+    catch(e) { document.getElementById('root').innerHTML = '<div class="error-box">❌ Erreur de connexion.<br><br>Vérifie que NOTION_TOKEN est bien configuré dans les variables Vercel.<br><br>Détail : ' + e.message + '</div>'; }
   }
-
   init();
 </script>
 </body>
