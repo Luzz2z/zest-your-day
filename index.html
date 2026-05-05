@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -10,221 +11,164 @@
     :root {
       --red: #FF2D4B; --orange: #FF6B1A; --yellow: #FFD700;
       --green: #00FF88; --purple: #BF00FF; --cyan: #00EEFF;
-      --darker: #050508; --dark: #0D0D1A; --card: #0A0A18;
-      --text: #F5F5F5; --muted: #6B7280;
+      --darker: #050508; --card: #0A0A18; --text: #F5F5F5; --muted: #6B7280;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Nunito', sans-serif; background: var(--darker); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-
-    /* PARTICLE CANVAS */
     #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-
-    /* SCANLINES */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-      pointer-events: none; z-index: 1;
-    }
-
+    body::after { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px); pointer-events: none; z-index: 1; }
     .app { position: relative; z-index: 2; max-width: 480px; margin: 0 auto; padding: 0 0 120px; }
 
-    /* HEADER */
-    .header { padding: 48px 20px 24px; text-align: center; position: relative; }
+```
+/* HEADER */
+.header { padding: 48px 20px 24px; text-align: center; }
+.header-mascot { font-size: 72px; display: block; animation: bounce 2s ease-in-out infinite; filter: drop-shadow(0 0 24px rgba(255,107,26,0.9)); }
+@keyframes bounce { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-14px) rotate(3deg)} }
+.header h1 { font-family: 'Bangers', cursive; font-size: 54px; letter-spacing: 5px; background: linear-gradient(135deg, var(--red), var(--orange), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin: 8px 0 4px; animation: glitch 6s infinite; }
+@keyframes glitch { 0%,94%,100%{transform:none;filter:none} 95%{transform:translate(-2px,0) skewX(-1deg);filter:drop-shadow(2px 0 #FF2D4B) drop-shadow(-2px 0 #00EEFF)} 97%{transform:translate(2px,0) skewX(1deg);filter:drop-shadow(-2px 0 #FF2D4B) drop-shadow(2px 0 #00EEFF)} }
+.header-sub { font-size: 11px; color: var(--cyan); text-transform: uppercase; letter-spacing: 5px; font-weight: 700; }
+.day-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.35); border-radius: 20px; padding: 7px 20px; font-size: 15px; font-weight: 900; color: var(--yellow); margin-top: 16px; animation: pulse-badge 3s infinite; }
+@keyframes pulse-badge { 0%,100%{box-shadow:0 0 20px rgba(255,215,0,0.15)} 50%{box-shadow:0 0 35px rgba(255,215,0,0.3)} }
 
-    .header-mascot {
-      font-size: 72px; display: block;
-      animation: bounce 2s ease-in-out infinite;
-      filter: drop-shadow(0 0 24px rgba(255,107,26,0.9));
-    }
-    @keyframes bounce { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-14px) rotate(3deg)} }
+/* WAITING SCREEN */
+.waiting-screen { padding: 40px 20px; text-align: center; }
+.waiting-icon { font-size: 80px; display: block; margin-bottom: 20px; animation: bounce 2s infinite; }
+.waiting-title { font-family: 'Bangers', cursive; font-size: 32px; letter-spacing: 3px; color: var(--muted); margin-bottom: 8px; }
+.waiting-sub { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
-    .header h1 {
-      font-family: 'Bangers', cursive; font-size: 54px; letter-spacing: 5px;
-      background: linear-gradient(135deg, var(--red), var(--orange), var(--yellow));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      line-height: 1; margin: 8px 0 4px;
-      position: relative; display: inline-block;
-      animation: glitch 6s infinite;
-    }
-    @keyframes glitch {
-      0%,94%,100% { transform: none; filter: none; }
-      95% { transform: translate(-2px,0) skewX(-1deg); filter: drop-shadow(2px 0 #FF2D4B) drop-shadow(-2px 0 #00EEFF); }
-      97% { transform: translate(2px,0) skewX(1deg); filter: drop-shadow(-2px 0 #FF2D4B) drop-shadow(2px 0 #00EEFF); }
-      99% { transform: none; filter: drop-shadow(0 0 20px rgba(255,107,26,0.6)); }
-    }
+/* SECTION */
+.section-title { font-family: 'Bangers', cursive; font-size: 18px; letter-spacing: 3px; text-transform: uppercase; padding: 0 20px 14px; display: flex; align-items: center; gap: 10px; color: var(--muted); }
+.section-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,rgba(255,45,75,0.4),transparent); }
 
-    .header-sub { font-size: 11px; color: var(--cyan); text-transform: uppercase; letter-spacing: 5px; font-weight: 700; }
+/* CARDS */
+.cards { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+.card { background: var(--card); border-radius: 24px; border: 1px solid rgba(255,255,255,0.06); position: relative; overflow: hidden; opacity: 0; transform: translateY(30px); animation: slide-in 0.5s ease forwards; transition: box-shadow 0.3s; }
+.card:nth-child(1){animation-delay:0.05s} .card:nth-child(2){animation-delay:0.15s} .card:nth-child(3){animation-delay:0.25s} .card:nth-child(4){animation-delay:0.35s}
+@keyframes slide-in{to{opacity:1;transform:translateY(0)}}
+.card-band { height: 3px; }
+.card-cover { height: 72px; display: flex; align-items: center; padding: 0 20px; gap: 14px; position: relative; overflow: hidden; }
+.card-cover::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--cover-color),transparent 60%); opacity:0.15; }
+.player-name-big { font-family:'Bangers',cursive; font-size:26px; letter-spacing:2px; position:relative; }
+.player-emoji-big { font-size:34px; position:relative; }
+.power-badge-cover { position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:28px; filter:drop-shadow(0 0 10px currentColor); }
+.card-body { padding: 14px 20px 18px; }
+.streak-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.pill { display:inline-flex; align-items:center; gap:5px; border-radius:20px; padding:4px 12px; font-size:12px; font-weight:900; }
+.pill-streak { background:rgba(255,107,26,0.1); border:1px solid rgba(255,107,26,0.3); color:var(--orange); }
+.pill-bonus { background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.35); color:var(--yellow); }
+.pill-reroll { background:rgba(191,0,255,0.1); border:1px solid rgba(191,0,255,0.35); color:#e879f9; }
+.pill-power { font-size:12px; font-weight:900; padding:4px 12px; border-radius:20px; border:1px solid; }
+.challenge-box { background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:16px; margin-bottom:14px; }
+.challenge-num { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; }
+.challenge-name { font-weight:900; font-size:17px; line-height:1.4; margin-bottom:10px; }
+.challenge-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.spice-badge { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:700; padding:4px 12px; border-radius:10px; background:rgba(255,255,255,0.06); }
+.total-badge { display:inline-flex; align-items:center; gap:4px; font-size:12px; font-weight:900; padding:4px 12px; border-radius:10px; background:rgba(255,215,0,0.08); color:var(--yellow); border:1px solid rgba(255,215,0,0.25); }
+.card-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.done-wrap { display:flex; align-items:center; gap:10px; }
+.done-label { font-size:12px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:1px; }
+.checkbox-wrap input[type="checkbox"] { display:none; }
+.checkbox-custom { width:36px; height:36px; border-radius:12px; border:2px solid rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.25s; font-size:18px; }
+.checkbox-wrap input:checked + .checkbox-custom { background:var(--green); border-color:var(--green); box-shadow:0 0 24px rgba(0,255,136,0.6); animation:check-pop 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes check-pop{0%{transform:scale(0.7)}100%{transform:scale(1)}}
+.btn-reroll { display:flex; align-items:center; gap:6px; background:rgba(191,0,255,0.08); border:1px solid rgba(191,0,255,0.35); border-radius:12px; padding:10px 16px; font-size:13px; font-weight:900; color:#e879f9; cursor:pointer; transition:all 0.2s; white-space:nowrap; font-family:'Nunito',sans-serif; }
+.btn-reroll:disabled{opacity:0.3;cursor:not-allowed}
+.card.validated { box-shadow:0 0 30px rgba(0,255,136,0.08); border-color:rgba(0,255,136,0.15); }
 
-    .day-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.35);
-      border-radius: 20px; padding: 7px 20px; font-size: 15px; font-weight: 900;
-      color: var(--yellow); margin-top: 16px;
-      box-shadow: 0 0 20px rgba(255,215,0,0.15), inset 0 0 20px rgba(255,215,0,0.05);
-      animation: pulse-badge 3s infinite;
-    }
-    @keyframes pulse-badge { 0%,100%{box-shadow:0 0 20px rgba(255,215,0,0.15),inset 0 0 20px rgba(255,215,0,0.05)} 50%{box-shadow:0 0 35px rgba(255,215,0,0.3),inset 0 0 30px rgba(255,215,0,0.1)} }
+/* POWER BUTTON */
+.btn-power { width:100%; margin-top:12px; border:none; border-radius:14px; padding:14px; font-family:'Bangers',cursive; font-size:18px; letter-spacing:2px; cursor:pointer; transition:all 0.2s; }
+.btn-power:disabled { opacity:0.3; cursor:not-allowed; }
 
-    /* SECTION TITLE */
-    .section-title {
-      font-family: 'Bangers', cursive; font-size: 18px; letter-spacing: 3px;
-      text-transform: uppercase; padding: 0 20px 14px;
-      display: flex; align-items: center; gap: 10px; color: var(--muted);
-    }
-    .section-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,rgba(255,45,75,0.4),transparent); }
+/* POWER MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
+.modal { background:#0F0F20; border-radius:24px; padding:28px; width:100%; max-width:420px; border:1px solid rgba(255,255,255,0.1); animation:modal-in 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes modal-in{0%{transform:scale(0.8);opacity:0}100%{transform:scale(1);opacity:1}}
+.modal-title { font-family:'Bangers',cursive; font-size:28px; letter-spacing:2px; margin-bottom:8px; }
+.modal-desc { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:20px; }
+.modal-targets { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+.target-btn { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px 18px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.2s; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; color:var(--text); }
+.target-btn:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); }
+.target-btn.selected { border-color:var(--green); background:rgba(0,255,136,0.08); }
+.modal-upgrade-btns { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+.upgrade-btn { border:none; border-radius:14px; padding:16px; font-family:'Bangers',cursive; font-size:20px; letter-spacing:1px; cursor:pointer; transition:all 0.2s; }
+.modal-actions { display:flex; gap:10px; }
+.modal-confirm { flex:1; background:linear-gradient(135deg,var(--green),#1db954); border:none; border-radius:14px; padding:14px; font-family:'Bangers',cursive; font-size:20px; letter-spacing:2px; color:white; cursor:pointer; }
+.modal-cancel { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:14px 20px; font-family:'Bangers',cursive; font-size:18px; color:var(--muted); cursor:pointer; }
 
-    /* CARDS */
-    .cards { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+/* SHIELD PROMPT */
+.shield-prompt { background:#0F0F20; border:2px solid #00EEFF; border-radius:24px; padding:24px; margin:0 16px 16px; animation:slide-in 0.3s ease; text-align:center; }
+.shield-prompt-title { font-family:'Bangers',cursive; font-size:24px; letter-spacing:2px; color:#00EEFF; margin-bottom:8px; }
+.shield-prompt-desc { font-size:13px; color:var(--muted); margin-bottom:16px; line-height:1.5; }
+.shield-btns { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.shield-yes { background:linear-gradient(135deg,#00EEFF,#00FF88); border:none; border-radius:12px; padding:14px; font-family:'Bangers',cursive; font-size:18px; color:#000; cursor:pointer; }
+.shield-no { background:rgba(255,45,75,0.1); border:1px solid rgba(255,45,75,0.3); border-radius:12px; padding:14px; font-family:'Bangers',cursive; font-size:18px; color:var(--red); cursor:pointer; }
 
-    .card {
-      background: linear-gradient(135deg, var(--card), rgba(10,10,30,0.9));
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,0.06);
-      position: relative; overflow: hidden;
-      opacity: 0; transform: translateY(30px);
-      animation: slide-in 0.5s ease forwards;
-      transition: box-shadow 0.3s;
-    }
-    .card:nth-child(1){animation-delay:0.05s}
-    .card:nth-child(2){animation-delay:0.15s}
-    .card:nth-child(3){animation-delay:0.25s}
-    .card:nth-child(4){animation-delay:0.35s}
-    @keyframes slide-in { to{opacity:1;transform:translateY(0)} }
+/* POWER EFFECTS LOG */
+.effects-log { margin:0 16px 20px; }
+.effect-item { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:12px 16px; margin-bottom:8px; font-size:13px; font-weight:700; display:flex; align-items:center; gap:10px; }
 
-    .card-band { height: 3px; }
-    .card-cover {
-      height: 72px; display: flex; align-items: center; padding: 0 20px; gap: 14px;
-      position: relative; overflow: hidden;
-    }
-    .card-cover::before {
-      content:''; position:absolute; inset:0;
-      background: linear-gradient(135deg, var(--cover-color), transparent 60%);
-      opacity: 0.15;
-    }
-    .card-cover::after {
-      content: var(--player-emoji-content);
-      position:absolute; right:-8px; top:-8px;
-      font-size:72px; opacity:0.12; line-height:1;
-    }
-    .player-name-big { font-family:'Bangers',cursive; font-size:26px; letter-spacing:2px; position:relative; }
-    .player-emoji-big { font-size:34px; position:relative; }
+/* LEADERBOARD */
+.leaderboard{padding:0 16px}
+.lb-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05)}
+.lb-header-row{display:grid;grid-template-columns:40px 1fr 64px 64px 56px;gap:8px;padding:12px 18px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04)}
+.lb-header-row span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;text-align:center;font-weight:700}
+.lb-header-row span:nth-child(2){text-align:left}
+.lb-row{display:grid;grid-template-columns:40px 1fr 64px 64px 56px;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.03)}
+.lb-row:last-child{border-bottom:none}
+.lb-row:first-child{background:rgba(255,215,0,0.04)}
+.lb-rank{font-family:'Bangers',cursive;font-size:22px;text-align:center}
+.lb-player{display:flex;align-items:center;gap:10px}
+.lb-emoji{font-size:20px}
+.lb-name{font-weight:900;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-stat{text-align:center}
+.lb-val{font-weight:900;font-size:17px}
+.lb-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 
-    .card-body { padding: 14px 20px 18px; }
+/* SUGGEST & RULES */
+.suggest,.rules{padding:0 16px}
+.collapsible-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05)}
+.collapsible-header{padding:18px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:background 0.2s}
+.collapsible-header h3{font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px}
+.collapsible-toggle{font-size:16px;transition:transform 0.3s;color:var(--muted)}
+.collapsible-toggle.open{transform:rotate(180deg)}
+.collapsible-body{padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s}
+.collapsible-body.open{max-height:2000px;padding:20px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:block}
+.form-input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 16px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;outline:none;transition:border-color 0.2s}
+.form-input:focus{border-color:var(--green)}
+.spice-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.spice-option{display:none}
+.spice-option+label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:rgba(255,255,255,0.02);border:2px solid rgba(255,255,255,0.05);border-radius:14px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;transition:all 0.2s}
+.spice-option:checked+label{border-color:var(--green);background:rgba(0,255,136,0.06)}
+.spice-emoji{font-size:24px}
+.btn-suggest{width:100%;background:linear-gradient(135deg,rgba(0,255,136,0.15),rgba(0,238,255,0.08));border:1px solid rgba(0,255,136,0.35);border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px;color:var(--green);cursor:pointer;transition:all 0.2s}
+.btn-suggest:disabled{opacity:0.4;cursor:not-allowed}
+.rule-item{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.rule-item:last-child{border-bottom:none}
+.rule-icon{font-size:24px;flex-shrink:0}
+.rule-title{font-weight:900;font-size:15px;margin-bottom:4px}
+.rule-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.neon-table{margin-top:10px;background:rgba(255,255,255,0.02);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04)}
+.neon-row{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px}
+.neon-row:last-child{border-bottom:none}
+.neon-row span:first-child{color:var(--orange);font-weight:700}
+.neon-row span:last-child{color:var(--yellow);font-weight:900}
 
-    .streak-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
-    .pill {
-      display:inline-flex; align-items:center; gap:5px;
-      border-radius:20px; padding:4px 12px; font-size:12px; font-weight:900;
-    }
-    .pill-streak { background:rgba(255,107,26,0.1); border:1px solid rgba(255,107,26,0.3); color:var(--orange); }
-    .pill-bonus { background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.35); color:var(--yellow); animation:pulse-badge 2s infinite; }
-    .pill-reroll { background:rgba(191,0,255,0.1); border:1px solid rgba(191,0,255,0.35); color:#e879f9; }
+/* CONFETTI */
+.confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;animation:confetti-fall 1.5s ease-out forwards;pointer-events:none;z-index:999}
+@keyframes confetti-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
-    .challenge-box {
-      background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.05);
-      border-radius:16px; padding:16px; margin-bottom:14px;
-    }
-    .challenge-num { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
-    .challenge-name { font-weight:900; font-size:17px; line-height:1.4; margin-bottom:10px; }
-    .challenge-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-    .spice-badge { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:700; padding:4px 12px; border-radius:10px; background:rgba(255,255,255,0.06); }
-    .total-badge { display:inline-flex; align-items:center; gap:4px; font-size:12px; font-weight:900; padding:4px 12px; border-radius:10px; background:rgba(255,215,0,0.08); color:var(--yellow); border:1px solid rgba(255,215,0,0.25); }
+/* UTILS */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px}
+.spinner{width:48px;height:48px;border:2px solid rgba(255,45,75,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:3px;font-size:11px}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:28px 16px}
+```
 
-    .card-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    .done-wrap { display:flex; align-items:center; gap:10px; }
-    .done-label { font-size:12px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:1px; }
-    .checkbox-wrap input[type="checkbox"] { display:none; }
-    .checkbox-custom {
-      width:36px; height:36px; border-radius:12px;
-      border:2px solid rgba(255,255,255,0.12);
-      display:flex; align-items:center; justify-content:center;
-      cursor:pointer; transition:all 0.25s; font-size:18px;
-      background:rgba(255,255,255,0.02);
-    }
-    .checkbox-wrap input:checked + .checkbox-custom {
-      background:var(--green); border-color:var(--green);
-      box-shadow:0 0 24px rgba(0,255,136,0.6);
-      animation:check-pop 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    @keyframes check-pop{0%{transform:scale(0.7)}100%{transform:scale(1)}}
-
-    .btn-reroll {
-      display:flex; align-items:center; gap:6px;
-      background:rgba(191,0,255,0.08); border:1px solid rgba(191,0,255,0.35);
-      border-radius:12px; padding:10px 16px;
-      font-size:13px; font-weight:900; color:#e879f9;
-      cursor:pointer; transition:all 0.2s; white-space:nowrap;
-      font-family:'Nunito',sans-serif;
-    }
-    .btn-reroll:hover{background:rgba(191,0,255,0.18);box-shadow:0 0 20px rgba(191,0,255,0.25)}
-    .btn-reroll:disabled{opacity:0.3;cursor:not-allowed;box-shadow:none}
-
-    .card.validated { box-shadow:0 0 30px rgba(0,255,136,0.08); border-color:rgba(0,255,136,0.15); }
-
-    /* LEADERBOARD */
-    .leaderboard { padding:0 16px; }
-    .lb-card { background:var(--card); border-radius:24px; overflow:hidden; border:1px solid rgba(255,255,255,0.05); }
-    .lb-header-row { display:grid; grid-template-columns:40px 1fr 64px 64px 56px; gap:8px; padding:12px 18px; background:rgba(255,255,255,0.02); border-bottom:1px solid rgba(255,255,255,0.04); }
-    .lb-header-row span { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; text-align:center; font-weight:700; }
-    .lb-header-row span:nth-child(2){text-align:left}
-    .lb-row { display:grid; grid-template-columns:40px 1fr 64px 64px 56px; align-items:center; gap:8px; padding:14px 18px; border-bottom:1px solid rgba(255,255,255,0.03); transition:background 0.2s; }
-    .lb-row:last-child{border-bottom:none}
-    .lb-row:first-child{background:rgba(255,215,0,0.04)}
-    .lb-rank{font-family:'Bangers',cursive;font-size:22px;text-align:center}
-    .lb-player{display:flex;align-items:center;gap:10px}
-    .lb-emoji{font-size:20px}
-    .lb-name{font-weight:900;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .lb-stat{text-align:center}
-    .lb-val{font-weight:900;font-size:17px}
-    .lb-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-
-    /* SUGGEST & RULES */
-    .suggest,.rules{padding:0 16px}
-    .collapsible-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05)}
-    .collapsible-header{padding:18px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:background 0.2s}
-    .collapsible-header:hover{background:rgba(255,255,255,0.02)}
-    .collapsible-header h3{font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px}
-    .collapsible-toggle{font-size:16px;transition:transform 0.3s;color:var(--muted)}
-    .collapsible-toggle.open{transform:rotate(180deg)}
-    .collapsible-body{padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s}
-    .collapsible-body.open{max-height:1600px;padding:20px}
-    .form-group{margin-bottom:16px}
-    .form-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:block}
-    .form-input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 16px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
-    .form-input:focus{border-color:var(--green);box-shadow:0 0 20px rgba(0,255,136,0.1)}
-    .spice-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-    .spice-option{display:none}
-    .spice-option+label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:rgba(255,255,255,0.02);border:2px solid rgba(255,255,255,0.05);border-radius:14px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;transition:all 0.2s}
-    .spice-option:checked+label{border-color:var(--green);background:rgba(0,255,136,0.06);box-shadow:0 0 16px rgba(0,255,136,0.12)}
-    .spice-emoji{font-size:24px}
-    .btn-suggest{width:100%;background:linear-gradient(135deg,rgba(0,255,136,0.15),rgba(0,238,255,0.08));border:1px solid rgba(0,255,136,0.35);border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px;color:var(--green);cursor:pointer;transition:all 0.2s;box-shadow:0 0 20px rgba(0,255,136,0.08)}
-    .btn-suggest:hover{box-shadow:0 0 30px rgba(0,255,136,0.2)}
-    .btn-suggest:disabled{opacity:0.4;cursor:not-allowed}
-    .rule-item{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
-    .rule-item:last-child{border-bottom:none}
-    .rule-icon{font-size:24px;flex-shrink:0}
-    .rule-title{font-weight:900;font-size:15px;margin-bottom:4px}
-    .rule-desc{font-size:13px;color:var(--muted);line-height:1.6}
-    .neon-table{margin-top:10px;background:rgba(255,255,255,0.02);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04)}
-    .neon-row{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px}
-    .neon-row:last-child{border-bottom:none}
-    .neon-row span:first-child{color:var(--orange);font-weight:700}
-    .neon-row span:last-child{color:var(--yellow);font-weight:900}
-
-    /* CONFETTI */
-    .confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;animation:confetti-fall 1.5s ease-out forwards;pointer-events:none;z-index:999}
-    @keyframes confetti-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-
-    /* UTILS */
-    .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px}
-    .spinner{width:48px;height:48px;border:2px solid rgba(255,45,75,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite;box-shadow:0 0 20px rgba(255,45,75,0.3)}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:3px;font-size:11px}
-    .error-box{margin:20px;padding:20px;background:rgba(255,45,75,0.06);border:1px solid rgba(255,45,75,0.25);border-radius:20px;color:var(--red);font-weight:600;font-size:14px;line-height:1.6}
-    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;letter-spacing:0.5px}
-    .toast.show{transform:translateX(-50%) translateY(0)}
-    .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:28px 16px}
   </style>
 </head>
 <body>
@@ -232,322 +176,511 @@
 <div class="app">
   <div id="root"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
 </div>
+<div id="modal-container"></div>
 <div class="toast" id="toast"></div>
 <script>
-  // PARTICLES
-  (function() {
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-    const colors = ['#FF2D4B','#FF6B1A','#FFD700','#00FF88','#00EEFF','#BF00FF'];
-    let particles = [];
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    resize(); window.addEventListener('resize', resize);
-    for (let i = 0; i < 50; i++) {
-      particles.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        r: Math.random() * 1.5 + 0.3,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: -Math.random() * 0.4 - 0.1,
-        alpha: Math.random() * 0.5 + 0.1,
-      });
-    }
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = p.color + Math.floor(p.alpha * 255).toString(16).padStart(2,'0');
-        ctx.fill();
-        p.x += p.vx; p.y += p.vy;
-        if (p.y < -5) { p.y = canvas.height + 5; p.x = Math.random() * canvas.width; }
-        if (p.x < -5) p.x = canvas.width + 5;
-        if (p.x > canvas.width + 5) p.x = -5;
-      });
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
+// PARTICLES
+(function(){
+  const canvas=document.getElementById('particle-canvas');
+  const ctx=canvas.getContext('2d');
+  const colors=['#FF2D4B','#FF6B1A','#FFD700','#00FF88','#00EEFF','#BF00FF'];
+  let particles=[];
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(let i=0;i<50;i++){particles.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.5+0.3,color:colors[Math.floor(Math.random()*colors.length)],vx:(Math.random()-0.5)*0.3,vy:-Math.random()*0.4-0.1,alpha:Math.random()*0.5+0.1});}
+  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color+Math.floor(p.alpha*255).toString(16).padStart(2,'0');ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.y<-5){p.y=canvas.height+5;p.x=Math.random()*canvas.width;}if(p.x<-5)p.x=canvas.width+5;if(p.x>canvas.width+5)p.x=-5;});requestAnimationFrame(draw);}
+  draw();
+})();
 
-  const CONFIG = {
-    db_system:      '354403dde0e380aa85bfe7d9fd139be5',
-    db_challenges:  '354403dde0e3804f8644d242a0ec6bf6',
-    db_assignments: '354403dde0e380f797ccfb85ad5a072e',
-  };
-  const PLAYERS = [
-    { name: 'Banuu', emoji: '🌵', color: '#00FF88', colorDark: 'rgba(0,255,136,0.2)' },
-    { name: 'Luzz',  emoji: '🔥', color: '#FF2D4B', colorDark: 'rgba(255,45,75,0.2)' },
-    { name: 'Y',     emoji: '⚡', color: '#FFD700', colorDark: 'rgba(255,215,0,0.2)' },
-    { name: 'Nicoo', emoji: '💰', color: '#FF6B1A', colorDark: 'rgba(255,107,26,0.2)' },
-  ];
-  const SPICE_POINTS = {'🌱 Mild':1,'🌶️ Spicy':2,'🔥 Hot':3,'⚡ Atomic':5};
-  function streakBonus(s){return s>=10?3:s>=5?2:s>=3?1:0}
-  function spiceColor(pts){return pts>=5?'#FF2D4B':pts>=3?'#FF6B1A':pts>=2?'#FFD700':'#00FF88'}
+const CONFIG = {
+db_system:      ‘354403dde0e380aa85bfe7d9fd139be5’,
+db_challenges:  ‘354403dde0e3804f8644d242a0ec6bf6’,
+db_assignments: ‘354403dde0e380f797ccfb85ad5a072e’,
+};
 
-  function confetti() {
-    const colors=['#FF2D4B','#FF6B1A','#FFD700','#00FF88','#00EEFF','#BF00FF'];
-    for(let i=0;i<50;i++){
-      const el=document.createElement('div');
-      el.className='confetti-piece';
-      el.style.cssText=`left:${Math.random()*100}%;top:0;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*0.5}s;animation-duration:${1+Math.random()}s`;
-      document.body.appendChild(el);
-      setTimeout(()=>el.remove(),2500);
-    }
-  }
+const PLAYERS = [
+{ name:‘Banuu’, emoji:‘🌵’, color:’#00FF88’, colorDark:‘rgba(0,255,136,0.2)’ },
+{ name:‘Luzz’,  emoji:‘🔥’, color:’#FF2D4B’, colorDark:‘rgba(255,45,75,0.2)’ },
+{ name:‘Y’,     emoji:‘⚡’, color:’#FFD700’, colorDark:‘rgba(255,215,0,0.2)’ },
+{ name:‘Nicoo’, emoji:‘💰’, color:’#FF6B1A’, colorDark:‘rgba(255,107,26,0.2)’ },
+];
 
-  async function notionQuery(dbId,body={}){
-    const res=await fetch('/api/notion?endpoint=databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const data=await res.json();
-    if(!res.ok)throw new Error(data.message||'Notion error');
-    return data.results;
-  }
-  async function notionPatch(pageId,properties){
-    const res=await fetch('/api/notion?endpoint=pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties})});
-    const data=await res.json();
-    if(!res.ok)throw new Error(data.message||'Update error');
-    return data;
-  }
-  async function notionCreate(dbId,properties){
-    const res=await fetch('/api/notion?endpoint=pages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({parent:{database_id:dbId},properties})});
-    const data=await res.json();
-    if(!res.ok)throw new Error(data.message||'Create error');
-    return data;
-  }
-  function getProp(page,name,type){
-    const p=page.properties[name];
-    if(!p)return null;
-    if(type==='number')return p.number??0;
-    if(type==='title')return p.title?.[0]?.plain_text??'';
-    if(type==='checkbox')return p.checkbox??false;
-    if(type==='formula_number')return p.formula?.number??0;
-    if(type==='formula_string')return p.formula?.string??'';
-    if(type==='select')return p.select?.name??'';
-    return null;
-  }
-  function showToast(msg,color){
-    const t=document.getElementById('toast');
-    t.textContent=msg; t.style.background=color||'#00FF88';
-    t.style.boxShadow=`0 0 30px ${color||'#00FF88'}80`;
-    t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000);
-  }
+const POWERS = {
+‘🦹 Entourloupeur’: { color:’#BF00FF’, bg:‘rgba(191,0,255,0.1)’, border:‘rgba(191,0,255,0.4)’, desc:‘Copy someone's challenge. If you complete it first, you steal their points!’, needsTarget:true, targetSelf:false },
+‘🔄 Swap’:          { color:’#00EEFF’, bg:‘rgba(0,238,255,0.1)’, border:‘rgba(0,238,255,0.4)’, desc:‘Force a challenge swap with another player.’, needsTarget:true, targetSelf:false },
+‘💀 Bridage’:       { color:’#FF2D4B’, bg:‘rgba(255,45,75,0.1)’, border:‘rgba(255,45,75,0.4)’, desc:‘Multiply someone's (or your own) points by ×0.5 today.’, needsTarget:true, targetSelf:true },
+‘⚡ Pas si vite’:   { color:’#FFD700’, bg:‘rgba(255,215,0,0.1)’, border:‘rgba(255,215,0,0.4)’, desc:‘Upgrade or downgrade someone's challenge difficulty.’, needsTarget:true, targetSelf:false, needsUpDown:true },
+‘🛡️ Shield’:        { color:’#00EEFF’, bg:‘rgba(0,238,255,0.08)’, border:‘rgba(0,238,255,0.3)’, desc:‘Immune to all powers today. Activate when targeted!’, needsTarget:false, targetSelf:true, reactive:true },
+‘🎰 Roulette’:      { color:’#FF6B1A’, bg:‘rgba(255,107,26,0.1)’, border:‘rgba(255,107,26,0.4)’, desc:‘Your points today are multiplied by ×0, ×1 or ×2 — random!’, needsTarget:false, targetSelf:true },
+‘👯 Copier-Coller’: { color:’#00FF88’, bg:‘rgba(0,255,136,0.1)’, border:‘rgba(0,255,136,0.4)’, desc:‘Share your challenge with someone. If you BOTH complete it, ×2 points each!’, needsTarget:true, targetSelf:false },
+‘🔥 Extincteur’:    { color:’#FF2D4B’, bg:‘rgba(255,45,75,0.1)’, border:‘rgba(255,45,75,0.4)’, desc:‘Reset someone's streak to 0. Ice cold. 🧊’, needsTarget:true, targetSelf:false },
+‘❌ None’:          { color:’#6B7280’, bg:‘transparent’, border:‘transparent’, desc:’’, needsTarget:false },
+};
 
-  let STATE={dayCounter:1,systemPageId:null,challenges:{},assignments:[],allChallengeIds:[]};
+const SPICE_POINTS={‘🌱 Mild’:1,‘🌶️ Spicy’:2,‘🔥 Hot’:3,‘⚡ Atomic’:5};
+const SPICE_ORDER=[‘🌱 Mild’,‘🌶️ Spicy’,‘🔥 Hot’,‘⚡ Atomic’];
+function streakBonus(s){return s>=10?3:s>=5?2:s>=3?1:0;}
+function spiceColor(pts){return pts>=5?’#FF2D4B’:pts>=3?’#FF6B1A’:pts>=2?’#FFD700’:’#00FF88’;}
 
-  async function loadData(){
-    const sysPages=await notionQuery(CONFIG.db_system);
-    const sys=sysPages[0];
-    STATE.systemPageId=sys.id;
-    STATE.dayCounter=getProp(sys,'Day_Counter','number');
-    const chPages=await notionQuery(CONFIG.db_challenges);
-    STATE.challenges={};STATE.allChallengeIds=[];
-    for(const p of chPages){
-      const id=getProp(p,'ID_Global','number');
-      const status=getProp(p,'Status','select');
-      if(status==='✅ Active'||!status){
-        STATE.challenges[id]={id,name:getProp(p,'Name','title'),points:getProp(p,'Points','number'),spice:getProp(p,'Spice_Level','formula_string')||getProp(p,'Spice_Level','select')};
-        STATE.allChallengeIds.push(id);
-      }
-    }
-    const asgPages=await notionQuery(CONFIG.db_assignments);
-    STATE.assignments=asgPages.map(p=>({
-      pageId:p.id,name:getProp(p,'Name','title'),playerIndex:getProp(p,'Player_Index','number'),
-      winStreak:getProp(p,'Win_Streak','number'),totalScore:getProp(p,'Total_Score','number'),
-      defisReussis:getProp(p,'Defis_Reussis','number'),isValidated:getProp(p,'Is_Validated','checkbox'),
-      challengeId:getProp(p,'Challenge_ID_Today','formula_number'),
-      hasRerolled:getProp(p,'Has_Rerolled','checkbox'),
-      rerollChallengeId:getProp(p,'Reroll_Challenge_ID','number'),
-    })).sort((a,b)=>a.playerIndex-b.playerIndex);
-  }
+function confetti(){
+const colors=[’#FF2D4B’,’#FF6B1A’,’#FFD700’,’#00FF88’,’#00EEFF’,’#BF00FF’];
+for(let i=0;i<50;i++){const el=document.createElement(‘div’);el.className=‘confetti-piece’;el.style.cssText=`left:${Math.random()*100}%;top:0;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*0.5}s;animation-duration:${1+Math.random()}s`;document.body.appendChild(el);setTimeout(()=>el.remove(),2500);}
+}
 
-  function getEffectiveChallengeId(asg){
-    return(asg.rerollChallengeId&&asg.rerollChallengeId>0)?asg.rerollChallengeId:asg.challengeId;
-  }
+async function notionQuery(dbId,body={}){
+const res=await fetch(’/api/notion?endpoint=databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify(body)});
+const data=await res.json();
+if(!res.ok)throw new Error(data.message||‘Notion error’);
+return data.results;
+}
+async function notionPatch(pageId,properties){
+const res=await fetch(’/api/notion?endpoint=pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties})});
+const data=await res.json();
+if(!res.ok)throw new Error(data.message||‘Update error’);
+return data;
+}
+async function notionCreate(dbId,properties){
+const res=await fetch(’/api/notion?endpoint=pages’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({parent:{database_id:dbId},properties})});
+const data=await res.json();
+if(!res.ok)throw new Error(data.message||‘Create error’);
+return data;
+}
+function getProp(page,name,type){
+const p=page.properties[name];
+if(!p)return null;
+if(type===‘number’)return p.number??0;
+if(type===‘title’)return p.title?.[0]?.plain_text??’’;
+if(type===‘checkbox’)return p.checkbox??false;
+if(type===‘formula_number’)return p.formula?.number??0;
+if(type===‘formula_string’)return p.formula?.string??’’;
+if(type===‘select’)return p.select?.name??’’;
+if(type===‘text’)return p.rich_text?.[0]?.plain_text??’’;
+return null;
+}
+function showToast(msg,color){
+const t=document.getElementById(‘toast’);
+t.textContent=msg;t.style.background=color||’#00FF88’;
+t.style.boxShadow=`0 0 30px ${color||'#00FF88'}80`;
+t.classList.add(‘show’);setTimeout(()=>t.classList.remove(‘show’),3000);
+}
 
-  async function toggleValidation(pageId,current){
-    const newVal=!current;
-    await notionPatch(pageId,{Is_Validated:{checkbox:newVal}});
-    const asg=STATE.assignments.find(a=>a.pageId===pageId);
-    if(asg)asg.isValidated=newVal;
-    if(newVal)confetti();
-    render();
-    showToast(newVal?'🎉 Challenge completed!':'❌ Validation removed',newVal?'#00FF88':'#FF2D4B');
-  }
+let STATE={dayCounter:1,systemPageId:null,challenges:{},assignments:[],allChallengeIds:[],defiLaunched:false,effectsLog:[]};
 
-  async function reroll(pageId){
-    const asg=STATE.assignments.find(a=>a.pageId===pageId);
-    if(!asg||asg.hasRerolled)return;
-    const current=getEffectiveChallengeId(asg);
-    const available=STATE.allChallengeIds.filter(id=>id!==current);
-    if(available.length===0){showToast('No other challenges available!','#FF6B1A');return;}
-    const newId=available[Math.floor(Math.random()*available.length)];
-    await notionPatch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}});
-    asg.hasRerolled=true;asg.rerollChallengeId=newId;
-    render();
-    showToast('🎲 New challenge! Streak kept 🔥','#BF00FF');
-  }
+async function loadData(){
+const sysPages=await notionQuery(CONFIG.db_system);
+const sys=sysPages[0];
+STATE.systemPageId=sys.id;
+STATE.dayCounter=getProp(sys,‘Day_Counter’,‘number’);
+STATE.defiLaunched=getProp(sys,‘Defis_Launched’,‘checkbox’);
 
-  async function suggestChallenge(){
-    const nameEl=document.getElementById('suggest-name');
-    const spiceEl=document.querySelector('input[name="spice"]:checked');
-    if(!nameEl.value.trim()){showToast('⚠️ Enter a challenge name!','#FF6B1A');return;}
-    if(!spiceEl){showToast('⚠️ Pick a spice level!','#FF6B1A');return;}
-    const btn=document.getElementById('btn-suggest');
-    btn.disabled=true;btn.textContent='Sending...';
-    const pts=SPICE_POINTS[spiceEl.value]||1;
-    try{
-      await notionCreate(CONFIG.db_challenges,{
-        Name:{title:[{text:{content:nameEl.value.trim()}}]},
-        Points:{number:pts},Status:{select:{name:'⏳ Pending'}},
-      });
-      showToast('💡 Suggestion sent!','#00FF88');
-      nameEl.value='';if(spiceEl)spiceEl.checked=false;
-    }catch(e){showToast('❌ Error: '+e.message,'#FF2D4B');}
-    btn.disabled=false;btn.textContent='💡 SUGGEST CHALLENGE';
-  }
+const chPages=await notionQuery(CONFIG.db_challenges);
+STATE.challenges={};STATE.allChallengeIds=[];
+for(const p of chPages){
+const id=getProp(p,‘ID_Global’,‘number’);
+const status=getProp(p,‘Status’,‘select’);
+if(status===‘✅ Active’||!status){
+STATE.challenges[id]={id,name:getProp(p,‘Name’,‘title’),points:getProp(p,‘Points’,‘number’),spice:getProp(p,‘Spice_Level’,‘formula_string’)||getProp(p,‘Spice_Level’,‘select’)};
+STATE.allChallengeIds.push(id);
+}
+}
 
-  function toggleSection(bodyId,toggleId){
-    document.getElementById(bodyId).classList.toggle('open');
-    document.getElementById(toggleId).classList.toggle('open');
-  }
+const asgPages=await notionQuery(CONFIG.db_assignments);
+STATE.assignments=asgPages.map(p=>({
+pageId:p.id,name:getProp(p,‘Name’,‘title’),playerIndex:getProp(p,‘Player_Index’,‘number’),
+winStreak:getProp(p,‘Win_Streak’,‘number’),totalScore:getProp(p,‘Total_Score’,‘number’),
+defisReussis:getProp(p,‘Defis_Reussis’,‘number’),isValidated:getProp(p,‘Is_Validated’,‘checkbox’),
+challengeId:getProp(p,‘Challenge_ID_Today’,‘formula_number’),
+hasRerolled:getProp(p,‘Has_Rerolled’,‘checkbox’),
+rerollChallengeId:getProp(p,‘Reroll_Challenge_ID’,‘number’),
+powerType:getProp(p,‘Power_Type’,‘select’)||‘❌ None’,
+powerTarget:getProp(p,‘Power_Target’,‘text’)||’’,
+powerUsed:getProp(p,‘Power_Used’,‘checkbox’),
+rouletteMultiplier:getProp(p,‘Roulette_Multiplier’,‘number’)||1,
+})).sort((a,b)=>a.playerIndex-b.playerIndex);
 
-  function render(){
-    const root=document.getElementById('root');
-    const lb=[...STATE.assignments].sort((a,b)=>b.totalScore-a.totalScore);
-    const rankEmoji=['🥇','🥈','🥉','4️⃣'];
-    root.innerHTML=`
-      <div class="header">
-        <span class="header-mascot">🌶️</span>
-        <h1>ZEST YOUR DAY</h1>
-        <div class="header-sub">Mexico Edition</div>
-        <div class="day-badge">📅 Day ${STATE.dayCounter}</div>
+// Build effects log from active powers
+STATE.effectsLog=[];
+for(const asg of STATE.assignments){
+if(asg.powerUsed && asg.powerType && asg.powerType!==‘❌ None’ && POWERS[asg.powerType]){
+const player=PLAYERS[asg.playerIndex];
+const power=POWERS[asg.powerType];
+let msg=`${player.emoji} ${player.name} activated ${asg.powerType}`;
+if(asg.powerTarget) msg+=` on ${asg.powerTarget}`;
+STATE.effectsLog.push({msg,color:power.color,icon:asg.powerType.split(’ ’)[0]});
+}
+}
+}
+
+function getEffectiveChallengeId(asg){
+return(asg.rerollChallengeId&&asg.rerollChallengeId>0)?asg.rerollChallengeId:asg.challengeId;
+}
+
+function getEffectivePoints(asg){
+const effectiveId=getEffectiveChallengeId(asg);
+const challenge=STATE.challenges[effectiveId];
+let pts=challenge?.points??0;
+
+// Check if someone used Pas si vite on this player
+const upgrader=STATE.assignments.find(a=>a.powerUsed&&a.powerType===‘⚡ Pas si vite’&&a.powerTarget===PLAYERS[asg.playerIndex]?.name);
+if(upgrader){
+const currentSpiceIdx=SPICE_ORDER.findIndex(s=>challenge?.spice?.includes(s.split(’ ’)[1]||s));
+// pts already modified in challenge, just use stored
+}
+
+// Check Bridage
+const bridager=STATE.assignments.find(a=>a.powerUsed&&a.powerType===‘💀 Bridage’&&(a.powerTarget===PLAYERS[asg.playerIndex]?.name||(a.playerIndex===asg.playerIndex&&a.powerTarget===‘myself’)));
+if(bridager) pts=Math.ceil(pts*0.5);
+
+// Check Roulette on self
+if(asg.powerUsed&&asg.powerType===‘🎰 Roulette’) pts=pts*asg.rouletteMultiplier;
+
+return pts;
+}
+
+function isProtectedByShield(playerName){
+return STATE.assignments.some(a=>a.powerUsed&&a.powerType===‘🛡️ Shield’&&PLAYERS[a.playerIndex]?.name===playerName);
+}
+
+// POWER MODAL
+function showPowerModal(asg){
+const player=PLAYERS[asg.playerIndex];
+const power=POWERS[asg.powerType];
+if(!power||asg.powerType===‘❌ None’)return;
+
+const container=document.getElementById(‘modal-container’);
+const otherPlayers=PLAYERS.filter((_,i)=>i!==asg.playerIndex);
+
+let targetHTML=’’;
+if(power.needsTarget){
+targetHTML=`<div class="form-label" style="margin-bottom:8px">Choose target:</div><div class="modal-targets">`;
+if(power.targetSelf) targetHTML+=`<button class="target-btn" onclick="selectTarget(this,'myself')"><span style="font-size:24px">${player.emoji}</span> Myself</button>`;
+otherPlayers.forEach(p=>{targetHTML+=`<button class="target-btn" onclick="selectTarget(this,'${p.name}')"><span style="font-size:24px">${p.emoji}</span> ${p.name}</button>`;});
+targetHTML+=`</div>`;
+}
+
+let upgradeHTML=’’;
+if(power.needsUpDown){
+upgradeHTML=`<div class="modal-upgrade-btns"> <button class="upgrade-btn" style="background:rgba(0,255,136,0.15);color:#00FF88;border:1px solid rgba(0,255,136,0.4)" onclick="setUpgradeDir('upgrade',this)">⬆️ UPGRADE</button> <button class="upgrade-btn" style="background:rgba(255,45,75,0.15);color:#FF2D4B;border:1px solid rgba(255,45,75,0.4)" onclick="setUpgradeDir('downgrade',this)">⬇️ DOWNGRADE</button> </div>`;
+}
+
+container.innerHTML=` <div class="modal-overlay" onclick="closePowerModal(event)"> <div class="modal" onclick="event.stopPropagation()"> <div class="modal-title" style="color:${power.color}">${asg.powerType}</div> <div class="modal-desc">${power.desc}</div> ${targetHTML} ${upgradeHTML} <div class="modal-actions"> <button class="modal-cancel" onclick="closePowerModal()">Cancel</button> <button class="modal-confirm" onclick="activatePower('${asg.pageId}')">⚡ ACTIVATE</button> </div> </div> </div>`;
+
+window._currentPowerAsg=asg;
+window._selectedTarget=power.needsTarget?null:(power.targetSelf?‘myself’:null);
+window._upgradeDir=null;
+}
+
+window.selectTarget=function(btn,name){
+document.querySelectorAll(’.target-btn’).forEach(b=>b.classList.remove(‘selected’));
+btn.classList.add(‘selected’);
+window._selectedTarget=name;
+};
+window.setUpgradeDir=function(dir,btn){
+document.querySelectorAll(’.upgrade-btn’).forEach(b=>b.style.opacity=‘0.5’);
+btn.style.opacity=‘1’;
+window._upgradeDir=dir;
+};
+window.closePowerModal=function(e){
+if(!e||e.target.classList.contains(‘modal-overlay’)) document.getElementById(‘modal-container’).innerHTML=’’;
+};
+
+window.activatePower=async function(pageId){
+const asg=window._currentPowerAsg;
+const target=window._selectedTarget;
+const power=POWERS[asg.powerType];
+
+if(power.needsTarget&&!target){showToast(‘⚠️ Select a target!’,’#FF6B1A’);return;}
+if(power.needsUpDown&&!window._upgradeDir){showToast(‘⚠️ Choose upgrade or downgrade!’,’#FF6B1A’);return;}
+
+// Check shield
+if(target&&target!==‘myself’&&isProtectedByShield(target)){
+showToast(`🛡️ ${target} is protected by Shield!`,’#00EEFF’);
+// Prompt shield holder
+showShieldPrompt(target,asg,pageId,target);
+document.getElementById(‘modal-container’).innerHTML=’’;
+return;
+}
+
+await applyPower(pageId,asg,target,window._upgradeDir);
+document.getElementById(‘modal-container’).innerHTML=’’;
+};
+
+function showShieldPrompt(shieldHolder,attackerAsg,attackerPageId,target){
+const shieldAsg=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===shieldHolder);
+if(!shieldAsg)return;
+const attacker=PLAYERS[attackerAsg.playerIndex];
+const root=document.getElementById(‘root’);
+const prompt=document.createElement(‘div’);
+prompt.className=‘shield-prompt’;
+prompt.id=‘shield-prompt’;
+prompt.innerHTML=` <div class="shield-prompt-title">🛡️ SHIELD ALERT!</div> <div class="shield-prompt-desc">${attacker.emoji} ${attacker.name} used ${attackerAsg.powerType} on you!<br>Do you activate your Shield?</div> <div class="shield-btns"> <button class="shield-yes" onclick="useShield('${shieldAsg.pageId}','${attackerPageId}',true)">🛡️ YES, SHIELD!</button> <button class="shield-no" onclick="useShield('${shieldAsg.pageId}','${attackerPageId}',false)">❌ NO, ALLOW</button> </div>`;
+root.insertBefore(prompt,root.firstChild);
+}
+
+window.useShield=async function(shieldPageId,attackerPageId,activate){
+document.getElementById(‘shield-prompt’)?.remove();
+if(activate){
+await notionPatch(shieldPageId,{Power_Used:{checkbox:true}});
+const shieldAsg=STATE.assignments.find(a=>a.pageId===shieldPageId);
+if(shieldAsg){shieldAsg.powerUsed=true;}
+showToast(‘🛡️ Shield activated! Attack blocked!’,’#00EEFF’);
+} else {
+const attackerAsg=STATE.assignments.find(a=>a.pageId===attackerPageId);
+if(attackerAsg) await applyPower(attackerPageId,attackerAsg,window._selectedTarget,window._upgradeDir);
+showToast(‘💀 Shield refused! Power applied!’,’#FF2D4B’);
+}
+await loadData();render();
+};
+
+async function applyPower(pageId,asg,target,upgradeDir){
+const player=PLAYERS[asg.playerIndex];
+const power=POWERS[asg.powerType];
+
+let updates={Power_Used:{checkbox:true}};
+if(target) updates.Power_Target={rich_text:[{text:{content:target}}]};
+
+// Roulette — pick random multiplier
+if(asg.powerType===‘🎰 Roulette’){
+const mult=[0,1,2][Math.floor(Math.random()*3)];
+updates.Roulette_Multiplier={number:mult};
+showToast(`🎰 Roulette: ×${mult}!`,mult===2?’#00FF88’:mult===0?’#FF2D4B’:’#FFD700’);
+}
+
+// Extincteur — reset target streak
+if(asg.powerType===‘🔥 Extincteur’&&target){
+const targetAsg=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===target);
+if(targetAsg){await notionPatch(targetAsg.pageId,{Win_Streak:{number:0}});targetAsg.winStreak=0;}
+showToast(`🔥 ${target}'s streak has been EXTINGUISHED!`,’#FF2D4B’);
+}
+
+await notionPatch(pageId,updates);
+asg.powerUsed=true;
+asg.powerTarget=target||’’;
+
+if(asg.powerType!==‘🎰 Roulette’&&asg.powerType!==‘🔥 Extincteur’){
+const msg=target?`${player.emoji} ${player.name} used ${asg.powerType} on ${target}!`:`${player.emoji} ${player.name} activated ${asg.powerType}!`;
+showToast(msg,power.color);
+}
+
+await loadData();render();
+}
+
+async function toggleValidation(pageId,current){
+const newVal=!current;
+await notionPatch(pageId,{Is_Validated:{checkbox:newVal}});
+const asg=STATE.assignments.find(a=>a.pageId===pageId);
+if(asg)asg.isValidated=newVal;
+if(newVal)confetti();
+render();
+showToast(newVal?‘🎉 Challenge completed!’:‘❌ Removed’,newVal?’#00FF88’:’#FF2D4B’);
+}
+
+async function reroll(pageId){
+const asg=STATE.assignments.find(a=>a.pageId===pageId);
+if(!asg||asg.hasRerolled)return;
+const current=getEffectiveChallengeId(asg);
+const available=STATE.allChallengeIds.filter(id=>id!==current);
+if(available.length===0){showToast(‘No other challenges!’,’#FF6B1A’);return;}
+const newId=available[Math.floor(Math.random()*available.length)];
+await notionPatch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId},Power_Type:{select:{name:‘❌ None’}}});
+asg.hasRerolled=true;asg.rerollChallengeId=newId;asg.powerType=‘❌ None’;
+render();showToast(‘🎲 Rerolled! Power lost 💀’,’#BF00FF’);
+}
+
+async function suggestChallenge(){
+const nameEl=document.getElementById(‘suggest-name’);
+const spiceEl=document.querySelector(‘input[name=“spice”]:checked’);
+if(!nameEl.value.trim()){showToast(‘⚠️ Enter a name!’,’#FF6B1A’);return;}
+if(!spiceEl){showToast(‘⚠️ Pick spice level!’,’#FF6B1A’);return;}
+const btn=document.getElementById(‘btn-suggest’);btn.disabled=true;btn.textContent=‘Sending…’;
+const pts=SPICE_POINTS[spiceEl.value]||1;
+try{
+await notionCreate(CONFIG.db_challenges,{Name:{title:[{text:{content:nameEl.value.trim()}}]},Points:{number:pts},Status:{select:{name:‘⏳ Pending’}}});
+showToast(‘💡 Suggestion sent!’,’#00FF88’);nameEl.value=’’;if(spiceEl)spiceEl.checked=false;
+}catch(e){showToast(‘❌ Error: ‘+e.message,’#FF2D4B’);}
+btn.disabled=false;btn.textContent=‘💡 SUGGEST CHALLENGE’;
+}
+
+function toggleSection(bodyId,toggleId){
+document.getElementById(bodyId).classList.toggle(‘open’);
+document.getElementById(toggleId).classList.toggle(‘open’);
+}
+
+function getPowerCardStyle(powerType){
+if(!powerType||powerType===‘❌ None’)return{border:‘rgba(255,255,255,0.06)’,glow:’’};
+const p=POWERS[powerType];
+if(!p)return{border:‘rgba(255,255,255,0.06)’,glow:’’};
+return{border:p.border,glow:`0 0 20px ${p.color}30`};
+}
+
+function render(){
+const root=document.getElementById(‘root’);
+const lb=[…STATE.assignments].sort((a,b)=>b.totalScore-a.totalScore);
+const rankEmoji=[‘🥇’,‘🥈’,‘🥉’,‘4️⃣’];
+
+const effectsHTML=STATE.effectsLog.length>0?` <div class="effects-log"> ${STATE.effectsLog.map(e=>`<div class="effect-item"><span style="font-size:20px">${e.icon}</span><span style="color:${e.color}">${e.msg}</span></div>`).join('')} </div>`:’’;
+
+const cardsHTML=STATE.defiLaunched?STATE.assignments.map(asg=>{
+const player=PLAYERS[asg.playerIndex]||{name:asg.name,emoji:‘🎮’,color:’#8892A4’,colorDark:‘rgba(136,146,164,0.15)’};
+const effectiveId=getEffectiveChallengeId(asg);
+const challenge=STATE.challenges[effectiveId];
+const pts=challenge?.points??0;
+const bonus=streakBonus(asg.winStreak);
+const isRerolled=asg.rerollChallengeId>0;
+const power=POWERS[asg.powerType];
+const cardStyle=getPowerCardStyle(asg.powerType);
+const hasPower=asg.powerType&&asg.powerType!==‘❌ None’;
+
+```
+return`<div class="card ${asg.isValidated?'validated':''}" style="border-color:${cardStyle.border};box-shadow:${cardStyle.glow}">
+  <div class="card-band" style="background:${player.color};box-shadow:0 0 15px ${player.color}60"></div>
+  <div class="card-cover" style="--cover-color:${player.color}">
+    <span style="font-size:36px;position:relative">${player.emoji}</span>
+    <span class="player-name-big" style="color:${player.color};text-shadow:0 0 20px ${player.color}60">${player.name}</span>
+    ${hasPower?`<span class="power-badge-cover" style="color:${power.color}">${asg.powerType.split(' ')[0]}</span>`:''}
+  </div>
+  <div class="card-body">
+    <div class="streak-row">
+      <div class="pill pill-streak">🔥 ${asg.winStreak} streak</div>
+      ${bonus>0?`<div class="pill pill-bonus">⚡ +${bonus} bonus</div>`:''}
+      ${isRerolled?`<div class="pill pill-reroll">🎲 Rerolled</div>`:''}
+      ${hasPower&&!asg.powerUsed?`<div class="pill" style="background:${power.bg};border:1px solid ${power.border};color:${power.color}">${asg.powerType}</div>`:''}
+      ${hasPower&&asg.powerUsed?`<div class="pill" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--muted)">${asg.powerType.split(' ')[0]} Used</div>`:''}
+    </div>
+    <div class="challenge-box">
+      <div class="challenge-num">Challenge #${effectiveId}</div>
+      <div class="challenge-name">${challenge?.name??'⏳ Loading...'}</div>
+      <div class="challenge-meta">
+        <span class="spice-badge" style="color:${spiceColor(pts)}">${challenge?.spice??''} · ${pts} pt${pts>1?'s':''}</span>
+        ${bonus>0?`<span class="total-badge">⚡ ${pts+bonus} pts total</span>`:''}
       </div>
-
-      <div class="divider"></div>
-      <div class="section-title">🎯 Today's Challenges</div>
-      <div class="cards">
-        ${STATE.assignments.map(asg=>{
-          const player=PLAYERS[asg.playerIndex]||{name:asg.name,emoji:'🎮',color:'#8892A4',colorDark:'rgba(136,146,164,0.15)'};
-          const effectiveId=getEffectiveChallengeId(asg);
-          const challenge=STATE.challenges[effectiveId];
-          const pts=challenge?.points??0;
-          const bonus=streakBonus(asg.winStreak);
-          const isRerolled=asg.rerollChallengeId>0;
-          return`
-          <div class="card ${asg.isValidated?'validated':''}">
-            <div class="card-band" style="background:${player.color};box-shadow:0 0 15px ${player.color}60"></div>
-            <div class="card-cover" style="--cover-color:${player.color};--player-emoji-content:'${player.emoji}'">
-              <span style="font-size:36px;position:relative">${player.emoji}</span>
-              <span class="player-name-big" style="color:${player.color};text-shadow:0 0 20px ${player.color}60">${player.name}</span>
-            </div>
-            <div class="card-body">
-              <div class="streak-row">
-                <div class="pill pill-streak">🔥 ${asg.winStreak} streak</div>
-                ${bonus>0?`<div class="pill pill-bonus">⚡ +${bonus} bonus</div>`:''}
-                ${isRerolled?`<div class="pill pill-reroll">🎲 Rerolled</div>`:''}
-              </div>
-              <div class="challenge-box">
-                <div class="challenge-num">Challenge #${effectiveId}</div>
-                <div class="challenge-name">${challenge?.name??'⏳ Loading...'}</div>
-                <div class="challenge-meta">
-                  <span class="spice-badge" style="color:${spiceColor(pts)}">${challenge?.spice??''} · ${pts} pt${pts>1?'s':''}</span>
-                  ${bonus>0?`<span class="total-badge">⚡ ${pts+bonus} pts total</span>`:''}
-                </div>
-              </div>
-              <div class="card-actions">
-                <div class="done-wrap">
-                  <span class="done-label">Done?</span>
-                  <label class="checkbox-wrap">
-                    <input type="checkbox" ${asg.isValidated?'checked':''} onchange="toggleValidation('${asg.pageId}',${asg.isValidated})" />
-                    <div class="checkbox-custom">${asg.isValidated?'✓':''}</div>
-                  </label>
-                </div>
-                <button class="btn-reroll" onclick="reroll('${asg.pageId}')" ${asg.hasRerolled?'disabled':''}>
-                  🎲 ${asg.hasRerolled?'Rerolled':'Reroll'}
-                </button>
-              </div>
-            </div>
-          </div>`;
-        }).join('')}
+    </div>
+    <div class="card-actions">
+      <div class="done-wrap">
+        <span class="done-label">Done?</span>
+        <label class="checkbox-wrap">
+          <input type="checkbox" ${asg.isValidated?'checked':''} onchange="toggleValidation('${asg.pageId}',${asg.isValidated})" />
+          <div class="checkbox-custom">${asg.isValidated?'✓':''}</div>
+        </label>
       </div>
+      <button class="btn-reroll" onclick="reroll('${asg.pageId}')" ${asg.hasRerolled?'disabled':''}>
+        🎲 ${asg.hasRerolled?'Rerolled':'Reroll'}
+      </button>
+    </div>
+    ${hasPower&&!asg.powerUsed&&!POWERS[asg.powerType]?.reactive?`
+      <button class="btn-power" style="background:${power.bg};border:1px solid ${power.border};color:${power.color}" onclick="showPowerModal(STATE.assignments.find(a=>a.pageId==='${asg.pageId}'))">
+        ${asg.powerType} — ACTIVATE
+      </button>`:''}
+  </div>
+</div>`;
+```
 
-      <div class="divider"></div>
-      <div class="section-title">🏆 Leaderboard</div>
-      <div class="leaderboard">
-        <div class="lb-card">
-          <div class="lb-header-row"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>✅</span></div>
-          ${lb.map((asg,i)=>{
-            const player=PLAYERS[asg.playerIndex]||{name:asg.name,emoji:'🎮',color:'#8892A4'};
-            return`<div class="lb-row">
-              <div class="lb-rank">${rankEmoji[i]??i+1}</div>
-              <div class="lb-player"><span class="lb-emoji">${player.emoji}</span><span class="lb-name" style="color:${player.color}">${player.name}</span></div>
-              <div class="lb-stat"><div class="lb-val" style="color:#FFD700">${asg.totalScore}</div><div class="lb-lbl">pts</div></div>
-              <div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">${asg.winStreak}🔥</div><div class="lb-lbl">streak</div></div>
-              <div class="lb-stat"><div class="lb-val" style="color:#00FF88">${asg.defisReussis}</div><div class="lb-lbl">done</div></div>
-            </div>`;
-          }).join('')}
+}).join(’’):`<div class="waiting-screen">
+<span class="waiting-icon">🌙</span>
+<div class="waiting-title">Challenges not launched yet</div>
+<div class="waiting-sub">The game master will launch today’s challenges from the admin panel.</div>
+
+  </div>`;
+
+root.innerHTML=`
+<div class="header">
+<span class="header-mascot">🌶️</span>
+<h1>ZEST YOUR DAY</h1>
+<div class="header-sub">Mexico Edition</div>
+<div class="day-badge">📅 Day ${STATE.dayCounter}</div>
+</div>
+
+```
+${effectsHTML}
+
+<div class="divider"></div>
+<div class="section-title">🎯 Today's Challenges</div>
+<div class="cards">${cardsHTML}</div>
+
+<div class="divider"></div>
+<div class="section-title">🏆 Leaderboard</div>
+<div class="leaderboard">
+  <div class="lb-card">
+    <div class="lb-header-row"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>✅</span></div>
+    ${lb.map((asg,i)=>{
+      const player=PLAYERS[asg.playerIndex]||{name:asg.name,emoji:'🎮',color:'#8892A4'};
+      return`<div class="lb-row">
+        <div class="lb-rank">${rankEmoji[i]??i+1}</div>
+        <div class="lb-player"><span class="lb-emoji">${player.emoji}</span><span class="lb-name" style="color:${player.color}">${player.name}</span></div>
+        <div class="lb-stat"><div class="lb-val" style="color:#FFD700">${asg.totalScore}</div><div class="lb-lbl">pts</div></div>
+        <div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">${asg.winStreak}🔥</div><div class="lb-lbl">streak</div></div>
+        <div class="lb-stat"><div class="lb-val" style="color:#00FF88">${asg.defisReussis}</div><div class="lb-lbl">done</div></div>
+      </div>`;
+    }).join('')}
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="section-title">💡 Suggest</div>
+<div class="suggest">
+  <div class="collapsible-card">
+    <div class="collapsible-header" onclick="toggleSection('suggest-body','suggest-toggle')" style="border-bottom:1px solid rgba(0,255,136,0.08)">
+      <h3 style="color:#00FF88">➕ NEW CHALLENGE IDEA</h3>
+      <span class="collapsible-toggle" id="suggest-toggle">▼</span>
+    </div>
+    <div class="collapsible-body" id="suggest-body">
+      <div class="form-group"><label class="form-label">Challenge name</label><input class="form-input" id="suggest-name" type="text" placeholder="e.g. Sing your order..." maxlength="100" /></div>
+      <div class="form-group"><label class="form-label">Spice level</label>
+        <div class="spice-selector">
+          <input type="radio" name="spice" id="s1" value="🌱 Mild" class="spice-option"><label for="s1"><span class="spice-emoji">🌱</span>Mild<br><small style="color:#6B7280">1 pt</small></label>
+          <input type="radio" name="spice" id="s2" value="🌶️ Spicy" class="spice-option"><label for="s2"><span class="spice-emoji">🌶️</span>Spicy<br><small style="color:#6B7280">2 pts</small></label>
+          <input type="radio" name="spice" id="s3" value="🔥 Hot" class="spice-option"><label for="s3"><span class="spice-emoji">🔥</span>Hot<br><small style="color:#6B7280">3 pts</small></label>
+          <input type="radio" name="spice" id="s4" value="⚡ Atomic" class="spice-option"><label for="s4"><span class="spice-emoji">⚡</span>Atomic<br><small style="color:#6B7280">5 pts</small></label>
         </div>
       </div>
+      <button class="btn-suggest" id="btn-suggest" onclick="suggestChallenge()">💡 SUGGEST CHALLENGE</button>
+      <p style="font-size:12px;color:#6B7280;margin-top:12px;text-align:center">Reviewed before entering the rotation ✅</p>
+    </div>
+  </div>
+</div>
 
-      <div class="divider"></div>
-      <div class="section-title">💡 Suggest</div>
-      <div class="suggest">
-        <div class="collapsible-card">
-          <div class="collapsible-header" onclick="toggleSection('suggest-body','suggest-toggle')" style="border-bottom:1px solid rgba(0,255,136,0.08)">
-            <h3 style="color:#00FF88">➕ NEW CHALLENGE IDEA</h3>
-            <span class="collapsible-toggle" id="suggest-toggle">▼</span>
-          </div>
-          <div class="collapsible-body" id="suggest-body">
-            <div class="form-group">
-              <label class="form-label">Challenge name</label>
-              <input class="form-input" id="suggest-name" type="text" placeholder="e.g. Sing your order at a restaurant..." maxlength="100" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Spice level</label>
-              <div class="spice-selector">
-                <input type="radio" name="spice" id="s1" value="🌱 Mild" class="spice-option">
-                <label for="s1"><span class="spice-emoji">🌱</span>Mild<br><small style="color:#6B7280">1 pt</small></label>
-                <input type="radio" name="spice" id="s2" value="🌶️ Spicy" class="spice-option">
-                <label for="s2"><span class="spice-emoji">🌶️</span>Spicy<br><small style="color:#6B7280">2 pts</small></label>
-                <input type="radio" name="spice" id="s3" value="🔥 Hot" class="spice-option">
-                <label for="s3"><span class="spice-emoji">🔥</span>Hot<br><small style="color:#6B7280">3 pts</small></label>
-                <input type="radio" name="spice" id="s4" value="⚡ Atomic" class="spice-option">
-                <label for="s4"><span class="spice-emoji">⚡</span>Atomic<br><small style="color:#6B7280">5 pts</small></label>
-              </div>
-            </div>
-            <button class="btn-suggest" id="btn-suggest" onclick="suggestChallenge()">💡 SUGGEST CHALLENGE</button>
-            <p style="font-size:12px;color:#6B7280;margin-top:12px;text-align:center">Reviewed by the game master before entering the rotation ✅</p>
-          </div>
+<div class="divider"></div>
+<div class="section-title">📖 Rules</div>
+<div class="rules">
+  <div class="collapsible-card">
+    <div class="collapsible-header" onclick="toggleSection('rules-body','rules-toggle')" style="border-bottom:1px solid rgba(255,45,75,0.08)">
+      <h3 style="color:#FF2D4B">📜 HOW IT WORKS</h3>
+      <span class="collapsible-toggle" id="rules-toggle">▼</span>
+    </div>
+    <div class="collapsible-body" id="rules-body">
+      <div class="rule-item"><div class="rule-icon">🎯</div><div><div class="rule-title">One challenge per day</div><div class="rule-desc">Each player gets a unique challenge every day. Challenges rotate automatically — no two players get the same one!</div></div></div>
+      <div class="rule-item"><div class="rule-icon">🌶️</div><div><div class="rule-title">Spice levels</div><div class="rule-desc">Each challenge has a difficulty that determines how many points you earn.</div><div class="neon-table"><div class="neon-row"><span>🌱 Mild</span><span>1 pt</span></div><div class="neon-row"><span>🌶️ Spicy</span><span>2 pts</span></div><div class="neon-row"><span>🔥 Hot</span><span>3 pts</span></div><div class="neon-row"><span>⚡ Atomic</span><span>5 pts</span></div></div></div></div>
+      <div class="rule-item"><div class="rule-icon">🔥</div><div><div class="rule-title">Streak bonuses</div><div class="rule-desc">Complete challenges on consecutive days to unlock bonus points! Streak resets to 0 if you miss a day.</div><div class="neon-table"><div class="neon-row"><span>🔥 3 days in a row</span><span>+1 pt</span></div><div class="neon-row"><span>🔥 5 days in a row</span><span>+2 pts</span></div><div class="neon-row"><span>🔥 10 days in a row</span><span>+3 pts</span></div></div></div></div>
+      <div class="rule-item"><div class="rule-icon">🎲</div><div><div class="rule-title">Reroll (once per day)</div><div class="rule-desc">Reroll your challenge — but you lose your power for the day!</div></div></div>
+      <div class="rule-item"><div class="rule-icon">🎴</div><div><div class="rule-title">Daily Powers</div><div class="rule-desc">Every player receives a random power each day. Powers are revealed during the morning launch. Rerolling removes your power!</div>
+        <div class="neon-table">
+          <div class="neon-row"><span>🦹 Entourloupeur</span><span>Copy & steal points</span></div>
+          <div class="neon-row"><span>🔄 Swap</span><span>Force challenge swap</span></div>
+          <div class="neon-row"><span>💀 Bridage</span><span>×0.5 points</span></div>
+          <div class="neon-row"><span>⚡ Pas si vite</span><span>Upgrade/downgrade difficulty</span></div>
+          <div class="neon-row"><span>🛡️ Shield</span><span>Block any power</span></div>
+          <div class="neon-row"><span>🎰 Roulette</span><span>×0, ×1 or ×2 random</span></div>
+          <div class="neon-row"><span>👯 Copier-Coller</span><span>Share challenge, ×2 if both win</span></div>
+          <div class="neon-row"><span>🔥 Extincteur</span><span>Reset someone's streak</span></div>
         </div>
-      </div>
+      </div></div>
+      <div class="rule-item"><div class="rule-icon">🛡️</div><div><div class="rule-title">Shield</div><div class="rule-desc">When targeted, you choose whether to activate your Shield. Everyone sees if you had one — strategic bluffing is part of the game!</div></div></div>
+      <div class="rule-item"><div class="rule-icon">✅</div><div><div class="rule-title">Validation</div><div class="rule-desc">The game master checks the box for each player who completed their challenge. Be honest — shame is the real punishment 😈</div></div></div>
+      <div class="rule-item"><div class="rule-icon">🏆</div><div><div class="rule-title">Leaderboard</div><div class="rule-desc">Rankings update in real time. Most points at the end wins eternal glory 🌶️</div></div></div>
+    </div>
+  </div>
+</div>
+```
 
-      <div class="divider"></div>
-      <div class="section-title">📖 Rules</div>
-      <div class="rules">
-        <div class="collapsible-card">
-          <div class="collapsible-header" onclick="toggleSection('rules-body','rules-toggle')" style="border-bottom:1px solid rgba(255,45,75,0.08)">
-            <h3 style="color:#FF2D4B">📜 HOW IT WORKS</h3>
-            <span class="collapsible-toggle" id="rules-toggle">▼</span>
-          </div>
-          <div class="collapsible-body" id="rules-body">
-            <div class="rule-item"><div class="rule-icon">🎯</div><div><div class="rule-title">One challenge per day</div><div class="rule-desc">Each player gets a unique challenge every day. Challenges rotate automatically — no two players get the same one!</div></div></div>
-            <div class="rule-item"><div class="rule-icon">🌶️</div><div><div class="rule-title">Spice levels</div><div class="rule-desc">Each challenge has a difficulty that determines how many points you earn.</div><div class="neon-table"><div class="neon-row"><span>🌱 Mild</span><span>1 pt</span></div><div class="neon-row"><span>🌶️ Spicy</span><span>2 pts</span></div><div class="neon-row"><span>🔥 Hot</span><span>3 pts</span></div><div class="neon-row"><span>⚡ Atomic</span><span>5 pts</span></div></div></div></div>
-            <div class="rule-item"><div class="rule-icon">🔥</div><div><div class="rule-title">Streak bonuses</div><div class="rule-desc">Complete challenges on consecutive days to unlock bonus points! Streak resets to 0 if you miss a day.</div><div class="neon-table"><div class="neon-row"><span>🔥 3 days in a row</span><span>+1 pt</span></div><div class="neon-row"><span>🔥 5 days in a row</span><span>+2 pts</span></div><div class="neon-row"><span>🔥 10 days in a row</span><span>+3 pts</span></div></div></div></div>
-            <div class="rule-item"><div class="rule-icon">🎲</div><div><div class="rule-title">Reroll (once per day)</div><div class="rule-desc">Not feeling your challenge? Hit Reroll to get a random new one — no streak penalty! One reroll per day, use it wisely.</div></div></div>
-            <div class="rule-item"><div class="rule-icon">✅</div><div><div class="rule-title">Challenge validation</div><div class="rule-desc">The game master checks the box for each player who completed their challenge. Be honest — shame is the real punishment 😈</div></div></div>
-            <div class="rule-item"><div class="rule-icon">💡</div><div><div class="rule-title">Suggest a challenge</div><div class="rule-desc">Got a wild idea? Submit it using the form above. The game master reviews it before it enters the rotation.</div></div></div>
-            <div class="rule-item"><div class="rule-icon">🏆</div><div><div class="rule-title">Leaderboard</div><div class="rule-desc">Rankings update in real time. The player with the most points at the end wins eternal glory 🌶️</div></div></div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
+`;
+}
 
-  async function init(){
-    try{await loadData();render();}
-    catch(e){document.getElementById('root').innerHTML='<div class="error-box">❌ Connection error.<br><br>Make sure NOTION_TOKEN is set in Vercel environment variables.<br><br>Details: '+e.message+'</div>';}
-  }
-  init();
+async function init(){
+try{await loadData();render();}
+catch(e){document.getElementById(‘root’).innerHTML=’<div style="margin:20px;padding:20px;background:rgba(255,45,75,0.06);border:1px solid rgba(255,45,75,0.25);border-radius:20px;color:#FF2D4B;font-weight:600;font-size:14px;line-height:1.6">❌ Connection error.<br><br>Make sure NOTION_TOKEN is set in Vercel.<br><br>Details: ‘+e.message+’</div>’;}
+}
+init();
 </script>
+
 </body>
 </html>
