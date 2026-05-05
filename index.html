@@ -307,8 +307,38 @@ async function loadData(){
   }
 }
 
-function getEffectiveChallengeId(asg){
+function getBaseChallenge(asg){
   return(asg.rerollChallengeId&&asg.rerollChallengeId>0)?asg.rerollChallengeId:asg.challengeId;
+}
+
+function getEffectiveChallengeId(asg){
+  const playerName=PLAYERS[asg.playerIndex]?.name;
+
+  // SWAP — if someone swapped with this player, show the swapper's challenge
+  const swapper=STATE.assignments.find(a=>
+    a.powerUsed && a.powerType==='🔄 Swap' && a.powerTarget===playerName && a.playerIndex!==asg.playerIndex
+  );
+  if(swapper) return getBaseChallenge(swapper);
+
+  // Check if THIS player used Swap — show target's challenge
+  if(asg.powerUsed && asg.powerType==='🔄 Swap' && asg.powerTarget){
+    const target=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===asg.powerTarget);
+    if(target) return getBaseChallenge(target);
+  }
+
+  // ENTOURLOUPEUR — if this player used it, show target's challenge
+  if(asg.powerUsed && asg.powerType==='🦹 Entourloupeur' && asg.powerTarget){
+    const target=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===asg.powerTarget);
+    if(target) return getBaseChallenge(target);
+  }
+
+  // COPIER-COLLER — if someone shared their challenge with this player, show that challenge
+  const copier=STATE.assignments.find(a=>
+    a.powerUsed && a.powerType==='👯 Copier-Coller' && a.powerTarget===playerName && a.playerIndex!==asg.playerIndex
+  );
+  if(copier) return getBaseChallenge(copier);
+
+  return getBaseChallenge(asg);
 }
 
 function getEffectivePoints(asg){
