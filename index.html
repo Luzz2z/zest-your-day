@@ -91,8 +91,11 @@ document.getElementById(‘root’).innerHTML=html;
 }
 
 async function init(){
-try{
-var sys=await query(DB.system);
+  document.getElementById('root').textContent='Step 1';
+  try{
+    var sys=await query(DB.system);
+    document.getElementById('root').textContent='Step 2';
+
 S.sysId=sys[0].id;
 S.day=gp(sys[0],‘Day_Counter’,‘num’)||1;
 var chs=await query(DB.challenges);
