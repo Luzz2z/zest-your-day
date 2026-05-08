@@ -216,19 +216,19 @@ for(let i=0;i<50;i++){const el=document.createElement(‘div’);el.className=�
 
 async function notionQuery(dbId,body){
 body=body||{};
-const res=await fetch(’/api/notion?endpoint=databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify(body)});
+const res=await fetch(’/api/notion/databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify(body)});
 const data=await res.json();
 if(!res.ok)throw new Error(data.message||‘Notion error’);
 return data.results;
 }
 async function notionPatch(pageId,properties){
-const res=await fetch(’/api/notion?endpoint=pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:properties})});
+const res=await fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:properties})});
 const data=await res.json();
 if(!res.ok)throw new Error(data.message||‘Update error’);
 return data;
 }
 async function notionCreate(dbId,properties){
-const res=await fetch(’/api/notion?endpoint=pages’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({parent:{database_id:dbId},properties:properties})});
+const res=await fetch(’/api/notion/pages’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({parent:{database_id:dbId},properties:properties})});
 const data=await res.json();
 if(!res.ok)throw new Error(data.message||‘Create error’);
 return data;
