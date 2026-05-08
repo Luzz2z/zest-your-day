@@ -5,10 +5,18 @@
 <style>
 body{background:#050508;color:#F5F5F5;padding:20px;font-family:sans-serif;}
 .card{background:#0A0A18;border-radius:14px;padding:16px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.06);}
+.card.validated{border-color:rgba(0,255,136,0.3);}
+.btn{border-radius:10px;padding:9px 14px;font-size:12px;font-weight:900;cursor:pointer;font-family:sans-serif;margin-right:8px;}
+.btn-done{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:#00FF88;}
+.btn-reroll{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);color:#e879f9;}
+.btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);color:white;font-weight:900;padding:12px 24px;border-radius:40px;font-size:14px;z-index:999;transition:transform 0.3s;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 <div id="root">Loading...</div>
+<div class="toast" id="toast"></div>
 <script>
 var DB={
   system:'354403dde0e380aa85bfe7d9fd139be5',
@@ -23,8 +31,17 @@ var PLAYERS=[
 ];
 var S={day:1,challenges:{},players:[],ids:[]};
 
+function toast(msg,col){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=col||'#00FF88';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2500);
+}
 function query(dbId){
   return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
+}
+function patch(pageId,props){
+  return fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:props})}).then(function(r){return r.json();});
 }
 function gp(page,name,type){
   var p=page.properties[name];if(!p)return null;
@@ -37,16 +54,40 @@ function gp(page,name,type){
   return null;
 }
 
+window.validate=function(pageId,cur){
+  var nv=!cur;
+  patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
+    var a=S.players.find(function(x){return x.pageId===pageId;});
+    if(a)a.isValidated=nv;
+    render();
+    toast(nv?'Challenge done!':'Removed',nv?'#00FF88':'#FF2D4B');
+  });
+};
+window.reroll=function(pageId){
+  var a=S.players.find(function(x){return x.pageId===pageId;});
+  if(!a||a.hasRerolled)return;
+  var cur=a.rerollId>0?a.rerollId:a.challengeId;
+  var avail=S.ids.filter(function(id){return id!==cur;});
+  if(!avail.length){toast('No other challenges!','#FF6B1A');return;}
+  var newId=avail[Math.floor(Math.random()*avail.length)];
+  patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}).then(function(){
+    a.hasRerolled=true;a.rerollId=newId;
+    render();toast('Rerolled!','#BF00FF');
+  });
+};
+
 function render(){
   var html='<h2 style="color:#FFD700;margin-bottom:16px">Day '+S.day+'</h2>';
   S.players.forEach(function(a){
     var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
     var cid=a.rerollId>0?a.rerollId:a.challengeId;
     var ch=S.challenges[cid]||{name:'?',pts:0,spice:''};
-    html+='<div class="card">'
-      +'<div style="color:'+pl.color+';font-weight:900;font-size:20px">'+pl.emoji+' '+pl.name+'</div>'
-      +'<div style="font-size:14px;margin:6px 0">'+ch.name+'</div>'
-      +'<div style="font-size:12px;color:#FFD700">'+ch.spice+' - '+ch.pts+' pts</div>'
+    html+='<div class="card'+(a.isValidated?' validated':'')+'">'
+      +'<div style="color:'+pl.color+';font-weight:900;font-size:20px;margin-bottom:6px">'+pl.emoji+' '+pl.name+'</div>'
+      +'<div style="font-size:14px;margin-bottom:4px">'+ch.name+'</div>'
+      +'<div style="font-size:12px;color:#FFD700;margin-bottom:10px">'+ch.spice+' - '+ch.pts+' pts | Streak: '+a.winStreak+'</div>'
+      +'<button class="btn btn-done" onclick="validate(\''+a.pageId+'\','+a.isValidated+')">'+(a.isValidated?'✓ Done':'Mark done')+'</button>'
+      +'<button class="btn btn-reroll" onclick="reroll(\''+a.pageId+'\')"'+(a.hasRerolled?' disabled':'')+'>🎲 '+(a.hasRerolled?'Rerolled':'Reroll')+'</button>'
       +'</div>';
   });
   document.getElementById('root').innerHTML=html;
