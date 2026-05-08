@@ -2,13 +2,35 @@
 <html>
 <head><meta charset="UTF-8"></head>
 <body>
-<div id="r">Step 0</div>
+<div id="r">Loading...</div>
 <script>
-document.getElementById('r').textContent = 'Step 1 - JS works';
-fetch('/api/notion/databases/354403dde0e380aa85bfe7d9fd139be5/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
-.then(function(r){document.getElementById('r').textContent='Step 2 - fetch ok';return r.json();})
-.then(function(d){document.getElementById('r').textContent='Step 3 - data: '+d.results.length+' results';})
-.catch(function(e){document.getElementById('r').textContent='Error: '+e.message;});
+var DB={
+  system:'354403dde0e380aa85bfe7d9fd139be5',
+  challenges:'354403dde0e3804f8644d242a0ec6bf6',
+  assignments:'354403dde0e380f797ccfb85ad5a072e'
+};
+
+async function query(dbId){
+  var r=await fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+  var d=await r.json();
+  if(!r.ok)throw new Error(d.message||'Error');
+  return d.results;
+}
+
+async function init(){
+  try{
+    document.getElementById('r').textContent='Querying system...';
+    var sys=await query(DB.system);
+    document.getElementById('r').textContent='System OK - querying challenges...';
+    var chs=await query(DB.challenges);
+    document.getElementById('r').textContent='Challenges OK ('+chs.length+') - querying assignments...';
+    var asgs=await query(DB.assignments);
+    document.getElementById('r').textContent='ALL OK! System:'+sys.length+' Challenges:'+chs.length+' Assignments:'+asgs.length;
+  }catch(e){
+    document.getElementById('r').textContent='ERROR: '+e.message;
+  }
+}
+init();
 </script>
 </body>
 </html>
