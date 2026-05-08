@@ -14,185 +14,150 @@
     #particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
     body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:1;}
     .app{position:relative;z-index:2;max-width:480px;margin:0 auto;padding:0 0 120px;}
-
-```
-/* HEADER */
-.header{padding:48px 20px 24px;text-align:center;}
-.header-mascot{font-size:72px;display:block;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 0 24px rgba(255,107,26,0.9));}
-@keyframes bounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
-.header h1{font-family:'Bangers',cursive;font-size:54px;letter-spacing:5px;background:linear-gradient(135deg,var(--red),var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:8px 0 4px;animation:glitch 6s infinite;}
-@keyframes glitch{0%,94%,100%{transform:none;filter:none}95%{transform:translate(-2px,0) skewX(-1deg);filter:drop-shadow(2px 0 #FF2D4B) drop-shadow(-2px 0 #00EEFF)}97%{transform:translate(2px,0) skewX(1deg);filter:drop-shadow(-2px 0 #FF2D4B) drop-shadow(2px 0 #00EEFF)}}
-.header-sub{font-size:11px;color:var(--cyan);text-transform:uppercase;letter-spacing:5px;font-weight:700;}
-.day-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:7px 20px;font-size:15px;font-weight:900;color:var(--yellow);margin-top:16px;animation:pulse-badge 3s infinite;}
-@keyframes pulse-badge{0%,100%{box-shadow:0 0 20px rgba(255,215,0,0.15)}50%{box-shadow:0 0 35px rgba(255,215,0,0.3)}}
-
-/* ===== REVEAL PHASE ===== */
-.reveal-phase{padding:0 16px;}
-
-.reveal-progress{display:flex;justify-content:center;align-items:center;gap:16px;padding:20px 0;margin-bottom:8px;}
-.progress-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all 0.3s;}
-.progress-dot.done{background:rgba(255,255,255,0.3);}
-.progress-dot.active{width:14px;height:14px;background:var(--yellow);box-shadow:0 0 12px rgba(255,215,0,0.6);}
-
-.reveal-card{background:var(--card);border-radius:28px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;margin-bottom:16px;animation:slide-in 0.4s cubic-bezier(0.34,1.56,0.64,1);}
-@keyframes slide-in{0%{opacity:0;transform:translateY(30px)}100%{opacity:1;transform:translateY(0)}}
-
-.reveal-cover{padding:28px 24px 20px;text-align:center;position:relative;}
-.reveal-step{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:3px;margin-bottom:8px;}
-.reveal-emoji-big{font-size:72px;display:block;margin:8px 0;animation:bounce 2s infinite;}
-.reveal-player-name{font-family:'Bangers',cursive;font-size:40px;letter-spacing:3px;margin-bottom:4px;}
-.reveal-subtitle{font-size:13px;color:var(--muted);}
-
-.reveal-body{padding:0 20px 20px;}
-
-.reveal-challenge-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:18px;margin-bottom:14px;}
-.reveal-challenge-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
-.reveal-challenge-name{font-weight:900;font-size:19px;line-height:1.4;margin-bottom:10px;}
-.reveal-challenge-meta{display:flex;gap:8px;flex-wrap:wrap;}
-.spice-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
-
-.reveal-power-box{border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid;}
-.reveal-power-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;opacity:0.7;}
-.reveal-power-name{font-family:'Bangers',cursive;font-size:32px;letter-spacing:2px;margin-bottom:6px;}
-.reveal-power-desc{font-size:13px;line-height:1.5;opacity:0.8;}
-
-.target-section{margin-bottom:14px;}
-.target-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;}
-.target-grid{display:flex;flex-direction:column;gap:8px;}
-.target-btn{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s;font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;color:var(--text);width:100%;text-align:left;}
-.target-btn:hover{background:rgba(255,255,255,0.08);}
-.target-btn.selected{border-color:var(--green);background:rgba(0,255,136,0.08);}
-.upgrade-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.upgrade-btn{border:none;border-radius:14px;padding:15px;font-family:'Bangers',cursive;font-size:18px;cursor:pointer;transition:all 0.2s;opacity:0.6;}
-.upgrade-btn.selected{opacity:1;transform:scale(1.04);}
-
-.reveal-actions{display:flex;flex-direction:column;gap:10px;}
-.btn-activate{background:linear-gradient(135deg,var(--orange),var(--red));border:none;border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:22px;letter-spacing:2px;color:white;cursor:pointer;box-shadow:0 0 20px rgba(255,45,75,0.3);transition:transform 0.15s;}
-.btn-activate:active{transform:scale(0.97);}
-.btn-activate:disabled{opacity:0.3;cursor:not-allowed;}
-.btn-skip-reveal{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px;font-family:'Bangers',cursive;font-size:18px;color:var(--muted);cursor:pointer;}
-.btn-reroll-reveal{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:14px;padding:12px;font-family:'Bangers',cursive;font-size:16px;color:#e879f9;cursor:pointer;}
-
-/* EFFECT LOG */
-.effect-log{margin-bottom:16px;}
-.effect-item-reveal{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:10px 14px;margin-bottom:6px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
-
-/* SHIELD OVERLAY */
-.shield-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);}
-.shield-modal{background:#060620;border:2px solid var(--cyan);border-radius:28px;padding:36px 28px;width:100%;max-width:420px;text-align:center;animation:pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1);}
-@keyframes pop-in{0%{transform:scale(0.75);opacity:0}100%{transform:scale(1);opacity:1}}
-.shield-big-icon{font-size:72px;display:block;margin-bottom:16px;animation:shield-pulse 1s ease-in-out infinite alternate;filter:drop-shadow(0 0 20px #00EEFF);}
-@keyframes shield-pulse{0%{transform:scale(1)}100%{transform:scale(1.08)}}
-.shield-pass-to{font-size:12px;color:var(--cyan);text-transform:uppercase;letter-spacing:3px;margin-bottom:6px;}
-.shield-player-name{font-family:'Bangers',cursive;font-size:44px;margin-bottom:8px;}
-.shield-desc{font-size:15px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:8px;}
-.shield-attacker-info{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:28px;}
-.shield-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.shield-yes-btn{background:linear-gradient(135deg,var(--cyan),var(--green));border:none;border-radius:16px;padding:18px;font-family:'Bangers',cursive;font-size:22px;color:#000;cursor:pointer;}
-.shield-no-btn{background:rgba(255,45,75,0.12);border:1.5px solid rgba(255,45,75,0.4);border-radius:16px;padding:18px;font-family:'Bangers',cursive;font-size:22px;color:var(--red);cursor:pointer;}
-
-/* NORMAL GAME VIEW */
-.section-title{font-family:'Bangers',cursive;font-size:18px;letter-spacing:3px;text-transform:uppercase;padding:0 20px 14px;display:flex;align-items:center;gap:10px;color:var(--muted);}
-.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,75,0.4),transparent);}
-.cards{padding:0 16px;display:flex;flex-direction:column;gap:16px;margin-bottom:32px;}
-.card{background:var(--card);border-radius:24px;border:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;opacity:0;transform:translateY(30px);animation:slide-in 0.5s ease forwards;transition:box-shadow 0.3s;}
-.card:nth-child(1){animation-delay:0.05s}.card:nth-child(2){animation-delay:0.15s}.card:nth-child(3){animation-delay:0.25s}.card:nth-child(4){animation-delay:0.35s}
-.card-band{height:3px;}
-.card-cover{height:72px;display:flex;align-items:center;padding:0 20px;gap:14px;position:relative;overflow:hidden;}
-.card-cover::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--cover-color),transparent 60%);opacity:0.15;}
-.player-name-big{font-family:'Bangers',cursive;font-size:26px;letter-spacing:2px;position:relative;}
-.power-badge-cover{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:26px;}
-.card-body{padding:14px 20px 18px;}
-.pills{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
-.pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:900;}
-.pill-streak{background:rgba(255,107,26,0.1);border:1px solid rgba(255,107,26,0.3);color:var(--orange);}
-.pill-bonus{background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.35);color:var(--yellow);}
-.pill-reroll{background:rgba(191,0,255,0.1);border:1px solid rgba(191,0,255,0.35);color:#e879f9;}
-.challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:16px;margin-bottom:14px;}
-.challenge-num{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
-.challenge-name{font-weight:900;font-size:17px;line-height:1.4;margin-bottom:10px;}
-.challenge-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.total-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:900;padding:4px 12px;border-radius:10px;background:rgba(255,215,0,0.08);color:var(--yellow);border:1px solid rgba(255,215,0,0.25);}
-.effect-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:900;padding:3px 10px;border-radius:10px;}
-.card-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.done-wrap{display:flex;align-items:center;gap:10px;}
-.done-label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-.checkbox-wrap input[type="checkbox"]{display:none;}
-.checkbox-custom{width:36px;height:36px;border-radius:12px;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.25s;font-size:18px;}
-.checkbox-wrap input:checked+.checkbox-custom{background:var(--green);border-color:var(--green);box-shadow:0 0 24px rgba(0,255,136,0.6);animation:check-pop 0.3s cubic-bezier(0.34,1.56,0.64,1);}
-@keyframes check-pop{0%{transform:scale(0.7)}100%{transform:scale(1)}}
-.btn-reroll{display:flex;align-items:center;gap:6px;background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:12px;padding:10px 16px;font-size:13px;font-weight:900;color:#e879f9;cursor:pointer;transition:all 0.2s;white-space:nowrap;font-family:'Nunito',sans-serif;}
-.btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
-.card.validated{box-shadow:0 0 30px rgba(0,255,136,0.08);border-color:rgba(0,255,136,0.15);}
-.btn-power{width:100%;margin-top:12px;border:none;border-radius:14px;padding:13px;font-family:'Bangers',cursive;font-size:17px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;}
-.btn-power:disabled{opacity:0.3;cursor:not-allowed;}
-
-/* EFFECTS LOG (normal view) */
-.effects-log-wrap{margin:0 16px 20px;}
-.effect-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px 16px;margin-bottom:8px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:10px;}
-
-/* LEADERBOARD */
-.leaderboard{padding:0 16px;}
-.lb-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
-.lb-header-row{display:grid;grid-template-columns:40px 1fr 64px 64px 56px;gap:8px;padding:12px 18px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);}
-.lb-header-row span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;text-align:center;font-weight:700;}
-.lb-header-row span:nth-child(2){text-align:left;}
-.lb-row{display:grid;grid-template-columns:40px 1fr 64px 64px 56px;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.03);}
-.lb-row:last-child{border-bottom:none;}
-.lb-row:first-child{background:rgba(255,215,0,0.04);}
-.lb-rank{font-family:'Bangers',cursive;font-size:22px;text-align:center;}
-.lb-player{display:flex;align-items:center;gap:10px;}
-.lb-emoji{font-size:20px;}
-.lb-name{font-weight:900;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.lb-stat{text-align:center;}
-.lb-val{font-weight:900;font-size:17px;}
-.lb-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
-
-/* SUGGEST & RULES */
-.suggest,.rules{padding:0 16px;}
-.collapsible-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
-.collapsible-header{padding:18px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
-.collapsible-header h3{font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px;}
-.collapsible-toggle{font-size:16px;transition:transform 0.3s;color:var(--muted);}
-.collapsible-toggle.open{transform:rotate(180deg);}
-.collapsible-body{padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;}
-.collapsible-body.open{max-height:2000px;padding:20px;}
-.form-group{margin-bottom:16px;}
-.form-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:block;}
-.form-input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 16px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;outline:none;transition:border-color 0.2s;}
-.form-input:focus{border-color:var(--green);}
-.spice-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-.spice-option{display:none;}
-.spice-option+label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:rgba(255,255,255,0.02);border:2px solid rgba(255,255,255,0.05);border-radius:14px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;transition:all 0.2s;}
-.spice-option:checked+label{border-color:var(--green);background:rgba(0,255,136,0.06);}
-.spice-emoji{font-size:24px;}
-.btn-suggest{width:100%;background:linear-gradient(135deg,rgba(0,255,136,0.15),rgba(0,238,255,0.08));border:1px solid rgba(0,255,136,0.35);border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px;color:var(--green);cursor:pointer;}
-.btn-suggest:disabled{opacity:0.4;cursor:not-allowed;}
-.rule-item{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-.rule-item:last-child{border-bottom:none;}
-.rule-icon{font-size:24px;flex-shrink:0;}
-.rule-title{font-weight:900;font-size:15px;margin-bottom:4px;}
-.rule-desc{font-size:13px;color:var(--muted);line-height:1.6;}
-.neon-table{margin-top:10px;background:rgba(255,255,255,0.02);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);}
-.neon-row{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px;}
-.neon-row:last-child{border-bottom:none;}
-.neon-row span:first-child{color:var(--orange);font-weight:700;}
-.neon-row span:last-child{color:var(--yellow);font-weight:900;}
-
-/* CONFETTI */
-.confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;animation:confetti-fall 1.5s ease-out forwards;pointer-events:none;z-index:999;}
-@keyframes confetti-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-
-/* UTILS */
-.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;}
-.spinner{width:48px;height:48px;border:2px solid rgba(255,45,75,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:3px;font-size:11px;}
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;}
-.toast.show{transform:translateX(-50%) translateY(0);}
-.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:28px 16px;}
-```
-
+    .header{padding:48px 20px 24px;text-align:center;}
+    .header-mascot{font-size:72px;display:block;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 0 24px rgba(255,107,26,0.9));}
+    @keyframes bounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+    .header h1{font-family:'Bangers',cursive;font-size:54px;letter-spacing:5px;background:linear-gradient(135deg,var(--red),var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:8px 0 4px;animation:glitch 6s infinite;}
+    @keyframes glitch{0%,94%,100%{transform:none;filter:none}95%{transform:translate(-2px,0) skewX(-1deg);filter:drop-shadow(2px 0 #FF2D4B) drop-shadow(-2px 0 #00EEFF)}97%{transform:translate(2px,0) skewX(1deg);filter:drop-shadow(-2px 0 #FF2D4B) drop-shadow(2px 0 #00EEFF)}}
+    .header-sub{font-size:11px;color:var(--cyan);text-transform:uppercase;letter-spacing:5px;font-weight:700;}
+    .day-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:7px 20px;font-size:15px;font-weight:900;color:var(--yellow);margin-top:16px;animation:pulse-badge 3s infinite;}
+    @keyframes pulse-badge{0%,100%{box-shadow:0 0 20px rgba(255,215,0,0.15)}50%{box-shadow:0 0 35px rgba(255,215,0,0.3)}}
+    .reveal-phase{padding:0 16px;}
+    .reveal-progress{display:flex;justify-content:center;align-items:center;gap:16px;padding:20px 0;margin-bottom:8px;}
+    .progress-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all 0.3s;}
+    .progress-dot.done{background:rgba(255,255,255,0.3);}
+    .progress-dot.active{width:14px;height:14px;background:var(--yellow);box-shadow:0 0 12px rgba(255,215,0,0.6);}
+    .reveal-card{background:var(--card);border-radius:28px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;margin-bottom:16px;animation:slide-in 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+    @keyframes slide-in{0%{opacity:0;transform:translateY(30px)}100%{opacity:1;transform:translateY(0)}}
+    .reveal-cover{padding:28px 24px 20px;text-align:center;position:relative;}
+    .reveal-step{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:3px;margin-bottom:8px;}
+    .reveal-emoji-big{font-size:72px;display:block;margin:8px 0;animation:bounce 2s infinite;}
+    .reveal-player-name{font-family:'Bangers',cursive;font-size:40px;letter-spacing:3px;margin-bottom:4px;}
+    .reveal-subtitle{font-size:13px;color:var(--muted);}
+    .reveal-body{padding:0 20px 20px;}
+    .reveal-challenge-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:18px;margin-bottom:14px;}
+    .reveal-challenge-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
+    .reveal-challenge-name{font-weight:900;font-size:19px;line-height:1.4;margin-bottom:10px;}
+    .reveal-challenge-meta{display:flex;gap:8px;flex-wrap:wrap;}
+    .spice-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
+    .reveal-power-box{border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid;}
+    .reveal-power-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;opacity:0.7;}
+    .reveal-power-name{font-family:'Bangers',cursive;font-size:32px;letter-spacing:2px;margin-bottom:6px;}
+    .reveal-power-desc{font-size:13px;line-height:1.5;opacity:0.8;}
+    .target-section{margin-bottom:14px;}
+    .target-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;}
+    .target-grid{display:flex;flex-direction:column;gap:8px;}
+    .target-btn{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s;font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;color:var(--text);width:100%;text-align:left;}
+    .target-btn:hover{background:rgba(255,255,255,0.08);}
+    .target-btn.selected{border-color:var(--green);background:rgba(0,255,136,0.08);}
+    .upgrade-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+    .upgrade-btn{border:none;border-radius:14px;padding:15px;font-family:'Bangers',cursive;font-size:18px;cursor:pointer;transition:all 0.2s;opacity:0.6;}
+    .upgrade-btn.selected{opacity:1;transform:scale(1.04);}
+    .reveal-actions{display:flex;flex-direction:column;gap:10px;}
+    .btn-activate{background:linear-gradient(135deg,var(--orange),var(--red));border:none;border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:22px;letter-spacing:2px;color:white;cursor:pointer;box-shadow:0 0 20px rgba(255,45,75,0.3);transition:transform 0.15s;}
+    .btn-activate:active{transform:scale(0.97);}
+    .btn-skip-reveal{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px;font-family:'Bangers',cursive;font-size:18px;color:var(--muted);cursor:pointer;}
+    .btn-reroll-reveal{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:14px;padding:12px;font-family:'Bangers',cursive;font-size:16px;color:#e879f9;cursor:pointer;}
+    .effect-log{margin-bottom:16px;}
+    .effect-item-reveal{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:10px 14px;margin-bottom:6px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
+    .shield-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);}
+    .shield-modal{background:#060620;border:2px solid var(--cyan);border-radius:28px;padding:36px 28px;width:100%;max-width:420px;text-align:center;animation:pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1);}
+    @keyframes pop-in{0%{transform:scale(0.75);opacity:0}100%{transform:scale(1);opacity:1}}
+    .shield-big-icon{font-size:72px;display:block;margin-bottom:16px;filter:drop-shadow(0 0 20px #00EEFF);}
+    .shield-pass-to{font-size:12px;color:var(--cyan);text-transform:uppercase;letter-spacing:3px;margin-bottom:6px;}
+    .shield-player-name{font-family:'Bangers',cursive;font-size:44px;margin-bottom:8px;}
+    .shield-desc{font-size:15px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:8px;}
+    .shield-attacker-info{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:28px;}
+    .shield-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .shield-yes-btn{background:linear-gradient(135deg,var(--cyan),var(--green));border:none;border-radius:16px;padding:18px;font-family:'Bangers',cursive;font-size:22px;color:#000;cursor:pointer;}
+    .shield-no-btn{background:rgba(255,45,75,0.12);border:1.5px solid rgba(255,45,75,0.4);border-radius:16px;padding:18px;font-family:'Bangers',cursive;font-size:22px;color:var(--red);cursor:pointer;}
+    .section-title{font-family:'Bangers',cursive;font-size:18px;letter-spacing:3px;text-transform:uppercase;padding:0 20px 14px;display:flex;align-items:center;gap:10px;color:var(--muted);}
+    .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,75,0.4),transparent);}
+    .cards{padding:0 16px;display:flex;flex-direction:column;gap:16px;margin-bottom:32px;}
+    .card{background:var(--card);border-radius:24px;border:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;opacity:0;transform:translateY(30px);animation:slide-in 0.5s ease forwards;transition:box-shadow 0.3s;}
+    .card:nth-child(1){animation-delay:0.05s}.card:nth-child(2){animation-delay:0.15s}.card:nth-child(3){animation-delay:0.25s}.card:nth-child(4){animation-delay:0.35s}
+    .card-band{height:3px;}
+    .card-cover{height:72px;display:flex;align-items:center;padding:0 20px;gap:14px;position:relative;overflow:hidden;}
+    .card-cover::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--cover-color),transparent 60%);opacity:0.15;}
+    .player-name-big{font-family:'Bangers',cursive;font-size:26px;letter-spacing:2px;position:relative;}
+    .power-badge-cover{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:26px;}
+    .card-body{padding:14px 20px 18px;}
+    .pills{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+    .pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:900;}
+    .pill-streak{background:rgba(255,107,26,0.1);border:1px solid rgba(255,107,26,0.3);color:var(--orange);}
+    .pill-bonus{background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.35);color:var(--yellow);}
+    .pill-reroll{background:rgba(191,0,255,0.1);border:1px solid rgba(191,0,255,0.35);color:#e879f9;}
+    .challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:16px;margin-bottom:14px;}
+    .challenge-num{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
+    .challenge-name{font-weight:900;font-size:17px;line-height:1.4;margin-bottom:10px;}
+    .challenge-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .total-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:900;padding:4px 12px;border-radius:10px;background:rgba(255,215,0,0.08);color:var(--yellow);border:1px solid rgba(255,215,0,0.25);}
+    .effect-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:900;padding:3px 10px;border-radius:10px;}
+    .card-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .done-wrap{display:flex;align-items:center;gap:10px;}
+    .done-label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+    .checkbox-wrap input[type="checkbox"]{display:none;}
+    .checkbox-custom{width:36px;height:36px;border-radius:12px;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.25s;font-size:18px;}
+    .checkbox-wrap input:checked+.checkbox-custom{background:var(--green);border-color:var(--green);box-shadow:0 0 24px rgba(0,255,136,0.6);animation:check-pop 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+    @keyframes check-pop{0%{transform:scale(0.7)}100%{transform:scale(1)}}
+    .btn-reroll{display:flex;align-items:center;gap:6px;background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:12px;padding:10px 16px;font-size:13px;font-weight:900;color:#e879f9;cursor:pointer;white-space:nowrap;font-family:'Nunito',sans-serif;}
+    .btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
+    .card.validated{box-shadow:0 0 30px rgba(0,255,136,0.08);border-color:rgba(0,255,136,0.15);}
+    .effects-log-wrap{margin:0 16px 20px;}
+    .effect-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px 16px;margin-bottom:8px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:10px;}
+    .leaderboard{padding:0 16px;}
+    .lb-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
+    .lb-header-row{display:grid;grid-template-columns:40px 1fr 64px 64px 56px;gap:8px;padding:12px 18px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);}
+    .lb-header-row span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;text-align:center;font-weight:700;}
+    .lb-header-row span:nth-child(2){text-align:left;}
+    .lb-row{display:grid;grid-template-columns:40px 1fr 64px 64px 56px;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.03);}
+    .lb-row:last-child{border-bottom:none;}
+    .lb-row:first-child{background:rgba(255,215,0,0.04);}
+    .lb-rank{font-family:'Bangers',cursive;font-size:22px;text-align:center;}
+    .lb-player{display:flex;align-items:center;gap:10px;}
+    .lb-emoji{font-size:20px;}
+    .lb-name{font-weight:900;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .lb-stat{text-align:center;}
+    .lb-val{font-weight:900;font-size:17px;}
+    .lb-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+    .suggest,.rules{padding:0 16px;}
+    .collapsible-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
+    .collapsible-header{padding:18px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+    .collapsible-header h3{font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px;}
+    .collapsible-toggle{font-size:16px;transition:transform 0.3s;color:var(--muted);}
+    .collapsible-toggle.open{transform:rotate(180deg);}
+    .collapsible-body{padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;}
+    .collapsible-body.open{max-height:2000px;padding:20px;}
+    .form-group{margin-bottom:16px;}
+    .form-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:block;}
+    .form-input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 16px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;outline:none;transition:border-color 0.2s;}
+    .form-input:focus{border-color:var(--green);}
+    .spice-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+    .spice-option{display:none;}
+    .spice-option+label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:rgba(255,255,255,0.02);border:2px solid rgba(255,255,255,0.05);border-radius:14px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;transition:all 0.2s;}
+    .spice-option:checked+label{border-color:var(--green);background:rgba(0,255,136,0.06);}
+    .spice-emoji{font-size:24px;}
+    .btn-suggest{width:100%;background:linear-gradient(135deg,rgba(0,255,136,0.15),rgba(0,238,255,0.08));border:1px solid rgba(0,255,136,0.35);border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px;color:var(--green);cursor:pointer;}
+    .btn-suggest:disabled{opacity:0.4;cursor:not-allowed;}
+    .rule-item{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .rule-item:last-child{border-bottom:none;}
+    .rule-icon{font-size:24px;flex-shrink:0;}
+    .rule-title{font-weight:900;font-size:15px;margin-bottom:4px;}
+    .rule-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+    .neon-table{margin-top:10px;background:rgba(255,255,255,0.02);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);}
+    .neon-row{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px;}
+    .neon-row:last-child{border-bottom:none;}
+    .neon-row span:first-child{color:var(--orange);font-weight:700;}
+    .neon-row span:last-child{color:var(--yellow);font-weight:900;}
+    .confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;animation:confetti-fall 1.5s ease-out forwards;pointer-events:none;z-index:999;}
+    @keyframes confetti-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+    .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;}
+    .spinner{width:48px;height:48px;border:2px solid rgba(255,45,75,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:3px;font-size:11px;}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;}
+    .toast.show{transform:translateX(-50%) translateY(0);}
+    .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:28px 16px;}
   </style>
 </head>
 <body>
@@ -203,7 +168,6 @@
 <div id="shield-container"></div>
 <div class="toast" id="toast"></div>
 <script>
-// PARTICLES
 (function(){
   const canvas=document.getElementById('particle-canvas');
   if(!canvas)return;
@@ -229,142 +193,146 @@ const PLAYERS=[
 {name:‘Nicooo’,emoji:‘💰’,color:’#FF6B1A’,colorDark:‘rgba(255,107,26,0.2)’},
 ];
 const POWERS={
-‘🦹 Entourloupeur’:{color:’#BF00FF’,bg:‘rgba(191,0,255,0.12)’,border:‘rgba(191,0,255,0.4)’,desc:‘Copy someone's challenge. Complete it before them → steal their points!’,needsTarget:true,targetSelf:false,reactive:false},
+‘🦹 Entourloupeur’:{color:’#BF00FF’,bg:‘rgba(191,0,255,0.12)’,border:‘rgba(191,0,255,0.4)’,desc:‘Copy someone challenge. Complete it before them to steal their points!’,needsTarget:true,targetSelf:false,reactive:false},
 ‘🔄 Swap’:         {color:’#00EEFF’,bg:‘rgba(0,238,255,0.1)’, border:‘rgba(0,238,255,0.4)’, desc:‘Force a challenge swap with someone.’,needsTarget:true,targetSelf:false,reactive:false},
-‘💀 Bridage’:      {color:’#FF2D4B’,bg:‘rgba(255,45,75,0.1)’, border:‘rgba(255,45,75,0.4)’, desc:‘×0.5 points today. Target yourself or someone else.’,needsTarget:true,targetSelf:true,reactive:false},
-‘⚡ Pas si vite’:  {color:’#FFD700’,bg:‘rgba(255,215,0,0.1)’, border:‘rgba(255,215,0,0.4)’, desc:‘Upgrade or downgrade someone's challenge difficulty.’,needsTarget:true,targetSelf:false,reactive:false,needsUpDown:true},
-‘🛡️ Shield’:       {color:’#00EEFF’,bg:‘rgba(0,238,255,0.08)’,border:‘rgba(0,238,255,0.3)’, desc:‘Block any power when targeted. Reactive — activates when someone targets you.’,needsTarget:false,targetSelf:false,reactive:true},
-‘🎰 Roulette’:     {color:’#FF6B1A’,bg:‘rgba(255,107,26,0.1)’,border:‘rgba(255,107,26,0.4)’,desc:‘×0, ×1 or ×2 random at end of day.’,needsTarget:false,targetSelf:false,reactive:true},
-‘👯 Copier-Coller’:{color:’#00FF88’,bg:‘rgba(0,255,136,0.1)’, border:‘rgba(0,255,136,0.4)’, desc:‘Share your challenge with someone. Both complete it → ×2 points each!’,needsTarget:true,targetSelf:false,reactive:false},
-‘🔥 Extincteur’:   {color:’#FF2D4B’,bg:‘rgba(255,45,75,0.1)’, border:‘rgba(255,45,75,0.4)’, desc:‘Reset someone's streak to 0. Ice cold. 🧊’,needsTarget:true,targetSelf:false,reactive:false},
+‘💀 Bridage’:      {color:’#FF2D4B’,bg:‘rgba(255,45,75,0.1)’, border:‘rgba(255,45,75,0.4)’, desc:‘x0.5 points today. Target yourself or someone else.’,needsTarget:true,targetSelf:true,reactive:false},
+‘⚡ Pas si vite’:  {color:’#FFD700’,bg:‘rgba(255,215,0,0.1)’, border:‘rgba(255,215,0,0.4)’, desc:‘Upgrade or downgrade someone challenge difficulty.’,needsTarget:true,targetSelf:false,reactive:false,needsUpDown:true},
+‘🛡️ Shield’:       {color:’#00EEFF’,bg:‘rgba(0,238,255,0.08)’,border:‘rgba(0,238,255,0.3)’, desc:‘Block any power when targeted. Reactive.’,needsTarget:false,targetSelf:false,reactive:true},
+‘🎰 Roulette’:     {color:’#FF6B1A’,bg:‘rgba(255,107,26,0.1)’,border:‘rgba(255,107,26,0.4)’,desc:‘x0, x1 or x2 random at end of day.’,needsTarget:false,targetSelf:false,reactive:true},
+‘👯 Copier-Coller’:{color:’#00FF88’,bg:‘rgba(0,255,136,0.1)’, border:‘rgba(0,255,136,0.4)’, desc:‘Share your challenge. Both complete it = x2 each!’,needsTarget:true,targetSelf:false,reactive:false},
+‘🔥 Extincteur’:   {color:’#FF2D4B’,bg:‘rgba(255,45,75,0.1)’, border:‘rgba(255,45,75,0.4)’, desc:‘Reset someone streak to 0.’,needsTarget:true,targetSelf:false,reactive:false},
 ‘❌ None’:         {color:’#6B7280’,bg:‘transparent’,border:‘transparent’,desc:’’,needsTarget:false,reactive:false},
 };
 const SPICE_ORDER=[‘🌱 Mild’,‘🌶️ Spicy’,‘🔥 Hot’,‘⚡ Atomic’];
 const SPICE_PTS={‘🌱 Mild’:1,‘🌶️ Spicy’:2,‘🔥 Hot’:3,‘⚡ Atomic’:5};
-const SPICE_POINTS={‘🌱 Mild’:1,‘🌶️ Spicy’:2,‘🔥 Hot’:3,‘⚡ Atomic’:5};
 
 function streakBonus(s){return s>=10?3:s>=5?2:s>=3?1:0;}
 function spiceColor(pts){return pts>=5?’#FF2D4B’:pts>=3?’#FF6B1A’:pts>=2?’#FFD700’:’#00FF88’;}
 
 function confetti(){
 const colors=[’#FF2D4B’,’#FF6B1A’,’#FFD700’,’#00FF88’,’#00EEFF’,’#BF00FF’];
-for(let i=0;i<50;i++){const el=document.createElement(‘div’);el.className=‘confetti-piece’;el.style.cssText=`left:${Math.random()*100}%;top:0;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*0.5}s;animation-duration:${1+Math.random()}s`;document.body.appendChild(el);setTimeout(()=>el.remove(),2500);}
+for(let i=0;i<50;i++){const el=document.createElement(‘div’);el.className=‘confetti-piece’;el.style.cssText=‘left:’+Math.random()*100+’%;top:0;background:’+colors[Math.floor(Math.random()*colors.length)]+’;animation-delay:’+Math.random()*0.5+‘s;animation-duration:’+(1+Math.random())+‘s’;document.body.appendChild(el);setTimeout(()=>el.remove(),2500);}
 }
 
-async function notionQuery(dbId,body={}){
+async function notionQuery(dbId,body){
+body=body||{};
 const res=await fetch(’/api/notion?endpoint=databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify(body)});
-const data=await res.json();if(!res.ok)throw new Error(data.message||‘Notion error’);return data.results;
+const data=await res.json();
+if(!res.ok)throw new Error(data.message||‘Notion error’);
+return data.results;
 }
 async function notionPatch(pageId,properties){
-const res=await fetch(’/api/notion?endpoint=pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties})});
-const data=await res.json();if(!res.ok)throw new Error(data.message||‘Update error’);return data;
+const res=await fetch(’/api/notion?endpoint=pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:properties})});
+const data=await res.json();
+if(!res.ok)throw new Error(data.message||‘Update error’);
+return data;
 }
 async function notionCreate(dbId,properties){
-const res=await fetch(’/api/notion?endpoint=pages’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({parent:{database_id:dbId},properties})});
-const data=await res.json();if(!res.ok)throw new Error(data.message||‘Create error’);return data;
+const res=await fetch(’/api/notion?endpoint=pages’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({parent:{database_id:dbId},properties:properties})});
+const data=await res.json();
+if(!res.ok)throw new Error(data.message||‘Create error’);
+return data;
 }
 function getProp(page,name,type){
-const p=page.properties[name];if(!p)return null;
-if(type===‘number’)return p.number??0;
-if(type===‘title’)return p.title?.[0]?.plain_text??’’;
-if(type===‘checkbox’)return p.checkbox??false;
-if(type===‘formula_number’)return p.formula?.number??0;
-if(type===‘formula_string’)return p.formula?.string??’’;
-if(type===‘select’)return p.select?.name??’’;
-if(type===‘text’)return p.rich_text?.[0]?.plain_text??’’;
+var p=page.properties[name];
+if(!p)return null;
+if(type===‘number’)return p.number!=null?p.number:0;
+if(type===‘title’)return p.title&&p.title[0]?p.title[0].plain_text:’’;
+if(type===‘checkbox’)return p.checkbox===true;
+if(type===‘formula_number’)return p.formula?p.formula.number||0:0;
+if(type===‘formula_string’)return p.formula?p.formula.string||’’:’’;
+if(type===‘select’)return p.select?p.select.name||’’:’’;
+if(type===‘text’)return p.rich_text&&p.rich_text[0]?p.rich_text[0].plain_text:’’;
 return null;
 }
 function showToast(msg,color){
-const t=document.getElementById(‘toast’);
+var t=document.getElementById(‘toast’);
 t.textContent=msg;t.style.background=color||’#00FF88’;
-t.style.boxShadow=`0 0 30px ${color||'#00FF88'}80`;
-t.classList.add(‘show’);setTimeout(()=>t.classList.remove(‘show’),3000);
+t.style.boxShadow=‘0 0 30px ‘+(color||’#00FF88’)+‘80’;
+t.classList.add(‘show’);setTimeout(function(){t.classList.remove(‘show’);},3000);
 }
 
-let STATE={
+var STATE={
 dayCounter:1,systemPageId:null,challenges:{},assignments:[],allChallengeIds:[],
 defiLaunched:false,
-// Reveal flow
-revealPhase:false,
-revealOrder:[],
-revealStep:0,
-effectLog:[],
-pendingShield:null,
-selectedTarget:null,
-selectedUpgradeDir:null,
+revealPhase:false,revealOrder:[],revealStep:0,
+effectLog:[],pendingShield:null,
+selectedTarget:null,selectedUpgradeDir:null,
 };
 
 async function loadData(){
-const sysPages=await notionQuery(CONFIG.db_system);
-const sys=sysPages[0];
+var sysPages=await notionQuery(CONFIG.db_system);
+var sys=sysPages[0];
 STATE.systemPageId=sys.id;
-STATE.dayCounter=getProp(sys,‘Day_Counter’,‘number’);
+STATE.dayCounter=getProp(sys,‘Day_Counter’,‘number’)||1;
 STATE.defiLaunched=getProp(sys,‘Defis_Launched’,‘checkbox’);
 
-const chPages=await notionQuery(CONFIG.db_challenges);
+var chPages=await notionQuery(CONFIG.db_challenges);
 STATE.challenges={};STATE.allChallengeIds=[];
-for(const p of chPages){
-const id=getProp(p,‘ID_Global’,‘number’);
-const status=getProp(p,‘Status’,‘select’);
+for(var i=0;i<chPages.length;i++){
+var p=chPages[i];
+var id=getProp(p,‘ID_Global’,‘number’);
+var status=getProp(p,‘Status’,‘select’);
 if(status===‘✅ Active’||!status){
-STATE.challenges[id]={id,name:getProp(p,‘Name’,‘title’),points:getProp(p,‘Points’,‘number’),spice:getProp(p,‘Spice_Level’,‘formula_string’)||getProp(p,‘Spice_Level’,‘select’)};
+STATE.challenges[id]={id:id,name:getProp(p,‘Name’,‘title’),points:getProp(p,‘Points’,‘number’)||0,spice:getProp(p,‘Spice_Level’,‘formula_string’)||getProp(p,‘Spice_Level’,‘select’)||’’};
 STATE.allChallengeIds.push(id);
 }
 }
 
-const asgPages=await notionQuery(CONFIG.db_assignments);
-STATE.assignments=asgPages.map(p=>({
-pageId:p.id,name:getProp(p,‘Name’,‘title’),playerIndex:getProp(p,‘Player_Index’,‘number’),
-winStreak:getProp(p,‘Win_Streak’,‘number’),totalScore:getProp(p,‘Total_Score’,‘number’),
-defisReussis:getProp(p,‘Defis_Reussis’,‘number’),isValidated:getProp(p,‘Is_Validated’,‘checkbox’),
-challengeId:getProp(p,‘Challenge_ID_Today’,‘formula_number’),
+var asgPages=await notionQuery(CONFIG.db_assignments);
+STATE.assignments=asgPages.map(function(p){
+return{
+pageId:p.id,
+name:getProp(p,‘Name’,‘title’),
+playerIndex:getProp(p,‘Player_Index’,‘number’)||0,
+winStreak:getProp(p,‘Win_Streak’,‘number’)||0,
+totalScore:getProp(p,‘Total_Score’,‘number’)||0,
+defisReussis:getProp(p,‘Defis_Reussis’,‘number’)||0,
+isValidated:getProp(p,‘Is_Validated’,‘checkbox’),
+challengeId:getProp(p,‘Challenge_ID_Today’,‘formula_number’)||0,
 hasRerolled:getProp(p,‘Has_Rerolled’,‘checkbox’),
-rerollChallengeId:getProp(p,‘Reroll_Challenge_ID’,‘number’),
+rerollChallengeId:getProp(p,‘Reroll_Challenge_ID’,‘number’)||0,
 powerType:getProp(p,‘Power_Type’,‘select’)||‘❌ None’,
 powerTarget:getProp(p,‘Power_Target’,‘text’)||’’,
 powerUsed:getProp(p,‘Power_Used’,‘checkbox’),
 rouletteMultiplier:getProp(p,‘Roulette_Multiplier’,‘number’)||1,
-shieldUsedToday:getProp(p,‘Shield_Used_Today’,‘checkbox’)||false,
-effectBridage:false,
-effectUpgrade:null,
-effectExtinct:false,
-})).sort((a,b)=>a.playerIndex-b.playerIndex);
+shieldUsedToday:getProp(p,‘Shield_Used_Today’,‘checkbox’),
+effectBridage:false,effectUpgrade:null,effectExtinct:false,
+};
+}).sort(function(a,b){return a.playerIndex-b.playerIndex;});
 
-// Rebuild effect log from Notion data
+// Rebuild effects from saved data
 STATE.effectLog=[];
-for(const asg of STATE.assignments){
+STATE.assignments.forEach(function(asg){
 if(asg.powerUsed&&asg.powerType&&asg.powerType!==‘❌ None’&&POWERS[asg.powerType]){
-const player=PLAYERS[asg.playerIndex];
-const power=POWERS[asg.powerType];
-let msg=`${player?.emoji} ${player?.name} activated ${asg.powerType}`;
-if(asg.powerTarget)msg+=` on ${asg.powerTarget}`;
-STATE.effectLog.push({msg,color:power.color});
-// Restore local effects
+var player=PLAYERS[asg.playerIndex];
+var power=POWERS[asg.powerType];
+var msg=(player?player.emoji+’ ‘+player.name:’?’)+’ activated ‘+asg.powerType;
+if(asg.powerTarget)msg+=’ on ‘+asg.powerTarget.split(’|’)[0];
+STATE.effectLog.push({msg:msg,color:power.color});
 if(asg.powerType===‘💀 Bridage’){
-const targetAsg=asg.powerTarget===‘myself’?asg:STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===asg.powerTarget);
-if(targetAsg)targetAsg.effectBridage=true;
+var tgt=asg.powerTarget===‘myself’?asg:STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===asg.powerTarget;});
+if(tgt)tgt.effectBridage=true;
 }
 if(asg.powerType===‘⚡ Pas si vite’&&asg.powerTarget){
-const targetAsg=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===asg.powerTarget);
-// upgradeDir stored in powerTarget as “name:dir” — simplified: check Notion
+var parts=asg.powerTarget.split(’|’);
+var tgtName=parts[0];var dir=parts[1];
+var tgt2=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===tgtName;});
+if(tgt2&&dir)tgt2.effectUpgrade=dir;
 }
 }
-}
+});
 
-// If not launched yet, check if we should be in reveal phase
-if(!STATE.defiLaunched&&STATE.assignments.some(a=>a.powerType&&a.powerType!==‘❌ None’)){
-// Powers were assigned but not yet fully revealed
-const allUsed=STATE.assignments.every(a=>a.powerUsed||a.powerType===‘❌ None’);
-if(!allUsed&&!STATE.revealPhase){
-// Re-enter reveal phase
-const order=[];
-for(let i=0;i<PLAYERS.length;i++)order.push((i+STATE.dayCounter-1)%PLAYERS.length);
+if(!STATE.defiLaunched&&STATE.assignments.some(function(a){return a.powerType&&a.powerType!==‘❌ None’;})){
+var allDone=STATE.assignments.every(function(a){return a.powerUsed||a.powerType===‘❌ None’;});
+if(!allDone&&!STATE.revealPhase){
+var order=[];
+for(var j=0;j<PLAYERS.length;j++)order.push((j+STATE.dayCounter-1)%PLAYERS.length);
 STATE.revealOrder=order;
-// Find first not yet processed step
-let step=0;
-for(let s=0;s<order.length;s++){
-const asg=STATE.assignments.find(a=>a.playerIndex===order[s]);
-if(asg&&!asg.powerUsed)break;
+var step=0;
+for(var s=0;s<order.length;s++){
+var asgS=STATE.assignments.find(function(a){return a.playerIndex===order[s];});
+if(asgS&&!asgS.powerUsed)break;
 step=s+1;
 }
 STATE.revealStep=step;
@@ -376,158 +344,136 @@ STATE.revealPhase=true;
 function getBaseChallenge(asg){return(asg.rerollChallengeId&&asg.rerollChallengeId>0)?asg.rerollChallengeId:asg.challengeId;}
 
 function getEffectiveChallengeId(asg){
-const playerName=PLAYERS[asg.playerIndex]?.name;
-const swapper=STATE.assignments.find(a=>a.powerUsed&&a.powerType===‘🔄 Swap’&&a.powerTarget===playerName&&a.playerIndex!==asg.playerIndex);
+var playerName=PLAYERS[asg.playerIndex]?PLAYERS[asg.playerIndex].name:null;
+var swapper=STATE.assignments.find(function(a){return a.powerUsed&&a.powerType===‘🔄 Swap’&&a.powerTarget===playerName&&a.playerIndex!==asg.playerIndex;});
 if(swapper)return getBaseChallenge(swapper);
 if(asg.powerUsed&&asg.powerType===‘🔄 Swap’&&asg.powerTarget){
-const target=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===asg.powerTarget);
+var target=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===asg.powerTarget;});
 if(target)return getBaseChallenge(target);
 }
 if(asg.powerUsed&&asg.powerType===‘🦹 Entourloupeur’&&asg.powerTarget){
-const target=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===asg.powerTarget);
-if(target)return getBaseChallenge(target);
+var target2=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===asg.powerTarget;});
+if(target2)return getBaseChallenge(target2);
 }
-const copier=STATE.assignments.find(a=>a.powerUsed&&a.powerType===‘👯 Copier-Coller’&&a.powerTarget===playerName&&a.playerIndex!==asg.playerIndex);
+var copier=STATE.assignments.find(function(a){return a.powerUsed&&a.powerType===‘👯 Copier-Coller’&&a.powerTarget===playerName&&a.playerIndex!==asg.playerIndex;});
 if(copier)return getBaseChallenge(copier);
 return getBaseChallenge(asg);
 }
 
-function getEffectiveSpice(asg){
-const effectiveId=getEffectiveChallengeId(asg);
-const challenge=STATE.challenges[effectiveId];
-if(!challenge)return null;
-let spice=challenge.spice;
-if(asg.effectUpgrade&&spice){
-const clean=SPICE_ORDER.find(s=>spice.includes(s.replace(/[^ ]+ /,’’)));
-const idx=clean?SPICE_ORDER.indexOf(clean):-1;
-if(idx>=0){
-const newIdx=asg.effectUpgrade===‘upgrade’?Math.min(idx+1,3):Math.max(idx-1,0);
-spice=SPICE_ORDER[newIdx];
-}
-}
-return spice;
-}
-
 function getEffectivePts(asg){
-const spice=getEffectiveSpice(asg);
-const effectiveId=getEffectiveChallengeId(asg);
-let pts=spice?SPICE_PTS[spice]:(STATE.challenges[effectiveId]?.points??0);
+var effectiveId=getEffectiveChallengeId(asg);
+var challenge=STATE.challenges[effectiveId];
+var pts=challenge?challenge.points:0;
+if(asg.effectUpgrade&&challenge){
+var spice=challenge.spice||’’;
+var idx=SPICE_ORDER.findIndex(function(s){return spice.indexOf(s.split(’ ’)[1]||s)>=0;});
+if(idx<0)idx=SPICE_ORDER.findIndex(function(s){return spice===s;});
+if(idx>=0){
+var newIdx=asg.effectUpgrade===‘upgrade’?Math.min(idx+1,3):Math.max(idx-1,0);
+pts=SPICE_PTS[SPICE_ORDER[newIdx]]||pts;
+}
+}
 if(asg.effectBridage)pts=Math.ceil(pts*0.5);
 return pts;
 }
 
-// ===== REVEAL FLOW =====
 function startReveal(){
-const order=[];
-for(let i=0;i<PLAYERS.length;i++)order.push((i+STATE.dayCounter-1)%PLAYERS.length);
-STATE.revealOrder=order;
-STATE.revealStep=0;
-STATE.revealPhase=true;
-STATE.effectLog=[];
-STATE.selectedTarget=null;
-STATE.selectedUpgradeDir=null;
+var order=[];
+for(var i=0;i<PLAYERS.length;i++)order.push((i+STATE.dayCounter-1)%PLAYERS.length);
+STATE.revealOrder=order;STATE.revealStep=0;STATE.revealPhase=true;
+STATE.effectLog=[];STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
 render();
 }
 
 function getCurrentRevealAsg(){
-const playerIdx=STATE.revealOrder[STATE.revealStep];
-return STATE.assignments.find(a=>a.playerIndex===playerIdx);
+var playerIdx=STATE.revealOrder[STATE.revealStep];
+return STATE.assignments.find(function(a){return a.playerIndex===playerIdx;});
 }
 
 window.selectTarget=function(name){
 STATE.selectedTarget=name;
-document.querySelectorAll(’.target-btn’).forEach(b=>b.classList.toggle(‘selected’,b.dataset.name===name));
+document.querySelectorAll(’.target-btn’).forEach(function(b){b.classList.toggle(‘selected’,b.dataset.name===name);});
 };
-
 window.selectUpgradeDir=function(dir,btn){
 STATE.selectedUpgradeDir=dir;
-document.querySelectorAll(’.upgrade-btn’).forEach(b=>b.classList.remove(‘selected’));
+document.querySelectorAll(’.upgrade-btn’).forEach(function(b){b.classList.remove(‘selected’);});
 btn.classList.add(‘selected’);
 };
 
 window.activatePower=async function(){
-const asg=getCurrentRevealAsg();
-const power=POWERS[asg.powerType];
-if(power.needsTarget&&!STATE.selectedTarget){showToast(‘⚠️ Select a target!’,’#FF6B1A’);return;}
-if(power.needsUpDown&&!STATE.selectedUpgradeDir){showToast(‘⚠️ Choose upgrade or downgrade!’,’#FF6B1A’);return;}
-
-const target=STATE.selectedTarget;
-
-// Check shield — only if shield not already consumed today
+var asg=getCurrentRevealAsg();
+var power=POWERS[asg.powerType];
+if(power.needsTarget&&!STATE.selectedTarget){showToast(‘Select a target!’,’#FF6B1A’);return;}
+if(power.needsUpDown&&!STATE.selectedUpgradeDir){showToast(‘Choose upgrade or downgrade!’,’#FF6B1A’);return;}
+var target=STATE.selectedTarget;
 if(target&&target!==‘myself’){
-const targetAsg=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===target);
-if(targetAsg&&targetAsg.powerType===‘🛡️ Shield’&&!targetAsg.powerUsed&&!targetAsg.shieldUsedToday&&!targetAsg.shieldResolved){
-STATE.pendingShield={attackerAsg:asg,targetAsg,target,upgradeDir:STATE.selectedUpgradeDir};
-showShieldPrompt(asg,targetAsg);
-return;
+var targetAsg=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
+if(targetAsg&&targetAsg.powerType===‘🛡️ Shield’&&!targetAsg.powerUsed&&!targetAsg.shieldUsedToday){
+STATE.pendingShield={attackerAsg:asg,targetAsg:targetAsg,target:target,upgradeDir:STATE.selectedUpgradeDir};
+showShieldPrompt(asg,targetAsg);return;
 }
 }
 await doActivatePower(asg,target,STATE.selectedUpgradeDir);
 };
 
 function showShieldPrompt(attackerAsg,targetAsg){
-const attacker=PLAYERS[attackerAsg.playerIndex];
-const target=PLAYERS[targetAsg.playerIndex];
-document.getElementById(‘shield-container’).innerHTML=` <div class="shield-overlay"> <div class="shield-modal"> <span class="shield-big-icon">🛡️</span> <div class="shield-pass-to">📱 Pass the phone to</div> <div class="shield-player-name" style="color:${target.color}">${target.emoji} ${target.name}</div> <div class="shield-desc">${attacker.emoji} <strong>${attacker.name}</strong> used<br><strong>${attackerAsg.powerType}</strong> on you!</div> <div class="shield-attacker-info">Do you want to activate your Shield?</div> <div class="shield-btns"> <button class="shield-yes-btn" onclick="resolveShield(true)">🛡️ ACTIVATE!</button> <button class="shield-no-btn" onclick="resolveShield(false)">❌ Allow it</button> </div> </div> </div>`;
+var attacker=PLAYERS[attackerAsg.playerIndex];
+var target=PLAYERS[targetAsg.playerIndex];
+document.getElementById(‘shield-container’).innerHTML=’<div class="shield-overlay"><div class="shield-modal"><span class="shield-big-icon">🛡️</span><div class="shield-pass-to">📱 Pass the phone to</div><div class="shield-player-name" style="color:'+target.color+'">’+target.emoji+’ ‘+target.name+’</div><div class="shield-desc">’+attacker.emoji+’ <strong>’+attacker.name+’</strong> used<br><strong>’+attackerAsg.powerType+’</strong> on you!</div><div class="shield-attacker-info">Do you want to activate your Shield?</div><div class="shield-btns"><button class="shield-yes-btn" onclick="resolveShield(true)">🛡️ ACTIVATE!</button><button class="shield-no-btn" onclick="resolveShield(false)">❌ Allow it</button></div></div></div>’;
 }
 
 window.resolveShield=async function(activate){
 document.getElementById(‘shield-container’).innerHTML=’’;
-const{attackerAsg,targetAsg,target,upgradeDir}=STATE.pendingShield;
-const shieldPlayer=PLAYERS[targetAsg.playerIndex];
-const attackPlayer=PLAYERS[attackerAsg.playerIndex];
+var pd=STATE.pendingShield;
+var shieldPlayer=PLAYERS[pd.targetAsg.playerIndex];
+var attackPlayer=PLAYERS[pd.attackerAsg.playerIndex];
 if(activate){
-await notionPatch(targetAsg.pageId,{Power_Used:{checkbox:true},Shield_Used_Today:{checkbox:true}});
-targetAsg.powerUsed=true;
-targetAsg.shieldUsedToday=true;
-STATE.effectLog.push({msg:`🛡️ ${shieldPlayer.emoji} ${shieldPlayer.name} blocked ${attackPlayer.emoji} ${attackPlayer.name}'s ${attackerAsg.powerType}!`,color:’#00EEFF’});
+await notionPatch(pd.targetAsg.pageId,{Power_Used:{checkbox:true},Shield_Used_Today:{checkbox:true}});
+pd.targetAsg.powerUsed=true;pd.targetAsg.shieldUsedToday=true;
+STATE.effectLog.push({msg:‘🛡️ ‘+shieldPlayer.emoji+’ ‘+shieldPlayer.name+’ blocked ‘+attackPlayer.emoji+’ ‘+attackPlayer.name+‘s ‘+pd.attackerAsg.powerType+’!’,color:’#00EEFF’});
 showToast(‘🛡️ Shield activated!’,’#00EEFF’);
-STATE.pendingShield=null;
-STATE.selectedTarget=null;
-STATE.selectedUpgradeDir=null;
+STATE.pendingShield=null;STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
 await nextRevealStep();
 } else {
-await notionPatch(targetAsg.pageId,{Shield_Used_Today:{checkbox:true}});
-targetAsg.shieldUsedToday=true;
-STATE.effectLog.push({msg:`❌ ${shieldPlayer.emoji} ${shieldPlayer.name} refused Shield!`,color:’#FF2D4B’});
+try{await notionPatch(pd.targetAsg.pageId,{Shield_Used_Today:{checkbox:true}});}catch(e){}
+pd.targetAsg.shieldUsedToday=true;
+STATE.effectLog.push({msg:‘❌ ‘+shieldPlayer.emoji+’ ‘+shieldPlayer.name+’ refused Shield!’,color:’#FF2D4B’});
 STATE.pendingShield=null;
-await doActivatePower(attackerAsg,target,upgradeDir);
+await doActivatePower(pd.attackerAsg,pd.target,pd.upgradeDir);
 }
 };
 
 async function doActivatePower(asg,target,upgradeDir){
-const player=PLAYERS[asg.playerIndex];
-const power=POWERS[asg.powerType];
-const color=power.color;
-let updates={Power_Used:{checkbox:true}};
+var player=PLAYERS[asg.playerIndex];
+var power=POWERS[asg.powerType];
+var color=power.color;
+var updates={Power_Used:{checkbox:true}};
 if(target)updates.Power_Target={rich_text:[{text:{content:target}}]};
 
 if(asg.powerType===‘🔥 Extincteur’&&target&&target!==‘myself’){
-const targetAsg=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===target);
+var targetAsg=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
 if(targetAsg){await notionPatch(targetAsg.pageId,{Win_Streak:{number:0}});targetAsg.winStreak=0;targetAsg.effectExtinct=true;}
-STATE.effectLog.push({msg:`🔥 ${player.emoji} ${player.name} extinguished ${target}'s streak! 🧊`,color});
+STATE.effectLog.push({msg:‘🔥 ‘+player.emoji+’ ‘+player.name+’ extinguished ‘+target+‘s streak!’,color:color});
 }
 if(asg.powerType===‘💀 Bridage’){
-const targetAsg=target===‘myself’?asg:STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===target);
-if(targetAsg)targetAsg.effectBridage=true;
-STATE.effectLog.push({msg:`💀 ${player.emoji} ${player.name} bridaged ${target==='myself'?'themselves':target}! (×0.5 pts)`,color});
+var tgt=target===‘myself’?asg:STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
+if(tgt)tgt.effectBridage=true;
+STATE.effectLog.push({msg:‘💀 ‘+player.emoji+’ ‘+player.name+’ bridaged ‘+(target===‘myself’?‘themselves’:target)+’! (x0.5 pts)’,color:color});
 }
 if(asg.powerType===‘⚡ Pas si vite’&&target&&upgradeDir){
-const targetAsg=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===target);
-if(targetAsg)targetAsg.effectUpgrade=upgradeDir;
-// Store upgradeDir in power target as “name|dir”
+var tgt2=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
+if(tgt2)tgt2.effectUpgrade=upgradeDir;
 updates.Power_Target={rich_text:[{text:{content:target+’|’+upgradeDir}}]};
-STATE.effectLog.push({msg:`⚡ ${player.emoji} ${player.name} ${upgradeDir}d ${target}'s challenge!`,color});
+STATE.effectLog.push({msg:‘⚡ ‘+player.emoji+’ ‘+player.name+’ ‘+upgradeDir+‘d ‘+target+‘s challenge!’,color:color});
 }
 if(asg.powerType===‘🎰 Roulette’){
-const mult=[0,1,2][Math.floor(Math.random()*3)];
-updates.Roulette_Multiplier={number:mult};
-asg.rouletteMultiplier=mult;
-STATE.effectLog.push({msg:`🎰 ${player.emoji} ${player.name} rolled ×${mult}!`,color:mult===2?’#00FF88’:mult===0?’#FF2D4B’:’#FFD700’});
+var mult=[0,1,2][Math.floor(Math.random()*3)];
+updates.Roulette_Multiplier={number:mult};asg.rouletteMultiplier=mult;
+STATE.effectLog.push({msg:‘🎰 ‘+player.emoji+’ ‘+player.name+’ rolled x’+mult+’!’,color:mult===2?’#00FF88’:mult===0?’#FF2D4B’:’#FFD700’});
 }
-if(![‘🔥 Extincteur’,‘💀 Bridage’,‘⚡ Pas si vite’,‘🎰 Roulette’].includes(asg.powerType)){
-const targetName=target&&target!==‘myself’?target:’’;
-STATE.effectLog.push({msg:`${player.emoji} ${player.name} activated ${asg.powerType}${targetName?' on '+targetName:''}!`,color});
+if([‘🦹 Entourloupeur’,‘🔄 Swap’,‘👯 Copier-Coller’].indexOf(asg.powerType)>=0){
+var tname=target&&target!==‘myself’?target:’’;
+STATE.effectLog.push({msg:player.emoji+’ ‘+player.name+’ activated ‘+asg.powerType+(tname?’ on ‘+tname:’’)+’!’,color:color});
 }
 
 await notionPatch(asg.pageId,updates);
@@ -539,23 +485,19 @@ await nextRevealStep();
 window.skipPower=async function(){await nextRevealStep();};
 
 async function nextRevealStep(){
-STATE.revealStep++;
-STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
+STATE.revealStep++;STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
 if(STATE.revealStep>=STATE.revealOrder.length){
-// All revealed!
 await notionPatch(STATE.systemPageId,{Defis_Launched:{checkbox:true}});
-STATE.defiLaunched=true;
-STATE.revealPhase=false;
-showToast(‘🌅 All challenges revealed! Let's go! 🌶️’,’#00FF88’);
+STATE.defiLaunched=true;STATE.revealPhase=false;
+showToast(‘🌅 All revealed! Let's go! 🌶️’,’#00FF88’);
 }
 render();
 }
 
-// ===== NORMAL GAME =====
 async function toggleValidation(pageId,current){
-const newVal=!current;
+var newVal=!current;
 await notionPatch(pageId,{Is_Validated:{checkbox:newVal}});
-const asg=STATE.assignments.find(a=>a.pageId===pageId);
+var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
 if(asg)asg.isValidated=newVal;
 if(newVal)confetti();
 render();
@@ -563,28 +505,41 @@ showToast(newVal?‘🎉 Challenge completed!’:‘❌ Removed’,newVal?’#00
 }
 
 async function reroll(pageId){
-const asg=STATE.assignments.find(a=>a.pageId===pageId);
+var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
 if(!asg||asg.hasRerolled)return;
-const current=getEffectiveChallengeId(asg);
-const available=STATE.allChallengeIds.filter(id=>id!==current);
+var current=getEffectiveChallengeId(asg);
+var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
 if(available.length===0){showToast(‘No other challenges!’,’#FF6B1A’);return;}
-const newId=available[Math.floor(Math.random()*available.length)];
+var newId=available[Math.floor(Math.random()*available.length)];
 await notionPatch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId},Power_Type:{select:{name:‘❌ None’}}});
 asg.hasRerolled=true;asg.rerollChallengeId=newId;asg.powerType=‘❌ None’;
 render();showToast(‘🎲 Rerolled! Power lost 💀’,’#BF00FF’);
 }
 
+window.rerollReveal=async function(pageId){
+var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
+if(!asg||asg.hasRerolled)return;
+var current=getEffectiveChallengeId(asg);
+var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
+if(available.length===0){showToast(‘No other challenges!’,’#FF6B1A’);return;}
+var newId=available[Math.floor(Math.random()*available.length)];
+await notionPatch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId},Power_Type:{select:{name:‘❌ None’}},Power_Used:{checkbox:false}});
+asg.hasRerolled=true;asg.rerollChallengeId=newId;asg.powerType=‘❌ None’;
+showToast(‘🎲 Rerolled! Power lost! 💀’,’#BF00FF’);
+await nextRevealStep();
+};
+
 async function suggestChallenge(){
-const nameEl=document.getElementById(‘suggest-name’);
-const spiceEl=document.querySelector(‘input[name=“spice”]:checked’);
-if(!nameEl.value.trim()){showToast(‘⚠️ Enter a name!’,’#FF6B1A’);return;}
-if(!spiceEl){showToast(‘⚠️ Pick spice!’,’#FF6B1A’);return;}
-const btn=document.getElementById(‘btn-suggest’);btn.disabled=true;btn.textContent=‘Sending…’;
-const pts=SPICE_POINTS[spiceEl.value]||1;
+var nameEl=document.getElementById(‘suggest-name’);
+var spiceEl=document.querySelector(‘input[name=“spice”]:checked’);
+if(!nameEl.value.trim()){showToast(‘Enter a name!’,’#FF6B1A’);return;}
+if(!spiceEl){showToast(‘Pick spice level!’,’#FF6B1A’);return;}
+var btn=document.getElementById(‘btn-suggest’);btn.disabled=true;btn.textContent=‘Sending…’;
+var pts=SPICE_PTS[spiceEl.value]||1;
 try{
 await notionCreate(CONFIG.db_challenges,{Name:{title:[{text:{content:nameEl.value.trim()}}]},Points:{number:pts},Status:{select:{name:‘⏳ Pending’}}});
 showToast(‘💡 Suggestion sent!’,’#00FF88’);nameEl.value=’’;if(spiceEl)spiceEl.checked=false;
-}catch(e){showToast(‘❌ Error: ‘+e.message,’#FF2D4B’);}
+}catch(e){showToast(‘Error: ‘+e.message,’#FF2D4B’);}
 btn.disabled=false;btn.textContent=‘💡 SUGGEST CHALLENGE’;
 }
 
@@ -593,270 +548,62 @@ document.getElementById(bodyId).classList.toggle(‘open’);
 document.getElementById(toggleId).classList.toggle(‘open’);
 }
 
-// ===== RENDER =====
 function render(){
-const root=document.getElementById(‘root’);
-const lb=[…STATE.assignments].sort((a,b)=>b.totalScore-a.totalScore);
-const rankEmoji=[‘🥇’,‘🥈’,‘🥉’,‘4️⃣’];
+var root=document.getElementById(‘root’);
+var lb=STATE.assignments.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
+var rankEmoji=[‘🥇’,‘🥈’,‘🥉’,‘4️⃣’];
 
-// ===== REVEAL PHASE =====
 if(STATE.revealPhase){
-const asg=getCurrentRevealAsg();
+var asg=getCurrentRevealAsg();
 if(!asg){nextRevealStep();return;}
-const player=PLAYERS[asg.playerIndex];
-const effectiveId=getEffectiveChallengeId(asg);
-const challenge=STATE.challenges[effectiveId];
-const pts=challenge?.points??0;
-const power=POWERS[asg.powerType];
-const hasPower=asg.powerType&&asg.powerType!==‘❌ None’;
-const otherPlayers=PLAYERS.filter((_,i)=>i!==asg.playerIndex);
+var player=PLAYERS[asg.playerIndex];
+var effectiveId=getEffectiveChallengeId(asg);
+var challenge=STATE.challenges[effectiveId];
+var pts=challenge?challenge.points:0;
+var power=POWERS[asg.powerType];
+var hasPower=asg.powerType&&asg.powerType!==‘❌ None’;
+var otherPlayers=PLAYERS.filter(function(_,i){return i!==asg.playerIndex;});
+var progressDots=STATE.revealOrder.map(function(pIdx,step){
+var p=PLAYERS[pIdx];var done=step<STATE.revealStep;var current=step===STATE.revealStep;
+var cls=‘progress-dot’+(done?’ done’:’’)+(current?’ active’:’’);
+return ‘<div class="'+cls+'" title="'+p.name+'"></div>’;
+}).join(’’);
 
 ```
-const progressDots=STATE.revealOrder.map((pIdx,step)=>{
-  const p=PLAYERS[pIdx];
-  const done=step<STATE.revealStep;
-  const current=step===STATE.revealStep;
-  let cls='progress-dot';
-  if(done)cls+=' done';
-  if(current)cls+=' active';
-  return`<div class="${cls}" title="${p.name}"></div>`;
-}).join('');
+var targetHTML='';
+if(hasPower&&power&&!power.reactive&&power.needsTarget){
+  targetHTML='<div class="target-section"><div class="target-label">Choose target:</div><div class="target-grid">';
+  if(power.targetSelf)targetHTML+='<button class="target-btn '+(STATE.selectedTarget==='myself'?'selected':'')+'" data-name="myself" onclick="selectTarget(\'myself\')"><span style="font-size:24px">'+player.emoji+'</span> Myself</button>';
+  otherPlayers.forEach(function(p){targetHTML+='<button class="target-btn '+(STATE.selectedTarget===p.name?'selected':'')+'" data-name="'+p.name+'" onclick="selectTarget(\''+p.name+'\')"><span style="font-size:24px">'+p.emoji+'</span> '+p.name+'</button>';});
+  targetHTML+='</div></div>';
+}
+var upgradeHTML='';
+if(hasPower&&power&&power.needsUpDown){
+  upgradeHTML='<div class="upgrade-grid"><button class="upgrade-btn '+(STATE.selectedUpgradeDir==='upgrade'?'selected':'')+'" style="background:rgba(0,255,136,0.15);color:#00FF88;border:1px solid rgba(0,255,136,0.4)" onclick="selectUpgradeDir(\'upgrade\',this)">⬆️ UPGRADE</button><button class="upgrade-btn '+(STATE.selectedUpgradeDir==='downgrade'?'selected':'')+'" style="background:rgba(255,45,75,0.15);color:#FF2D4B;border:1px solid rgba(255,45,75,0.4)" onclick="selectUpgradeDir(\'downgrade\',this)">⬇️ DOWNGRADE</button></div>';
+}
 
-root.innerHTML=`
-  <div class="header">
-    <span class="header-mascot">🌅</span>
-    <h1>MORNING REVEAL</h1>
-    <div class="header-sub">Day ${STATE.dayCounter}</div>
-  </div>
-
-  <div class="reveal-phase">
-    <div class="reveal-progress">${progressDots}</div>
-
-    ${STATE.effectLog.length>0?`
-      <div class="effect-log" style="margin-bottom:16px">
-        ${STATE.effectLog.map(e=>`<div class="effect-item-reveal"><span style="color:${e.color};font-size:16px">●</span>${e.msg}</div>`).join('')}
-      </div>`:''}
-
-    <div class="reveal-card" style="border-color:${player.color}30">
-      <div class="reveal-cover" style="background:linear-gradient(135deg,${player.colorDark||'rgba(255,255,255,0.05)'},transparent)">
-        <div class="reveal-step">Step ${STATE.revealStep+1} of ${STATE.revealOrder.length}</div>
-        <span class="reveal-emoji-big">${player.emoji}</span>
-        <div class="reveal-player-name" style="color:${player.color}">${player.name}</div>
-        <div class="reveal-subtitle">Your turn to reveal 👀</div>
-      </div>
-
-      <div class="reveal-body">
-        <div class="reveal-challenge-box">
-          <div class="reveal-challenge-label">🎯 Your Challenge Today</div>
-          <div class="reveal-challenge-name">${challenge?.name??'Loading...'}</div>
-          <div class="reveal-challenge-meta">
-            <span class="spice-badge" style="color:${spiceColor(pts)}">${challenge?.spice??''} · ${pts} pt${pts>1?'s':''}</span>
-          </div>
-        </div>
-
-        ${hasPower?`
-          <div class="reveal-power-box" style="background:${power.bg};border-color:${power.border};color:${power.color}">
-            <div class="reveal-power-label">🎴 Your Power Today</div>
-            <div class="reveal-power-name">${asg.powerType}</div>
-            <div class="reveal-power-desc">${power.desc}</div>
-          </div>
-
-          ${!power.reactive?`
-            ${power.needsTarget?`
-              <div class="target-section">
-                <div class="target-label">Choose target:</div>
-                <div class="target-grid">
-                  ${power.targetSelf?`<button class="target-btn ${STATE.selectedTarget==='myself'?'selected':''}" data-name="myself" onclick="selectTarget('myself')"><span style="font-size:24px">${player.emoji}</span> Myself</button>`:''}
-                  ${otherPlayers.map(p=>`<button class="target-btn ${STATE.selectedTarget===p.name?'selected':''}" data-name="${p.name}" onclick="selectTarget('${p.name}')"><span style="font-size:24px">${p.emoji}</span> ${p.name}</button>`).join('')}
-                </div>
-              </div>`:''}
-
-            ${power.needsUpDown?`
-              <div class="upgrade-grid">
-                <button class="upgrade-btn ${STATE.selectedUpgradeDir==='upgrade'?'selected':''}" style="background:rgba(0,255,136,0.15);color:#00FF88;border:1px solid rgba(0,255,136,0.4)" onclick="selectUpgradeDir('upgrade',this)">⬆️ UPGRADE</button>
-                <button class="upgrade-btn ${STATE.selectedUpgradeDir==='downgrade'?'selected':''}" style="background:rgba(255,45,75,0.15);color:#FF2D4B;border:1px solid rgba(255,45,75,0.4)" onclick="selectUpgradeDir('downgrade',this)">⬇️ DOWNGRADE</button>
-              </div>`:''}
-
-            <div class="reveal-actions">
-              <button class="btn-activate" onclick="activatePower()">⚡ USE POWER</button>
-              <button class="btn-skip-reveal" onclick="skipPower()">Skip — Save for later</button>
-              <button class="btn-reroll-reveal" onclick="rerollReveal('${asg.pageId}')">🎲 Reroll challenge (lose power)</button>
-            </div>
-          `:`
-            <div class="reveal-actions">
-              <button class="btn-skip-reveal" style="background:${power.bg};border:1px solid ${power.border};color:${power.color}" onclick="skipPower()">
-                ${asg.powerType==='🛡️ Shield'?'🛡️ Keep Shield — activates when targeted':'🎰 Keep Roulette — applies at end of day'} ✓
-              </button>
-              <button class="btn-reroll-reveal" onclick="rerollReveal('${asg.pageId}')">🎲 Reroll challenge (lose power)</button>
-            </div>`}
-        `:`
-          <div class="reveal-actions">
-            <button class="btn-skip-reveal" onclick="skipPower()">No power today — Continue ➡️</button>
-          </div>`}
-      </div>
-    </div>
-  </div>`;
+root.innerHTML='<div class="header"><span class="header-mascot">🌅</span><h1>MORNING REVEAL</h1><div class="header-sub">Day '+STATE.dayCounter+'</div></div><div class="reveal-phase"><div class="reveal-progress">'+progressDots+'</div>'+(STATE.effectLog.length>0?'<div class="effect-log" style="margin-bottom:16px">'+STATE.effectLog.map(function(e){return'<div class="effect-item-reveal"><span style="color:'+e.color+';font-size:16px">●</span>'+e.msg+'</div>';}).join('')+'</div>':'')+'<div class="reveal-card" style="border-color:'+player.color+'30"><div class="reveal-cover" style="background:linear-gradient(135deg,'+(player.colorDark||'rgba(255,255,255,0.05)')+',transparent)"><div class="reveal-step">Step '+(STATE.revealStep+1)+' of '+STATE.revealOrder.length+'</div><span class="reveal-emoji-big">'+player.emoji+'</span><div class="reveal-player-name" style="color:'+player.color+'">'+player.name+'</div><div class="reveal-subtitle">Your turn to reveal 👀</div></div><div class="reveal-body"><div class="reveal-challenge-box"><div class="reveal-challenge-label">🎯 Your Challenge Today</div><div class="reveal-challenge-name">'+(challenge?challenge.name:'Loading...')+'</div><div class="reveal-challenge-meta"><span class="spice-badge" style="color:'+spiceColor(pts)+'">'+(challenge?challenge.spice:'')+' · '+pts+' pt'+(pts>1?'s':'')+'</span></div></div>'+(hasPower&&power?'<div class="reveal-power-box" style="background:'+power.bg+';border-color:'+power.border+';color:'+power.color+'"><div class="reveal-power-label">🎴 Your Power Today</div><div class="reveal-power-name">'+asg.powerType+'</div><div class="reveal-power-desc">'+power.desc+'</div></div>'+(!power.reactive?targetHTML+upgradeHTML+'<div class="reveal-actions"><button class="btn-activate" onclick="activatePower()">⚡ USE POWER</button><button class="btn-skip-reveal" onclick="skipPower()">Skip — Save for later</button><button class="btn-reroll-reveal" onclick="rerollReveal(\''+asg.pageId+'\')">🎲 Reroll (lose power)</button></div>':'<div class="reveal-actions"><button class="btn-skip-reveal" style="background:'+power.bg+';border:1px solid '+power.border+';color:'+power.color+'" onclick="skipPower()">'+(asg.powerType==='🛡️ Shield'?'🛡️ Keep Shield — activates when targeted':'🎰 Keep Roulette — applies at end of day')+' ✓</button><button class="btn-reroll-reveal" onclick="rerollReveal(\''+asg.pageId+'\')">🎲 Reroll (lose power)</button></div>'):'<div class="reveal-actions"><button class="btn-skip-reveal" onclick="skipPower()">No power today — Continue ➡️</button></div>')+'</div></div></div>';
 return;
 ```
 
 }
 
-// ===== NORMAL GAME VIEW =====
-root.innerHTML=`
-<div class="header">
-<span class="header-mascot">🌶️</span>
-<h1>ZEST YOUR DAY</h1>
-<div class="header-sub">Mexico Edition</div>
-<div class="day-badge">📅 Day ${STATE.dayCounter}</div>
-</div>
+var cardsHTML=STATE.assignments.map(function(asg){
+var player=PLAYERS[asg.playerIndex]||{name:asg.name,emoji:‘🎮’,color:’#8892A4’,colorDark:‘rgba(136,146,164,0.15)’};
+var effectiveId=getEffectiveChallengeId(asg);
+var challenge=STATE.challenges[effectiveId];
+var pts=getEffectivePts(asg);
+var bonus=streakBonus(asg.winStreak);
+var isRerolled=asg.rerollChallengeId>0;
+var hasPower=asg.powerType&&asg.powerType!==‘❌ None’;
+var power=hasPower?POWERS[asg.powerType]:null;
+var cardBorder=power&&asg.powerUsed?power.border:‘rgba(255,255,255,0.06)’;
+var cardGlow=power&&asg.powerUsed?‘0 0 20px ‘+power.color+‘25’:’’;
+return ‘<div class="card '+(asg.isValidated?'validated':'')+'" style="border-color:'+cardBorder+';box-shadow:'+cardGlow+'"><div class="card-band" style="background:'+player.color+';box-shadow:0 0 15px '+player.color+'60"></div><div class="card-cover" style="--cover-color:'+player.color+'"><span style="font-size:36px;position:relative">’+player.emoji+’</span><span class="player-name-big" style="color:'+player.color+';text-shadow:0 0 20px '+player.color+'60">’+player.name+’</span>’+(hasPower&&power?’<span class="power-badge-cover" style="color:'+power.color+'">’+asg.powerType.split(’ ‘)[0]+’</span>’:’’)+’</div><div class="card-body"><div class="pills"><div class="pill pill-streak">🔥 ‘+asg.winStreak+’ streak</div>’+(bonus>0?’<div class="pill pill-bonus">⚡ +’+bonus+’ bonus</div>’:’’)+(isRerolled?’<div class="pill pill-reroll">🎲 Rerolled</div>’:’’)+(hasPower&&power?’<div class="pill" style="background:'+power.bg+';border:1px solid '+power.border+';color:'+power.color+'">’+(asg.powerUsed?asg.powerType+’ ✓’:asg.powerType)+’</div>’:’’)+(asg.effectBridage?’<span class="effect-badge" style="background:rgba(255,45,75,0.1);color:#FF2D4B;border:1px solid rgba(255,45,75,0.3)">💀 ×0.5 pts</span>’:’’)+(asg.effectUpgrade?’<span class="effect-badge" style="background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3)">’+(asg.effectUpgrade===‘upgrade’?‘⬆️ Upgraded’:‘⬇️ Downgraded’)+’</span>’:’’)+(asg.effectExtinct?’<span class="effect-badge" style="background:rgba(255,45,75,0.1);color:#FF2D4B;border:1px solid rgba(255,45,75,0.3)">🔥 Streak wiped</span>’:’’)+’</div><div class="challenge-box"><div class="challenge-num">Challenge #’+effectiveId+’</div><div class="challenge-name">’+(challenge?challenge.name:‘⏳ Loading…’)+’</div><div class="challenge-meta"><span class="spice-badge" style="color:'+spiceColor(pts)+'">’+(challenge?challenge.spice:’’)+’ · ‘+pts+’ pt’+(pts>1?‘s’:’’)+’</span>’+(bonus>0?’<span class="total-badge">⚡ ‘+(pts+bonus)+’ pts total</span>’:’’)+’</div></div><div class="card-actions"><div class="done-wrap"><span class="done-label">Done?</span><label class="checkbox-wrap"><input type=“checkbox” ‘+(asg.isValidated?‘checked’:’’)+’ onchange=“toggleValidation('’+asg.pageId+’',’+asg.isValidated+’)” /><div class="checkbox-custom">’+(asg.isValidated?‘✓’:’’)+’</div></label></div><button class=“btn-reroll” onclick=“reroll('’+asg.pageId+’')” ‘+(asg.hasRerolled?‘disabled’:’’)+’>🎲 ‘+(asg.hasRerolled?‘Rerolled’:‘Reroll’)+’</button></div></div></div>’;
+}).join(’’);
 
-```
-${STATE.effectLog.length>0?`
-  <div class="effects-log-wrap">
-    ${STATE.effectLog.map(e=>`<div class="effect-item"><span style="color:${e.color};font-size:16px">●</span>${e.msg}</div>`).join('')}
-  </div>`:''}
-
-<div class="section-title">🎯 Today's Challenges</div>
-<div class="cards">
-  ${STATE.assignments.map(asg=>{
-    const player=PLAYERS[asg.playerIndex]||{name:asg.name,emoji:'🎮',color:'#8892A4',colorDark:'rgba(136,146,164,0.15)'};
-    const effectiveId=getEffectiveChallengeId(asg);
-    const challenge=STATE.challenges[effectiveId];
-    const pts=getEffectivePts(asg);
-    const bonus=streakBonus(asg.winStreak);
-    const isRerolled=asg.rerollChallengeId>0;
-    const hasPower=asg.powerType&&asg.powerType!=='❌ None';
-    const power=hasPower?POWERS[asg.powerType]:null;
-    const cardBorder=power&&asg.powerUsed?power.border:'rgba(255,255,255,0.06)';
-    const cardGlow=power&&asg.powerUsed?`0 0 20px ${power.color}25`:'';
-    return`
-    <div class="card ${asg.isValidated?'validated':''}" style="border-color:${cardBorder};box-shadow:${cardGlow}">
-      <div class="card-band" style="background:${player.color};box-shadow:0 0 15px ${player.color}60"></div>
-      <div class="card-cover" style="--cover-color:${player.color}">
-        <span style="font-size:36px;position:relative">${player.emoji}</span>
-        <span class="player-name-big" style="color:${player.color};text-shadow:0 0 20px ${player.color}60">${player.name}</span>
-        ${hasPower&&power?`<span class="power-badge-cover" style="color:${power.color}">${asg.powerType.split(' ')[0]}</span>`:''}
-      </div>
-      <div class="card-body">
-        <div class="pills">
-          <div class="pill pill-streak">🔥 ${asg.winStreak} streak</div>
-          ${bonus>0?`<div class="pill pill-bonus">⚡ +${bonus} bonus</div>`:''}
-          ${isRerolled?`<div class="pill pill-reroll">🎲 Rerolled</div>`:''}
-          ${hasPower&&power?`<div class="pill" style="background:${power.bg};border:1px solid ${power.border};color:${power.color}">${asg.powerUsed?asg.powerType+' ✓':asg.powerType}</div>`:''}
-          ${asg.effectBridage?`<span class="effect-badge" style="background:rgba(255,45,75,0.1);color:#FF2D4B;border:1px solid rgba(255,45,75,0.3)">💀 ×0.5 pts</span>`:''}
-          ${asg.effectUpgrade?`<span class="effect-badge" style="background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3)">${asg.effectUpgrade==='upgrade'?'⬆️ Upgraded':'⬇️ Downgraded'}</span>`:''}
-          ${asg.effectExtinct?`<span class="effect-badge" style="background:rgba(255,45,75,0.1);color:#FF2D4B;border:1px solid rgba(255,45,75,0.3)">🔥 Streak wiped</span>`:''}
-        </div>
-        <div class="challenge-box">
-          <div class="challenge-num">Challenge #${effectiveId}</div>
-          <div class="challenge-name">${challenge?.name??'⏳ Loading...'}</div>
-          <div class="challenge-meta">
-            <span class="spice-badge" style="color:${spiceColor(pts)}">${challenge?.spice??''} · ${pts} pt${pts>1?'s':''}</span>
-            ${bonus>0?`<span class="total-badge">⚡ ${pts+bonus} pts total</span>`:''}
-          </div>
-        </div>
-        <div class="card-actions">
-          <div class="done-wrap">
-            <span class="done-label">Done?</span>
-            <label class="checkbox-wrap">
-              <input type="checkbox" ${asg.isValidated?'checked':''} onchange="toggleValidation('${asg.pageId}',${asg.isValidated})" />
-              <div class="checkbox-custom">${asg.isValidated?'✓':''}</div>
-            </label>
-          </div>
-          <button class="btn-reroll" onclick="reroll('${asg.pageId}')" ${asg.hasRerolled?'disabled':''}>
-            🎲 ${asg.hasRerolled?'Rerolled':'Reroll'}
-          </button>
-        </div>
-      </div>
-    </div>`;
-  }).join('')}
-</div>
-
-<div class="divider"></div>
-<div class="section-title">🏆 Leaderboard</div>
-<div class="leaderboard">
-  <div class="lb-card">
-    <div class="lb-header-row"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>✅</span></div>
-    ${lb.map((asg,i)=>{
-      const player=PLAYERS[asg.playerIndex]||{name:asg.name,emoji:'🎮',color:'#8892A4'};
-      return`<div class="lb-row">
-        <div class="lb-rank">${rankEmoji[i]??i+1}</div>
-        <div class="lb-player"><span class="lb-emoji">${player.emoji}</span><span class="lb-name" style="color:${player.color}">${player.name}</span></div>
-        <div class="lb-stat"><div class="lb-val" style="color:#FFD700">${asg.totalScore}</div><div class="lb-lbl">pts</div></div>
-        <div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">${asg.winStreak}🔥</div><div class="lb-lbl">streak</div></div>
-        <div class="lb-stat"><div class="lb-val" style="color:#00FF88">${asg.defisReussis}</div><div class="lb-lbl">done</div></div>
-      </div>`;
-    }).join('')}
-  </div>
-</div>
-
-<div class="divider"></div>
-<div class="section-title">💡 Suggest</div>
-<div class="suggest">
-  <div class="collapsible-card">
-    <div class="collapsible-header" onclick="toggleSection('suggest-body','suggest-toggle')" style="border-bottom:1px solid rgba(0,255,136,0.08)">
-      <h3 style="color:#00FF88">➕ NEW CHALLENGE IDEA</h3>
-      <span class="collapsible-toggle" id="suggest-toggle">▼</span>
-    </div>
-    <div class="collapsible-body" id="suggest-body">
-      <div class="form-group"><label class="form-label">Challenge name</label><input class="form-input" id="suggest-name" type="text" placeholder="e.g. Sing your order..." maxlength="100" /></div>
-      <div class="form-group"><label class="form-label">Spice level</label>
-        <div class="spice-selector">
-          <input type="radio" name="spice" id="s1" value="🌱 Mild" class="spice-option"><label for="s1"><span class="spice-emoji">🌱</span>Mild<br><small style="color:#6B7280">1 pt</small></label>
-          <input type="radio" name="spice" id="s2" value="🌶️ Spicy" class="spice-option"><label for="s2"><span class="spice-emoji">🌶️</span>Spicy<br><small style="color:#6B7280">2 pts</small></label>
-          <input type="radio" name="spice" id="s3" value="🔥 Hot" class="spice-option"><label for="s3"><span class="spice-emoji">🔥</span>Hot<br><small style="color:#6B7280">3 pts</small></label>
-          <input type="radio" name="spice" id="s4" value="⚡ Atomic" class="spice-option"><label for="s4"><span class="spice-emoji">⚡</span>Atomic<br><small style="color:#6B7280">5 pts</small></label>
-        </div>
-      </div>
-      <button class="btn-suggest" id="btn-suggest" onclick="suggestChallenge()">💡 SUGGEST CHALLENGE</button>
-      <p style="font-size:12px;color:#6B7280;margin-top:12px;text-align:center">Reviewed before entering the rotation ✅</p>
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-<div class="section-title">📖 Rules</div>
-<div class="rules">
-  <div class="collapsible-card">
-    <div class="collapsible-header" onclick="toggleSection('rules-body','rules-toggle')" style="border-bottom:1px solid rgba(255,45,75,0.08)">
-      <h3 style="color:#FF2D4B">📜 HOW IT WORKS</h3>
-      <span class="collapsible-toggle" id="rules-toggle">▼</span>
-    </div>
-    <div class="collapsible-body" id="rules-body">
-      <div class="rule-item"><div class="rule-icon">🎯</div><div><div class="rule-title">One challenge per day</div><div class="rule-desc">Each player gets a unique challenge every day. Challenges rotate automatically.</div></div></div>
-      <div class="rule-item"><div class="rule-icon">🌶️</div><div><div class="rule-title">Spice levels</div><div class="rule-desc">Difficulty determines points earned.</div><div class="neon-table"><div class="neon-row"><span>🌱 Mild</span><span>1 pt</span></div><div class="neon-row"><span>🌶️ Spicy</span><span>2 pts</span></div><div class="neon-row"><span>🔥 Hot</span><span>3 pts</span></div><div class="neon-row"><span>⚡ Atomic</span><span>5 pts</span></div></div></div></div>
-      <div class="rule-item"><div class="rule-icon">🔥</div><div><div class="rule-title">Streak bonuses</div><div class="rule-desc">Complete consecutive days for bonus points!</div><div class="neon-table"><div class="neon-row"><span>🔥 3 days</span><span>+1 pt</span></div><div class="neon-row"><span>🔥 5 days</span><span>+2 pts</span></div><div class="neon-row"><span>🔥 10 days</span><span>+3 pts</span></div></div></div></div>
-      <div class="rule-item"><div class="rule-icon">🌅</div><div><div class="rule-title">Morning Reveal</div><div class="rule-desc">Each morning, players take turns revealing their challenge and power on the shared screen. Powers can be activated during reveal.</div></div></div>
-      <div class="rule-item"><div class="rule-icon">🎴</div><div><div class="rule-title">Daily Powers</div><div class="rule-desc">Every player gets a random power each day. Rerolling removes your power!</div><div class="neon-table"><div class="neon-row"><span>🦹 Entourloupeur</span><span>Steal points</span></div><div class="neon-row"><span>🔄 Swap</span><span>Force swap</span></div><div class="neon-row"><span>💀 Bridage</span><span>×0.5 pts</span></div><div class="neon-row"><span>⚡ Pas si vite</span><span>Change difficulty</span></div><div class="neon-row"><span>🛡️ Shield</span><span>Block powers</span></div><div class="neon-row"><span>🎰 Roulette</span><span>×0/×1/×2</span></div><div class="neon-row"><span>👯 Copier-Coller</span><span>Share, ×2 if both win</span></div><div class="neon-row"><span>🔥 Extincteur</span><span>Reset streak</span></div></div></div></div>
-      <div class="rule-item"><div class="rule-icon">🛡️</div><div><div class="rule-title">Shield</div><div class="rule-desc">Reactive power — when someone targets you, a prompt asks if you want to activate it. Everyone sees your choice!</div></div></div>
-      <div class="rule-item"><div class="rule-icon">🎲</div><div><div class="rule-title">Reroll</div><div class="rule-desc">Reroll your challenge once per day — but you LOSE your power!</div></div></div>
-      <div class="rule-item"><div class="rule-icon">🏆</div><div><div class="rule-title">Leaderboard</div><div class="rule-desc">Most points at the end wins eternal glory 🌶️</div></div></div>
-    </div>
-  </div>
-</div>
-```
-
-`;
+root.innerHTML=’<div class="header"><span class="header-mascot">🌶️</span><h1>ZEST YOUR DAY</h1><div class="header-sub">Mexico Edition</div><div class="day-badge">📅 Day ‘+STATE.dayCounter+’</div></div>’+(STATE.effectLog.length>0?’<div class="effects-log-wrap">’+STATE.effectLog.map(function(e){return’<div class="effect-item"><span style="color:'+e.color+';font-size:16px">●</span>’+e.msg+’</div>’;}).join(’’)+’</div>’:’’)+’<div class="section-title">🎯 Today's Challenges</div><div class="cards">’+cardsHTML+’</div><div class="divider"></div><div class="section-title">🏆 Leaderboard</div><div class="leaderboard"><div class="lb-card"><div class="lb-header-row"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>✅</span></div>’+lb.map(function(asg,i){var player=PLAYERS[asg.playerIndex]||{name:asg.name,emoji:‘🎮’,color:’#8892A4’};return’<div class="lb-row"><div class="lb-rank">’+(rankEmoji[i]||i+1)+’</div><div class="lb-player"><span class="lb-emoji">’+player.emoji+’</span><span class="lb-name" style="color:'+player.color+'">’+player.name+’</span></div><div class="lb-stat"><div class="lb-val" style="color:#FFD700">’+asg.totalScore+’</div><div class="lb-lbl">pts</div></div><div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">’+asg.winStreak+‘🔥</div><div class="lb-lbl">streak</div></div><div class="lb-stat"><div class="lb-val" style="color:#00FF88">’+asg.defisReussis+’</div><div class="lb-lbl">done</div></div></div>’;}).join(’’)+’</div></div><div class="divider"></div><div class="section-title">💡 Suggest</div><div class="suggest"><div class="collapsible-card"><div class="collapsible-header" onclick="toggleSection(\'suggest-body\',\'suggest-toggle\')" style="border-bottom:1px solid rgba(0,255,136,0.08)"><h3 style="color:#00FF88">➕ NEW CHALLENGE IDEA</h3><span class="collapsible-toggle" id="suggest-toggle">▼</span></div><div class="collapsible-body" id="suggest-body"><div class="form-group"><label class="form-label">Challenge name</label><input class="form-input" id="suggest-name" type="text" placeholder="e.g. Sing your order..." maxlength="100" /></div><div class="form-group"><label class="form-label">Spice level</label><div class="spice-selector"><input type="radio" name="spice" id="s1" value="🌱 Mild" class="spice-option"><label for="s1"><span class="spice-emoji">🌱</span>Mild<br><small style="color:#6B7280">1 pt</small></label><input type="radio" name="spice" id="s2" value="🌶️ Spicy" class="spice-option"><label for="s2"><span class="spice-emoji">🌶️</span>Spicy<br><small style="color:#6B7280">2 pts</small></label><input type="radio" name="spice" id="s3" value="🔥 Hot" class="spice-option"><label for="s3"><span class="spice-emoji">🔥</span>Hot<br><small style="color:#6B7280">3 pts</small></label><input type="radio" name="spice" id="s4" value="⚡ Atomic" class="spice-option"><label for="s4"><span class="spice-emoji">⚡</span>Atomic<br><small style="color:#6B7280">5 pts</small></label></div></div><button class="btn-suggest" id="btn-suggest" onclick="suggestChallenge()">💡 SUGGEST CHALLENGE</button><p style="font-size:12px;color:#6B7280;margin-top:12px;text-align:center">Reviewed before entering the rotation ✅</p></div></div></div><div class="divider"></div><div class="section-title">📖 Rules</div><div class="rules"><div class="collapsible-card"><div class="collapsible-header" onclick="toggleSection(\'rules-body\',\'rules-toggle\')" style="border-bottom:1px solid rgba(255,45,75,0.08)"><h3 style="color:#FF2D4B">📜 HOW IT WORKS</h3><span class="collapsible-toggle" id="rules-toggle">▼</span></div><div class="collapsible-body" id="rules-body"><div class="rule-item"><div class="rule-icon">🎯</div><div><div class="rule-title">One challenge per day</div><div class="rule-desc">Each player gets a unique challenge every day. Challenges rotate automatically.</div></div></div><div class="rule-item"><div class="rule-icon">🌶️</div><div><div class="rule-title">Spice levels</div><div class="rule-desc">Difficulty determines points.</div><div class="neon-table"><div class="neon-row"><span>🌱 Mild</span><span>1 pt</span></div><div class="neon-row"><span>🌶️ Spicy</span><span>2 pts</span></div><div class="neon-row"><span>🔥 Hot</span><span>3 pts</span></div><div class="neon-row"><span>⚡ Atomic</span><span>5 pts</span></div></div></div></div><div class="rule-item"><div class="rule-icon">🔥</div><div><div class="rule-title">Streak bonuses</div><div class="rule-desc">Complete consecutive days for bonus points!</div><div class="neon-table"><div class="neon-row"><span>🔥 3 days</span><span>+1 pt</span></div><div class="neon-row"><span>🔥 5 days</span><span>+2 pts</span></div><div class="neon-row"><span>🔥 10 days</span><span>+3 pts</span></div></div></div></div><div class="rule-item"><div class="rule-icon">🌅</div><div><div class="rule-title">Morning Reveal</div><div class="rule-desc">Each morning, players take turns revealing their challenge and power. Powers activate during reveal.</div></div></div><div class="rule-item"><div class="rule-icon">🎴</div><div><div class="rule-title">Daily Powers</div><div class="rule-desc">Every player gets a random power each day. Rerolling removes your power!</div><div class="neon-table"><div class="neon-row"><span>🦹 Entourloupeur</span><span>Steal points</span></div><div class="neon-row"><span>🔄 Swap</span><span>Force swap</span></div><div class="neon-row"><span>💀 Bridage</span><span>x0.5 pts</span></div><div class="neon-row"><span>⚡ Pas si vite</span><span>Change difficulty</span></div><div class="neon-row"><span>🛡️ Shield</span><span>Block powers</span></div><div class="neon-row"><span>🎰 Roulette</span><span>x0/x1/x2</span></div><div class="neon-row"><span>👯 Copier-Coller</span><span>Share, x2 if both win</span></div><div class="neon-row"><span>🔥 Extincteur</span><span>Reset streak</span></div></div></div></div><div class="rule-item"><div class="rule-icon">🛡️</div><div><div class="rule-title">Shield</div><div class="rule-desc">When targeted, a prompt asks if you want to activate it. Everyone sees your choice!</div></div></div><div class="rule-item"><div class="rule-icon">🎲</div><div><div class="rule-title">Reroll</div><div class="rule-desc">Reroll your challenge once per day — but you LOSE your power!</div></div></div><div class="rule-item"><div class="rule-icon">🏆</div><div><div class="rule-title">Leaderboard</div><div class="rule-desc">Most points at the end wins eternal glory 🌶️</div></div></div></div></div></div>’;
 }
-
-// Reroll during reveal phase
-window.rerollReveal=async function(pageId){
-const asg=STATE.assignments.find(a=>a.pageId===pageId);
-if(!asg||asg.hasRerolled)return;
-const current=getEffectiveChallengeId(asg);
-const available=STATE.allChallengeIds.filter(id=>id!==current);
-if(available.length===0){showToast(‘No other challenges!’,’#FF6B1A’);return;}
-const newId=available[Math.floor(Math.random()*available.length)];
-await notionPatch(pageId,{
-Has_Rerolled:{checkbox:true},
-Reroll_Challenge_ID:{number:newId},
-Power_Type:{select:{name:‘❌ None’}},
-Power_Used:{checkbox:false},
-});
-asg.hasRerolled=true;asg.rerollChallengeId=newId;asg.powerType=‘❌ None’;
-showToast(‘🎲 Rerolled! Power lost! 💀’,’#BF00FF’);
-await nextRevealStep();
-};
 
 async function init(){
 try{await loadData();render();}
