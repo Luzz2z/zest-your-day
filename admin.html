@@ -101,11 +101,11 @@ const SPICE_PTS={'🌱 Mild':1,'🌶️ Spicy':2,'🔥 Hot':3,'⚡ Atomic':5};
 function streakBonus(s){return s>=10?3:s>=5?2:s>=3?1:0;}
 
 async function notionQuery(dbId,body={}){
-const res=await fetch(’/api/notion?endpoint=databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify(body)});
+const res=await fetch(’/api/notion/databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify(body)});
 const data=await res.json();if(!res.ok)throw new Error(data.message);return data.results;
 }
 async function notionPatch(pageId,properties){
-const res=await fetch(’/api/notion?endpoint=pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties})});
+const res=await fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties})});
 const data=await res.json();if(!res.ok)throw new Error(data.message);return data;
 }
 function getProp(page,name,type){
