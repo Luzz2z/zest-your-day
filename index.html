@@ -4,78 +4,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zest Your Day</title>
-
 <style>
-
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Nunito',sans-serif;background:#050508;color:#F5F5F5;min-height:100vh;padding:0 0 100px;}
-
-
-/* HEADER */
-.header{padding:48px 20px 24px;text-align:center;}
-.mascot{font-size:72px;display:block;}
-@keyframes bounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
-.title{font-family:‘Bangers’,cursive;font-size:52px;letter-spacing:5px;background:linear-gradient(135deg,var(–red),var(–orange),var(–yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:8px 0 4px;}
-.subtitle{font-size:11px;color:var(–cyan);text-transform:uppercase;letter-spacing:5px;font-weight:700;}
-.day-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.4);border-radius:20px;padding:7px 20px;font-size:14px;font-weight:900;color:var(–yellow);margin-top:14px;box-shadow:0 0 20px rgba(255,215,0,0.1);}
-
-/* SECTION */
-.section-title{font-family:‘Bangers’,cursive;font-size:18px;letter-spacing:3px;text-transform:uppercase;padding:0 20px 14px;display:flex;align-items:center;gap:10px;color:var(–muted);}
-.section-title::after{content:’’;flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,75,0.4),transparent);}
-
-/* CARDS */
-.card{background:var(–card);border-radius:24px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;margin:0 16px 16px;transition:box-shadow 0.3s;}
-.card.validated{border-color:rgba(0,255,136,0.2);box-shadow:0 0 24px rgba(0,255,136,0.06);}
+body{background:#050508;color:#F5F5F5;font-family:sans-serif;padding:0 0 80px;}
+.card{background:#0A0A18;border-radius:20px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;margin:0 16px 14px;}
+.card.validated{border-color:rgba(0,255,136,0.3);}
 .card-band{height:3px;}
-.card-cover{height:72px;display:flex;align-items:center;padding:0 20px;gap:14px;position:relative;overflow:hidden;}
-.card-cover::before{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,var(–cover-color,transparent),transparent 60%);opacity:0.15;}
-.player-emoji{font-size:36px;position:relative;}
-.player-name{font-family:‘Bangers’,cursive;font-size:28px;letter-spacing:2px;position:relative;}
-.card-body{padding:14px 20px 18px;}
-
-/* PILLS */
-.pill-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
-.pill{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:900;}
-.pill-streak{background:rgba(255,107,26,0.1);border:1px solid rgba(255,107,26,0.3);color:var(–orange);}
-
-/* CHALLENGE BOX */
-.challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:16px;margin-bottom:14px;}
-.challenge-num{font-size:10px;color:var(–muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
-.challenge-name{font-weight:900;font-size:17px;line-height:1.4;margin-bottom:10px;}
-.spice-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
-
-/* ACTIONS */
-.card-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.done-wrap{display:flex;align-items:center;gap:10px;}
-.done-label{font-size:11px;color:var(–muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-.check-box{width:36px;height:36px;border-radius:12px;border:2px solid rgba(255,255,255,0.12);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:all 0.25s;}
-.check-box.checked{background:var(–green);border-color:var(–green);box-shadow:0 0 24px rgba(0,255,136,0.6);}
-.btn-reroll{display:flex;align-items:center;gap:6px;background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:12px;padding:10px 16px;font-size:13px;font-weight:900;color:#e879f9;cursor:pointer;white-space:nowrap;font-family:‘Nunito’,sans-serif;}
+.card-cover{height:64px;display:flex;align-items:center;padding:0 18px;gap:12px;}
+.player-name{font-size:22px;font-weight:900;}
+.card-body{padding:12px 18px 16px;}
+.challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:14px;margin-bottom:12px;}
+.challenge-name{font-weight:900;font-size:16px;margin-bottom:6px;}
+.spice{font-size:12px;font-weight:700;padding:3px 10px;border-radius:8px;background:rgba(255,255,255,0.06);display:inline-block;}
+.card-actions{display:flex;align-items:center;justify-content:space-between;}
+.done-label{font-size:11px;color:#6B7280;font-weight:700;text-transform:uppercase;}
+.check-box{width:34px;height:34px;border-radius:10px;border:2px solid rgba(255,255,255,0.12);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;}
+.check-box.checked{background:#00FF88;border-color:#00FF88;box-shadow:0 0 20px rgba(0,255,136,0.5);}
+.btn-reroll{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:10px;padding:9px 14px;font-size:12px;font-weight:900;color:#e879f9;cursor:pointer;font-family:sans-serif;}
 .btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
-
-/* LEADERBOARD */
+.section-title{font-size:15px;font-weight:900;text-transform:uppercase;letter-spacing:2px;padding:0 20px 12px;color:#6B7280;}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:24px 16px;}
 .lb-wrap{padding:0 16px;}
-.lb-card{background:var(–card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
-.lb-header-row{display:grid;grid-template-columns:40px 1fr 64px 64px 56px;gap:8px;padding:12px 18px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);}
-.lb-header-row span{font-size:9px;color:var(–muted);text-transform:uppercase;letter-spacing:2px;text-align:center;font-weight:700;}
-.lb-header-row span:nth-child(2){text-align:left;}
-.lb-row{display:grid;grid-template-columns:40px 1fr 64px 64px 56px;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.03);}
+.lb-card{background:#0A0A18;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
+.lb-row{display:grid;grid-template-columns:40px 1fr 60px 60px 52px;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.03);}
 .lb-row:last-child{border-bottom:none;}
-.lb-row:first-child{background:rgba(255,215,0,0.03);}
-.lb-rank{font-family:‘Bangers’,cursive;font-size:22px;text-align:center;}
-.lb-player{display:flex;align-items:center;gap:10px;}
-.lb-emoji{font-size:20px;}
-.lb-name{font-weight:900;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-rank{font-size:20px;text-align:center;}
+.lb-name{font-weight:900;font-size:14px;}
 .lb-stat{text-align:center;}
-.lb-val{font-weight:900;font-size:17px;}
-.lb-lbl{font-size:9px;color:var(–muted);text-transform:uppercase;letter-spacing:1px;}
-
-.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:28px 16px;}
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;}
+.lb-val{font-weight:900;font-size:15px;}
+.lb-lbl{font-size:9px;color:#6B7280;text-transform:uppercase;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);color:white;font-weight:900;padding:12px 24px;border-radius:40px;font-size:14px;z-index:999;transition:transform 0.3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 </style>
-
 </head>
 <body>
 <div id="root">Loading...</div>
@@ -88,7 +47,6 @@ var PLAYERS=[
   {name:'Nicooo',emoji:'💰',color:'#FF6B1A'}
 ];
 var S={day:1,challenges:{},players:[],ids:[]};
-
 
 function toast(msg,col){
 var t=document.getElementById(‘toast’);
@@ -138,58 +96,35 @@ render();toast(‘Rerolled!’,’#BF00FF’);
 function render(){
 var lb=S.players.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
 var medals=[‘🥇’,‘🥈’,‘🥉’,‘4’];
-var html=’’;
-
-html+=’<div class="header">’
-+’<span class="mascot">🌶️</span>’
-+’<div class="title">ZEST YOUR DAY</div>’
-+’<div class="subtitle">Mexico Edition</div>’
-+’<div class="day-badge">📅 Day ‘+S.day+’</div>’
-+’</div>’;
-
-html+=’<div class="section-title">Today Challenges</div>’;
+var html=’<div style="padding:32px 20px 16px;text-align:center"><div style="font-size:56px">🌶️</div><div style="font-size:36px;font-weight:900;color:#FF6B1A">ZEST YOUR DAY</div><div style="font-size:11px;color:#00EEFF;text-transform:uppercase;letter-spacing:4px">Mexico Edition</div><div style="display:inline-flex;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:6px 18px;font-size:14px;font-weight:900;color:#FFD700;margin-top:12px">Day ‘+S.day+’</div></div>’;
+html+=’<div class="section-title">Challenges</div>’;
 S.players.forEach(function(a){
 var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
 var cid=a.rerollId>0?a.rerollId:a.challengeId;
 var ch=S.challenges[cid]||{name:’?’,pts:0,spice:’’};
-var bonus=sb(a.winStreak);
 html+=’<div class="card'+(a.isValidated?' validated':'')+'">’
-+’<div class="card-band" style="background:'+pl.color+';box-shadow:0 0 12px '+pl.color+'80"></div>’
-+’<div class="card-cover" style="--cover-color:'+pl.color+'">’
-+’<span class="player-emoji">’+pl.emoji+’</span>’
-+’<span class="player-name" style="color:'+pl.color+';text-shadow:0 0 20px '+pl.color+'60">’+pl.name+’</span>’
-+’</div>’
++’<div class="card-band" style="background:'+pl.color+'"></div>’
++’<div class="card-cover"><span style="font-size:32px">’+pl.emoji+’</span><span class="player-name" style="color:'+pl.color+'">’+pl.name+’</span></div>’
 +’<div class="card-body">’
-+’<div class="pill-row">’
-+’<span class="pill pill-streak">🔥 ‘+a.winStreak+’ streak</span>’
-+(bonus>0?’<span class="pill" style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.3);color:#FFD700">+’+bonus+’ bonus</span>’:’’)
-+(a.rerollId>0?’<span class="pill" style="background:rgba(191,0,255,0.1);border:1px solid rgba(191,0,255,0.3);color:#e879f9">🎲 Rerolled</span>’:’’)
-+’</div>’
 +’<div class="challenge-box">’
-+’<div class="challenge-num">Challenge #’+cid+’</div>’
 +’<div class="challenge-name">’+ch.name+’</div>’
-+’<span class="spice-badge" style="color:'+sc(ch.pts)+'">’+ch.spice+’ · ‘+ch.pts+’ pt’+(ch.pts>1?‘s’:’’)+’</span>’
-+(bonus>0?’<span class="spice-badge" style="color:#FFD700;margin-left:6px">Total: ‘+(ch.pts+bonus)+’ pts</span>’:’’)
++’<span class="spice">’+ch.spice+’ - ‘+ch.pts+‘pts</span>’
 +’</div>’
 +’<div class="card-actions">’
-+’<div class="done-wrap"><span class="done-label">Done?</span>’
++’<div style="display:flex;align-items:center;gap:8px"><span class="done-label">Done?</span>’
 +’<div class="check-box'+(a.isValidated?' checked':'')+'" onclick="validate(\''+a.pageId+'\','+a.isValidated+')">’+(a.isValidated?‘✓’:’’)+’</div></div>’
 +’<button class=“btn-reroll” onclick=“reroll('’+a.pageId+’')”’+(a.hasRerolled?’ disabled’:’’)+’>🎲 ‘+(a.hasRerolled?‘Rerolled’:‘Reroll’)+’</button>’
-+’</div>’
-+’</div></div>’;
++’</div></div></div>’;
 });
-
-html+=’<div class="divider"></div>’;
-html+=’<div class="section-title">Leaderboard</div>’;
+html+=’<div class="divider"></div><div class="section-title">Leaderboard</div>’;
 html+=’<div class="lb-wrap"><div class="lb-card">’;
-html+=’<div class="lb-header-row"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>Done</span></div>’;
 lb.forEach(function(a,i){
 var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
 html+=’<div class="lb-row">’
 +’<div class="lb-rank">’+(medals[i]||i+1)+’</div>’
-+’<div class="lb-player"><span class="lb-emoji">’+pl.emoji+’</span><span class="lb-name" style="color:'+pl.color+'">’+pl.name+’</span></div>’
++’<div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">’+pl.emoji+’</span><span class="lb-name" style="color:'+pl.color+'">’+pl.name+’</span></div>’
 +’<div class="lb-stat"><div class="lb-val" style="color:#FFD700">’+a.totalScore+’</div><div class="lb-lbl">pts</div></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">’+a.winStreak+‘🔥</div><div class="lb-lbl">streak</div></div>’
++’<div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">’+a.winStreak+’</div><div class="lb-lbl">streak</div></div>’
 +’<div class="lb-stat"><div class="lb-val" style="color:#00FF88">’+a.defisReussis+’</div><div class="lb-lbl">done</div></div>’
 +’</div>’;
 });
@@ -202,7 +137,6 @@ system:‘354403dde0e380aa85bfe7d9fd139be5’,
 challenges:‘354403dde0e3804f8644d242a0ec6bf6’,
 assignments:‘354403dde0e380f797ccfb85ad5a072e’
 };
-
 query(DB.system).then(function(sys){
 S.day=gp(sys[0],‘Day_Counter’,‘num’)||1;
 return query(DB.challenges);
