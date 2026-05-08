@@ -320,6 +320,7 @@ async function loadData(){
     powerTarget:getProp(p,'Power_Target','text')||'',
     powerUsed:getProp(p,'Power_Used','checkbox'),
     rouletteMultiplier:getProp(p,'Roulette_Multiplier','number')||1,
+    shieldUsedToday:getProp(p,'Shield_Used_Today','checkbox'),
     effectBridage:false,
     effectUpgrade:null,
     effectExtinct:false,
@@ -448,10 +449,10 @@ window.activatePower=async function(){
 
   const target=STATE.selectedTarget;
 
-  // Check shield
+  // Check shield — only if shield not already consumed today
   if(target&&target!=='myself'){
     const targetAsg=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===target);
-    if(targetAsg&&targetAsg.powerType==='🛡️ Shield'&&!targetAsg.powerUsed){
+    if(targetAsg&&targetAsg.powerType==='🛡️ Shield'&&!targetAsg.powerUsed&&!targetAsg.shieldUsedToday){
       STATE.pendingShield={attackerAsg:asg,targetAsg,target,upgradeDir:STATE.selectedUpgradeDir};
       showShieldPrompt(asg,targetAsg);
       return;
@@ -485,8 +486,9 @@ window.resolveShield=async function(activate){
   const shieldPlayer=PLAYERS[targetAsg.playerIndex];
   const attackPlayer=PLAYERS[attackerAsg.playerIndex];
   if(activate){
-    await notionPatch(targetAsg.pageId,{Power_Used:{checkbox:true}});
+    await notionPatch(targetAsg.pageId,{Power_Used:{checkbox:true},Shield_Used_Today:{checkbox:true}});
     targetAsg.powerUsed=true;
+    targetAsg.shieldUsedToday=true;
     STATE.effectLog.push({msg:`🛡️ ${shieldPlayer.emoji} ${shieldPlayer.name} blocked ${attackPlayer.emoji} ${attackPlayer.name}'s ${attackerAsg.powerType}!`,color:'#00EEFF'});
     showToast('🛡️ Shield activated!','#00EEFF');
     STATE.pendingShield=null;
@@ -494,6 +496,8 @@ window.resolveShield=async function(activate){
     STATE.selectedUpgradeDir=null;
     await nextRevealStep();
   } else {
+    await notionPatch(targetAsg.pageId,{Shield_Used_Today:{checkbox:true}});
+    targetAsg.shieldUsedToday=true;
     STATE.effectLog.push({msg:`❌ ${shieldPlayer.emoji} ${shieldPlayer.name} refused Shield!`,color:'#FF2D4B'});
     STATE.pendingShield=null;
     await doActivatePower(attackerAsg,target,upgradeDir);
