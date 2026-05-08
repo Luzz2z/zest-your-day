@@ -23,7 +23,28 @@ var DB={
   challenges:'354403dde0e3804f8644d242a0ec6bf6',
   assignments:'354403dde0e380f797ccfb85ad5a072e'
 };
+var PLAYERS=[
+  {name:'Banuu',emoji:'🌵',color:'#00FF88'},
+  {name:'Luzz',emoji:'🔥',color:'#FF2D4B'},
+  {name:'Y',emoji:'⚡',color:'#FFD700'},
+  {name:'Nicooo',emoji:'💰',color:'#FF6B1A'}
+];
 var S={day:1,challenges:{},players:[],ids:[]};
+
+function render(){
+  var html='<h2 style="color:#FFD700;margin-bottom:16px">Day '+S.day+'</h2>';
+  S.players.forEach(function(a){
+    var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+    var cid=a.rerollId>0?a.rerollId:a.challengeId;
+    var ch=S.challenges[cid]||{name:'?',pts:0,spice:''};
+    html+='<div style="background:#0A0A18;border-radius:14px;padding:16px;margin-bottom:12px;">'
+      +'<div style="color:'+pl.color+';font-weight:900;font-size:20px;margin-bottom:6px">'+pl.emoji+' '+pl.name+'</div>'
+      +'<div style="font-size:14px;margin-bottom:4px">'+ch.name+'</div>'
+      +'<div style="font-size:12px;color:#FFD700">'+ch.spice+' - '+ch.pts+' pts | Streak: '+a.winStreak+'</div>'
+      +'</div>';
+  });
+  document.getElementById('root').innerHTML=html;
+}
 
 query(DB.system).then(function(sys){
   S.day=gp(sys[0],'Day_Counter','num')||1;
@@ -46,14 +67,3 @@ query(DB.system).then(function(sys){
       defisReussis:gp(p,'Defis_Reussis','num')||0,
       isValidated:gp(p,'Is_Validated','check'),
       challengeId:gp(p,'Challenge_ID_Today','fnum')||0,
-      hasRerolled:gp(p,'Has_Rerolled','check'),
-      rerollId:gp(p,'Reroll_Challenge_ID','num')||0
-    };
-  }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
-  document.getElementById('root').textContent='Day '+S.day+' | Players: '+S.players.length+' | Challenges: '+S.ids.length;
-}).catch(function(e){
-  document.getElementById('root').textContent='ERROR: '+e.message;
-});
-</script>
-</body>
-</html>
