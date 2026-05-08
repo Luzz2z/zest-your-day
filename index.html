@@ -324,7 +324,7 @@ powerType:getProp(p,‘Power_Type’,‘select’)||‘❌ None’,
 powerTarget:getProp(p,‘Power_Target’,‘text’)||’’,
 powerUsed:getProp(p,‘Power_Used’,‘checkbox’),
 rouletteMultiplier:getProp(p,‘Roulette_Multiplier’,‘number’)||1,
-shieldUsedToday:getProp(p,‘Shield_Used_Today’,‘checkbox’),
+shieldUsedToday:getProp(p,‘Shield_Used_Today’,‘checkbox’)||false,
 effectBridage:false,
 effectUpgrade:null,
 effectExtinct:false,
@@ -456,7 +456,7 @@ const target=STATE.selectedTarget;
 // Check shield — only if shield not already consumed today
 if(target&&target!==‘myself’){
 const targetAsg=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===target);
-if(targetAsg&&targetAsg.powerType===‘🛡️ Shield’&&!targetAsg.powerUsed&&!targetAsg.shieldUsedToday){
+if(targetAsg&&targetAsg.powerType===‘🛡️ Shield’&&!targetAsg.powerUsed&&!targetAsg.shieldUsedToday&&!targetAsg.shieldResolved){
 STATE.pendingShield={attackerAsg:asg,targetAsg,target,upgradeDir:STATE.selectedUpgradeDir};
 showShieldPrompt(asg,targetAsg);
 return;
