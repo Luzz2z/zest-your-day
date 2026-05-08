@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/welcome", "destination": "/welcome.html" }
+    { "source": "/welcome", "destination": "/welcome.html" },
+    { "source": "/api/notion/:path*", "destination": "/api/notion" }
   ]
 }
