@@ -1,61 +1,8 @@
 <!DOCTYPE html>
-
 <html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zest Your Day</title>
-<style>
-:root{--red:#FF2D4B;--orange:#FF6B1A;--yellow:#FFD700;--green:#00FF88;--cyan:#00EEFF;--darker:#050508;--card:#0A0A18;--text:#F5F5F5;--muted:#6B7280;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:sans-serif;background:var(--darker);color:var(--text);min-height:100vh;}
-.app{max-width:480px;margin:0 auto;padding:0 0 80px;}
-.header{padding:40px 20px 20px;text-align:center;}
-.mascot{font-size:64px;display:block;}
-.title{font-size:42px;font-weight:900;background:linear-gradient(135deg,var(--red),var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:8px 0 4px;}
-.subtitle{font-size:11px;color:var(--cyan);text-transform:uppercase;letter-spacing:4px;font-weight:700;}
-.day-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:6px 18px;font-size:14px;font-weight:900;color:var(--yellow);margin-top:12px;}
-.section-title{font-size:16px;font-weight:900;text-transform:uppercase;letter-spacing:2px;padding:0 20px 12px;color:var(--muted);}
-.cards{padding:0 16px;display:flex;flex-direction:column;gap:14px;margin-bottom:28px;}
-.card{background:var(--card);border-radius:20px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;}
-.card.validated{border-color:rgba(0,255,136,0.3);}
-.card-band{height:3px;}
-.card-cover{height:64px;display:flex;align-items:center;padding:0 18px;gap:12px;}
-.player-name{font-size:22px;font-weight:900;}
-.card-body{padding:12px 18px 16px;}
-.streak-pill{display:inline-flex;align-items:center;gap:4px;background:rgba(255,107,26,0.1);border:1px solid rgba(255,107,26,0.3);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:900;color:var(--orange);margin-bottom:12px;}
-.challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:14px;margin-bottom:12px;}
-.challenge-num{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;}
-.challenge-name{font-weight:900;font-size:16px;line-height:1.4;margin-bottom:8px;}
-.spice{font-size:12px;font-weight:700;padding:3px 10px;border-radius:8px;background:rgba(255,255,255,0.06);display:inline-block;}
-.card-actions{display:flex;align-items:center;justify-content:space-between;}
-.done-label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-.check-box{width:34px;height:34px;border-radius:10px;border:2px solid rgba(255,255,255,0.12);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all 0.2s;}
-.check-box.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 20px rgba(0,255,136,0.5);}
-.btn-reroll{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:10px;padding:9px 14px;font-size:12px;font-weight:900;color:#e879f9;cursor:pointer;font-family:sans-serif;}
-.btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
-.lb-wrap{padding:0 16px;}
-.lb-card{background:var(--card);border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
-.lb-header{display:grid;grid-template-columns:40px 1fr 60px 60px 52px;gap:8px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.04);}
-.lb-header span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;text-align:center;font-weight:700;}
-.lb-header span:nth-child(2){text-align:left;}
-.lb-row{display:grid;grid-template-columns:40px 1fr 60px 60px 52px;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.03);}
-.lb-row:last-child{border-bottom:none;}
-.lb-rank{font-size:20px;text-align:center;}
-.lb-name{font-weight:900;font-size:14px;}
-.lb-stat{text-align:center;}
-.lb-val{font-weight:900;font-size:15px;}
-.lb-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;}
-.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:24px 16px;}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);color:white;font-weight:900;padding:12px 24px;border-radius:40px;font-size:14px;z-index:999;transition:transform 0.3s;white-space:nowrap;}
-.toast.show{transform:translateX(-50%) translateY(0);}
-</style>
-</head>
-<body>
-<div class="app">
-  <div id="root">Loading...</div>
-</div>
-<div class="toast" id="toast"></div>
+<head><meta charset="UTF-8"></head>
+<body style="background:#050508;color:#F5F5F5;font-family:sans-serif;padding:20px;">
+<div id="root">start</div>
 <script>
 var DB={
   system:'354403dde0e380aa85bfe7d9fd139be5',
@@ -68,142 +15,97 @@ var PLAYERS=[
   {name:'Y',emoji:'⚡',color:'#FFD700'},
   {name:'Nicooo',emoji:'💰',color:'#FF6B1A'}
 ];
-var RANKS=['🥇','🥈','🥉','4️⃣'];
 var S={day:1,challenges:{},players:[],ids:[]};
 
-function sb(s){return s>=10?3:s>=5?2:s>=3?1:0;}
-function sc(p){return p>=5?’#FF2D4B’:p>=3?’#FF6B1A’:p>=2?’#FFD700’:’#00FF88’;}
-
-function toast(msg,col){
-var t=document.getElementById(‘toast’);
-t.textContent=msg;t.style.background=col||’#00FF88’;
-t.classList.add(‘show’);
-setTimeout(function(){t.classList.remove(‘show’);},2500);
-}
-
 function query(dbId){
-return fetch(’/api/notion/databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:’{}’}).then(function(r){return r.json();}).then(function(d){return d.results;});
+  return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
 }
 function patch(pageId,props){
-return fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:props})}).then(function(r){return r.json();});
+  return fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:props})}).then(function(r){return r.json();});
 }
 function gp(page,name,type){
-var p=page.properties[name];if(!p)return null;
-if(type===‘num’)return p.number!=null?p.number:0;
-if(type===‘title’)return p.title&&p.title[0]?p.title[0].plain_text:’’;
-if(type===‘check’)return p.checkbox===true;
-if(type===‘fnum’)return p.formula?p.formula.number||0:0;
-if(type===‘fstr’)return p.formula?p.formula.string||’’:’’;
-if(type===‘sel’)return p.select?p.select.name||’’:’’;
-return null;
+  var p=page.properties[name];if(!p)return null;
+  if(type==='num')return p.number!=null?p.number:0;
+  if(type==='title')return p.title&&p.title[0]?p.title[0].plain_text:'';
+  if(type==='check')return p.checkbox===true;
+  if(type==='fnum')return p.formula?p.formula.number||0:0;
+  if(type==='fstr')return p.formula?p.formula.string||'':'';
+  if(type==='sel')return p.select?p.select.name||'':'';
+  return null;
 }
 
 window.validate=function(pageId,cur){
-var nv=!cur;
-patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
-var a=S.players.find(function(x){return x.pageId===pageId;});
-if(a)a.isValidated=nv;
-render();
-toast(nv?‘Challenge done!’:‘Removed’,nv?’#00FF88’:’#FF2D4B’);
-});
+  var nv=!cur;
+  patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
+    var a=S.players.find(function(x){return x.pageId===pageId;});
+    if(a)a.isValidated=nv;
+    render();
+  });
 };
 
 window.reroll=function(pageId){
-var a=S.players.find(function(x){return x.pageId===pageId;});
-if(!a||a.hasRerolled)return;
-var cur=a.rerollId>0?a.rerollId:a.challengeId;
-var avail=S.ids.filter(function(id){return id!==cur;});
-if(!avail.length){toast(‘No other challenges!’,’#FF6B1A’);return;}
-var newId=avail[Math.floor(Math.random()*avail.length)];
-patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}).then(function(){
-a.hasRerolled=true;a.rerollId=newId;
-render();toast(‘Rerolled!’,’#BF00FF’);
-});
+  var a=S.players.find(function(x){return x.pageId===pageId;});
+  if(!a||a.hasRerolled)return;
+  var cur=a.rerollId>0?a.rerollId:a.challengeId;
+  var avail=S.ids.filter(function(id){return id!==cur;});
+  if(!avail.length)return;
+  var newId=avail[Math.floor(Math.random()*avail.length)];
+  patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}).then(function(){
+    a.hasRerolled=true;a.rerollId=newId;
+    render();
+  });
 };
 
 function render(){
-var lb=S.players.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
-var cards=S.players.map(function(a){
-var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
-var cid=a.rerollId>0?a.rerollId:a.challengeId;
-var ch=S.challenges[cid]||{name:’?’,pts:0,spice:’’};
-var bonus=sb(a.winStreak);
-return ‘<div class="card'+(a.isValidated?' validated':'')+'">’
-+’<div class="card-band" style="background:'+pl.color+'"></div>’
-+’<div class="card-cover"><span style="font-size:32px">’+pl.emoji+’</span>’
-+’<span class="player-name" style="color:'+pl.color+'">’+pl.name+’</span></div>’
-+’<div class="card-body">’
-+’<div class="streak-pill">🔥 ‘+a.winStreak+’ streak’+(bonus>0?’ +’+bonus+‘pt’:’’)+’</div>’
-+’<div class="challenge-box">’
-+’<div class="challenge-num">Challenge #’+cid+’</div>’
-+’<div class="challenge-name">’+ch.name+’</div>’
-+’<span class="spice" style="color:'+sc(ch.pts)+'">’+ch.spice+’ - ‘+ch.pts+‘pt’+(ch.pts>1?‘s’:’’)+’</span>’
-+’</div>’
-+’<div class="card-actions">’
-+’<div style="display:flex;align-items:center;gap:8px"><span class="done-label">Done?</span>’
-+’<div class="check-box'+(a.isValidated?' checked':'')+'" onclick="validate(\''+a.pageId+'\','+a.isValidated+')">’+(a.isValidated?‘✓’:’’)+’</div></div>’
-+’<button class=“btn-reroll” onclick=“reroll('’+a.pageId+’')”’+(a.hasRerolled?’ disabled’:’’)+’>🎲 ‘+(a.hasRerolled?‘Rerolled’:‘Reroll’)+’</button>’
-+’</div></div></div>’;
-}).join(’’);
-
-var lbRows=lb.map(function(a,i){
-var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
-return ‘<div class="lb-row">’
-+’<div class="lb-rank">’+(RANKS[i]||i+1)+’</div>’
-+’<div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">’+pl.emoji+’</span><span class="lb-name" style="color:'+pl.color+'">’+pl.name+’</span></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#FFD700">’+a.totalScore+’</div><div class="lb-lbl">pts</div></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">’+a.winStreak+‘🔥</div><div class="lb-lbl">streak</div></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#00FF88">’+a.defisReussis+’</div><div class="lb-lbl">done</div></div>’
-+’</div>’;
-}).join(’’);
-
-document.getElementById(‘root’).innerHTML=
-‘<div class="header"><span class="mascot">🌶️</span>’
-+’<div class="title">ZEST YOUR DAY</div>’
-+’<div class="subtitle">Mexico Edition</div>’
-+’<div class="day-badge">Day ‘+S.day+’</div></div>’
-+’<div class="section-title">Challenges</div>’
-+’<div class="cards">’+cards+’</div>’
-+’<div class="divider"></div>’
-+’<div class="section-title">Leaderboard</div>’
-+’<div class="lb-wrap"><div class="lb-card">’
-+’<div class="lb-header"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>Done</span></div>’
-+lbRows+’</div></div>’;
+  var html='<h2 style="color:#FFD700;margin-bottom:16px">Day '+S.day+'</h2>';
+  S.players.forEach(function(a){
+    var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+    var cid=a.rerollId>0?a.rerollId:a.challengeId;
+    var ch=S.challenges[cid]||{name:'?',pts:0,spice:''};
+    html+='<div style="background:#0A0A18;border-radius:14px;padding:16px;margin-bottom:12px;border:1px solid '+(a.isValidated?'#00FF88':'rgba(255,255,255,0.06)')+'">'
+      +'<div style="color:'+pl.color+';font-weight:900;font-size:20px;margin-bottom:6px">'+pl.emoji+' '+pl.name+'</div>'
+      +'<div style="font-size:14px;margin-bottom:4px">'+ch.name+'</div>'
+      +'<div style="font-size:12px;color:#FFD700;margin-bottom:10px">'+ch.spice+' - '+ch.pts+' pts | Streak: '+a.winStreak+'</div>'
+      +'<button onclick="validate(\''+a.pageId+'\','+a.isValidated+')" style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:10px;padding:8px 14px;color:#00FF88;font-weight:900;cursor:pointer;margin-right:8px">'+(a.isValidated?'Done':'Mark done')+'</button>'
+      +'<button onclick="reroll(\''+a.pageId+'\')" '+(a.hasRerolled?'disabled':'')+' style="background:rgba(191,0,255,0.1);border:1px solid rgba(191,0,255,0.3);border-radius:10px;padding:8px 14px;color:#e879f9;font-weight:900;cursor:pointer">Reroll</button>'
+      +'</div>';
+  });
+  document.getElementById('root').innerHTML=html;
 }
 
 function init(){
-query(DB.system).then(function(sys){
-S.day=gp(sys[0],‘Day_Counter’,‘num’)||1;
-return query(DB.challenges);
-}).then(function(chs){
-chs.forEach(function(p){
-var id=gp(p,‘ID_Global’,‘num’);
-var st=gp(p,‘Status’,‘sel’);
-if(st===‘✅ Active’||!st){
-S.challenges[id]={name:gp(p,‘Name’,‘title’),pts:gp(p,‘Points’,‘num’)||0,spice:gp(p,‘Spice_Level’,‘fstr’)||’’};
-S.ids.push(id);
-}
-});
-return query(DB.assignments);
-}).then(function(asgs){
-S.players=asgs.map(function(p){
-return{
-pageId:p.id,playerIndex:gp(p,‘Player_Index’,‘num’)||0,
-winStreak:gp(p,‘Win_Streak’,‘num’)||0,totalScore:gp(p,‘Total_Score’,‘num’)||0,
-defisReussis:gp(p,‘Defis_Reussis’,‘num’)||0,
-isValidated:gp(p,‘Is_Validated’,‘check’),
-challengeId:gp(p,‘Challenge_ID_Today’,‘fnum’)||0,
-hasRerolled:gp(p,‘Has_Rerolled’,‘check’),
-rerollId:gp(p,‘Reroll_Challenge_ID’,‘num’)||0
-};
-}).sort(function(a,b){return a.playerIndex-b.playerIndex;});
-render();
-}).catch(function(e){
-document.getElementById(‘root’).innerHTML=’<div style="padding:20px;color:#FF2D4B">Error: ‘+e.message+’</div>’;
-});
+  document.getElementById('root').textContent='loading...';
+  query(DB.system).then(function(sys){
+    S.day=gp(sys[0],'Day_Counter','num')||1;
+    return query(DB.challenges);
+  }).then(function(chs){
+    chs.forEach(function(p){
+      var id=gp(p,'ID_Global','num');
+      var st=gp(p,'Status','sel');
+      if(st==='✅ Active'||!st){
+        S.challenges[id]={name:gp(p,'Name','title'),pts:gp(p,'Points','num')||0,spice:gp(p,'Spice_Level','fstr')||''};
+        S.ids.push(id);
+      }
+    });
+    return query(DB.assignments);
+  }).then(function(asgs){
+    S.players=asgs.map(function(p){
+      return{
+        pageId:p.id,playerIndex:gp(p,'Player_Index','num')||0,
+        winStreak:gp(p,'Win_Streak','num')||0,totalScore:gp(p,'Total_Score','num')||0,
+        defisReussis:gp(p,'Defis_Reussis','num')||0,
+        isValidated:gp(p,'Is_Validated','check'),
+        challengeId:gp(p,'Challenge_ID_Today','fnum')||0,
+        hasRerolled:gp(p,'Has_Rerolled','check'),
+        rerollId:gp(p,'Reroll_Challenge_ID','num')||0
+      };
+    }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
+    render();
+  }).catch(function(e){
+    document.getElementById('root').textContent='ERROR: '+e.message;
+  });
 }
 init();
 </script>
-
 </body>
 </html>
