@@ -22,6 +22,15 @@ body{background:#050508;color:#F5F5F5;font-family:sans-serif;padding:0 0 80px;}
 .btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
 .section-title{font-size:15px;font-weight:900;text-transform:uppercase;letter-spacing:2px;padding:0 20px 12px;color:#6B7280;}
 .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:24px 16px;}
+.lb-wrap{padding:0 16px;}
+.lb-card{background:#0A0A18;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
+.lb-row{display:grid;grid-template-columns:40px 1fr 60px 60px 52px;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.03);}
+.lb-row:last-child{border-bottom:none;}
+.lb-rank{font-size:20px;text-align:center;}
+.lb-name{font-weight:900;font-size:14px;}
+.lb-stat{text-align:center;}
+.lb-val{font-weight:900;font-size:15px;}
+.lb-lbl{font-size:9px;color:#6B7280;text-transform:uppercase;}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);color:white;font-weight:900;padding:12px 24px;border-radius:40px;font-size:14px;z-index:999;transition:transform 0.3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 </style>
@@ -84,7 +93,11 @@ window.reroll=function(pageId){
 };
 
 function render(){
+  var lb=S.players.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
+  var medals=['🥇','🥈','🥉','4'];
+
   var html='<div style="padding:32px 20px 16px;text-align:center"><div style="font-size:56px">🌶️</div><div style="font-size:36px;font-weight:900;background:linear-gradient(135deg,#FF2D4B,#FF6B1A,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent">ZEST YOUR DAY</div><div style="font-size:11px;color:#00EEFF;text-transform:uppercase;letter-spacing:4px">Mexico Edition</div><div style="display:inline-flex;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:6px 18px;font-size:14px;font-weight:900;color:#FFD700;margin-top:12px">Day '+S.day+'</div></div>';
+
   html+='<div class="section-title">Challenges</div>';
   S.players.forEach(function(a){
     var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
@@ -104,6 +117,21 @@ function render(){
       +'<button class="btn-reroll" onclick="reroll(\''+a.pageId+'\')"'+(a.hasRerolled?' disabled':'')+'>🎲 '+(a.hasRerolled?'Rerolled':'Reroll')+'</button>'
       +'</div></div></div>';
   });
+
+  html+='<div class="divider"></div><div class="section-title">Leaderboard</div>';
+  html+='<div class="lb-wrap"><div class="lb-card">';
+  lb.forEach(function(a,i){
+    var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+    html+='<div class="lb-row">'
+      +'<div class="lb-rank">'+(medals[i]||i+1)+'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">'+pl.emoji+'</span><span class="lb-name" style="color:'+pl.color+'">'+pl.name+'</span></div>'
+      +'<div class="lb-stat"><div class="lb-val" style="color:#FFD700">'+a.totalScore+'</div><div class="lb-lbl">pts</div></div>'
+      +'<div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">'+a.winStreak+'</div><div class="lb-lbl">streak</div></div>'
+      +'<div class="lb-stat"><div class="lb-val" style="color:#00FF88">'+a.defisReussis+'</div><div class="lb-lbl">done</div></div>'
+      +'</div>';
+  });
+  html+='</div></div>';
+
   document.getElementById('root').innerHTML=html;
 }
 
