@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
-<body>
+<body style="background:#050508;color:#F5F5F5;font-family:sans-serif;padding:20px;">
 <div id="root">start</div>
 <script>
 var DB={
@@ -9,11 +9,20 @@ var DB={
   challenges:'354403dde0e3804f8644d242a0ec6bf6',
   assignments:'354403dde0e380f797ccfb85ad5a072e'
 };
+var PLAYERS=[
+  {name:'Banuu',emoji:'🌵',color:'#00FF88'},
+  {name:'Luzz',emoji:'🔥',color:'#FF2D4B'},
+  {name:'Y',emoji:'⚡',color:'#FFD700'},
+  {name:'Nicooo',emoji:'💰',color:'#FF6B1A'}
+];
+var S={day:1,challenges:{},players:[],ids:[]};
 
 function query(dbId){
   return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
 }
-
+function patch(pageId,props){
+  return fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:props})}).then(function(r){return r.json();});
+}
 function gp(page,name,type){
   var p=page.properties[name];if(!p)return null;
   if(type==='num')return p.number!=null?p.number:0;
@@ -25,17 +34,73 @@ function gp(page,name,type){
   return null;
 }
 
+window.validate=function(pageId,cur){
+  var nv=!cur;
+  patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
+    var a=S.players.find(function(x){return x.pageId===pageId;});
+    if(a)a.isValidated=nv;
+    render();
+  });
+};
+
+window.reroll=function(pageId){
+  var a=S.players.find(function(x){return x.pageId===pageId;});
+  if(!a||a.hasRerolled)return;
+  var cur=a.rerollId>0?a.rerollId:a.challengeId;
+  var avail=S.ids.filter(function(id){return id!==cur;});
+  if(!avail.length)return;
+  var newId=avail[Math.floor(Math.random()*avail.length)];
+  patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}).then(function(){
+    a.hasRerolled=true;a.rerollId=newId;
+    render();
+  });
+};
+
+function render(){
+  var html='<h2 style="color:#FFD700;margin-bottom:16px">Day '+S.day+'</h2>';
+  S.players.forEach(function(a){
+    var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+    var cid=a.rerollId>0?a.rerollId:a.challengeId;
+    var ch=S.challenges[cid]||{name:'?',pts:0,spice:''};
+    html+='<div style="background:#0A0A18;border-radius:14px;padding:16px;margin-bottom:12px;border:1px solid '+(a.isValidated?'#00FF88':'rgba(255,255,255,0.06)')+'">'
+      +'<div style="color:'+pl.color+';font-weight:900;font-size:20px;margin-bottom:6px">'+pl.emoji+' '+pl.name+'</div>'
+      +'<div style="font-size:14px;margin-bottom:4px">'+ch.name+'</div>'
+      +'<div style="font-size:12px;color:#FFD700;margin-bottom:10px">'+ch.spice+' - '+ch.pts+' pts | Streak: '+a.winStreak+'</div>'
+      +'<button onclick="validate(\''+a.pageId+'\','+a.isValidated+')" style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:10px;padding:8px 14px;color:#00FF88;font-weight:900;cursor:pointer;margin-right:8px">'+(a.isValidated?'Done':'Mark done')+'</button>'
+      +'<button onclick="reroll(\''+a.pageId+'\')" '+(a.hasRerolled?'disabled':'')+' style="background:rgba(191,0,255,0.1);border:1px solid rgba(191,0,255,0.3);border-radius:10px;padding:8px 14px;color:#e879f9;font-weight:900;cursor:pointer">Reroll</button>'
+      +'</div>';
+  });
+  document.getElementById('root').innerHTML=html;
+}
+
 function init(){
-  document.getElementById('root').textContent='loading system...';
+  document.getElementById('root').textContent='loading...';
   query(DB.system).then(function(sys){
-    var day=gp(sys[0],'Day_Counter','num')||1;
-    document.getElementById('root').textContent='system ok, day='+day+', loading challenges...';
+    S.day=gp(sys[0],'Day_Counter','num')||1;
     return query(DB.challenges);
   }).then(function(chs){
-    document.getElementById('root').textContent='challenges ok: '+chs.length+', loading players...';
+    chs.forEach(function(p){
+      var id=gp(p,'ID_Global','num');
+      var st=gp(p,'Status','sel');
+      if(st==='✅ Active'||!st){
+        S.challenges[id]={name:gp(p,'Name','title'),pts:gp(p,'Points','num')||0,spice:gp(p,'Spice_Level','fstr')||''};
+        S.ids.push(id);
+      }
+    });
     return query(DB.assignments);
   }).then(function(asgs){
-    document.getElementById('root').textContent='ALL OK! Players: '+asgs.length;
+    S.players=asgs.map(function(p){
+      return{
+        pageId:p.id,playerIndex:gp(p,'Player_Index','num')||0,
+        winStreak:gp(p,'Win_Streak','num')||0,totalScore:gp(p,'Total_Score','num')||0,
+        defisReussis:gp(p,'Defis_Reussis','num')||0,
+        isValidated:gp(p,'Is_Validated','check'),
+        challengeId:gp(p,'Challenge_ID_Today','fnum')||0,
+        hasRerolled:gp(p,'Has_Rerolled','check'),
+        rerollId:gp(p,'Reroll_Challenge_ID','num')||0
+      };
+    }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
+    render();
   }).catch(function(e){
     document.getElementById('root').textContent='ERROR: '+e.message;
   });
