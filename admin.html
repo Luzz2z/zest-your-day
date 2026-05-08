@@ -12,54 +12,49 @@
     body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);min-height:100vh;}
     body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,45,75,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,45,75,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
     .app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 20px 80px;}
-    .header{text-align:center;margin-bottom:32px;}
-    .header-mascot{font-size:48px;display:block;animation:bounce 2s ease-in-out infinite;}
+    .header{text-align:center;margin-bottom:28px;}
+    .mascot{font-size:48px;display:block;animation:bounce 2s ease-in-out infinite;}
     @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
     h1{font-family:'Bangers',cursive;font-size:38px;letter-spacing:3px;background:linear-gradient(135deg,var(--red),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:8px 0 4px;}
     .subtitle{font-size:11px;color:var(--cyan);text-transform:uppercase;letter-spacing:3px;font-weight:700;}
-    .day-card{background:var(--card);border-radius:20px;border:1px solid rgba(255,45,75,0.2);padding:24px;text-align:center;margin-bottom:16px;}
-    .day-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:3px;margin-bottom:6px;}
-    .day-number{font-family:'Bangers',cursive;font-size:72px;color:var(--yellow);line-height:1;text-shadow:0 0 40px rgba(255,215,0,0.4);}
+    .day-card{background:var(--card);border-radius:20px;border:1px solid rgba(255,45,75,0.2);padding:20px;text-align:center;margin-bottom:20px;}
+    .day-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:3px;margin-bottom:4px;}
+    .day-number{font-family:'Bangers',cursive;font-size:64px;color:var(--yellow);line-height:1;text-shadow:0 0 40px rgba(255,215,0,0.4);}
     .section-title{font-family:'Bangers',cursive;font-size:18px;letter-spacing:2px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
     .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,75,0.3),transparent);}
 
-    /* LAUNCH BTN */
-    .btn-launch{width:100%;background:linear-gradient(135deg,var(--green),#1db954);border:none;border-radius:18px;padding:20px;font-family:'Bangers',cursive;font-size:26px;letter-spacing:3px;color:#000;cursor:pointer;box-shadow:0 0 40px rgba(0,255,136,0.3);transition:transform 0.15s;margin-bottom:12px;}
+    /* LAUNCH */
+    .btn-launch{width:100%;background:linear-gradient(135deg,var(--green),#1db954);border:none;border-radius:18px;padding:18px;font-family:'Bangers',cursive;font-size:24px;letter-spacing:3px;color:#000;cursor:pointer;box-shadow:0 0 30px rgba(0,255,136,0.25);transition:transform 0.15s;margin-bottom:10px;}
     .btn-launch:active{transform:scale(0.97);}
     .btn-launch:disabled{opacity:0.4;cursor:not-allowed;}
 
-    .btn-nextday{width:100%;background:linear-gradient(135deg,var(--red),var(--orange));border:none;border-radius:18px;padding:20px;font-family:'Bangers',cursive;font-size:26px;letter-spacing:3px;color:white;cursor:pointer;box-shadow:0 0 40px rgba(255,45,75,0.3);transition:transform 0.15s;margin-bottom:20px;}
+    /* NEXT DAY */
+    .btn-nextday{width:100%;background:linear-gradient(135deg,var(--red),var(--orange));border:none;border-radius:18px;padding:18px;font-family:'Bangers',cursive;font-size:24px;letter-spacing:3px;color:white;cursor:pointer;box-shadow:0 0 30px rgba(255,45,75,0.25);transition:transform 0.15s;margin-bottom:16px;}
     .btn-nextday:active{transform:scale(0.97);}
     .btn-nextday:disabled{opacity:0.4;cursor:not-allowed;}
 
     .warning{background:rgba(255,107,26,0.06);border:1px solid rgba(255,107,26,0.2);border-radius:14px;padding:12px 16px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
     .warning strong{color:var(--orange);}
+    .info{background:rgba(0,238,255,0.05);border:1px solid rgba(0,238,255,0.2);border-radius:14px;padding:12px 16px;font-size:13px;color:var(--cyan);line-height:1.6;margin-bottom:16px;font-weight:700;}
 
-    /* STATUS */
     .status-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:900;margin-bottom:16px;}
     .status-launched{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--green);}
     .status-waiting{background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.3);color:var(--yellow);}
+    .status-reveal{background:rgba(0,238,255,0.08);border:1px solid rgba(0,238,255,0.3);color:var(--cyan);}
 
     /* PLAYERS */
-    .players-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+    .players-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
     .player-row{background:var(--card);border-radius:16px;padding:14px 18px;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;gap:12px;}
     .player-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0;}
-    .player-emoji{font-size:26px;}
+    .player-emoji-sm{font-size:26px;}
     .player-info{flex:1;min-width:0;}
-    .player-name-admin{font-weight:900;font-size:15px;margin-bottom:2px;}
-    .player-challenge{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .player-power{font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap;}
+    .player-name-sm{font-weight:900;font-size:15px;margin-bottom:2px;}
+    .player-challenge-sm{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .player-power-sm{font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;display:inline-block;margin-top:4px;}
     .player-right{display:flex;align-items:center;gap:10px;}
     .checkbox-wrap input[type="checkbox"]{display:none;}
     .checkbox-custom{width:34px;height:34px;border-radius:10px;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.25s;font-size:16px;}
     .checkbox-wrap input:checked+.checkbox-custom{background:var(--green);border-color:var(--green);box-shadow:0 0 20px rgba(0,255,136,0.5);}
-
-    /* POWER GRID */
-    .power-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
-    .power-info-card{background:var(--card);border-radius:14px;padding:14px;border:1px solid rgba(255,255,255,0.05);}
-    .power-info-icon{font-size:24px;margin-bottom:6px;}
-    .power-info-name{font-family:'Bangers',cursive;font-size:15px;letter-spacing:1px;margin-bottom:4px;}
-    .power-info-desc{font-size:11px;color:var(--muted);line-height:1.4;}
 
     .back-link{display:block;text-align:center;color:var(--muted);font-size:13px;font-weight:700;text-decoration:none;margin-top:20px;}
     .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:40vh;gap:16px;}
@@ -68,13 +63,13 @@
     .loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:2px;font-size:11px;}
     .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;}
     .toast.show{transform:translateX(-50%) translateY(0);}
-    .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:24px 0;}
+    .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:20px 0;}
   </style>
 </head>
 <body>
 <div class="app">
   <div class="header">
-    <span class="header-mascot">⚙️</span>
+    <span class="mascot">⚙️</span>
     <h1>ADMIN PANEL</h1>
     <div class="subtitle">Game Master Only 🌶️</div>
   </div>
@@ -96,25 +91,21 @@ const PLAYERS=[
 ];
 const ALL_POWERS=['🦹 Entourloupeur','🔄 Swap','💀 Bridage','⚡ Pas si vite','🛡️ Shield','🎰 Roulette','👯 Copier-Coller','🔥 Extincteur'];
 const POWER_COLORS={'🦹 Entourloupeur':'#BF00FF','🔄 Swap':'#00EEFF','💀 Bridage':'#FF2D4B','⚡ Pas si vite':'#FFD700','🛡️ Shield':'#00EEFF','🎰 Roulette':'#FF6B1A','👯 Copier-Coller':'#00FF88','🔥 Extincteur':'#FF2D4B'};
-const POWER_DESCS={'🦹 Entourloupeur':'Copy & steal someone\'s points','🔄 Swap':'Force a challenge swap','💀 Bridage':'×0.5 points today','⚡ Pas si vite':'Upgrade or downgrade difficulty','🛡️ Shield':'Block any power','🎰 Roulette':'×0, ×1 or ×2 random','👯 Copier-Coller':'Share challenge, ×2 if both win','🔥 Extincteur':'Reset someone\'s streak'};
+const SPICE_ORDER=['🌱 Mild','🌶️ Spicy','🔥 Hot','⚡ Atomic'];
+const SPICE_PTS={'🌱 Mild':1,'🌶️ Spicy':2,'🔥 Hot':3,'⚡ Atomic':5};
 
 function streakBonus(s){return s>=10?3:s>=5?2:s>=3?1:0;}
 
 async function notionQuery(dbId,body={}){
   const res=await fetch('/api/notion?endpoint=databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  const data=await res.json();
-  if(!res.ok)throw new Error(data.message);
-  return data.results;
+  const data=await res.json();if(!res.ok)throw new Error(data.message);return data.results;
 }
 async function notionPatch(pageId,properties){
   const res=await fetch('/api/notion?endpoint=pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties})});
-  const data=await res.json();
-  if(!res.ok)throw new Error(data.message);
-  return data;
+  const data=await res.json();if(!res.ok)throw new Error(data.message);return data;
 }
 function getProp(page,name,type){
-  const p=page.properties[name];
-  if(!p)return null;
+  const p=page.properties[name];if(!p)return null;
   if(type==='number')return p.number??0;
   if(type==='title')return p.title?.[0]?.plain_text??'';
   if(type==='checkbox')return p.checkbox??false;
@@ -154,28 +145,33 @@ async function loadData(){
     challengeId:getProp(p,'Challenge_ID_Today','formula_number'),
     rerollChallengeId:getProp(p,'Reroll_Challenge_ID','number'),
     powerType:getProp(p,'Power_Type','select')||'❌ None',
+    powerTarget:getProp(p,'Power_Target','text')||'',
     powerUsed:getProp(p,'Power_Used','checkbox'),
+    rouletteMultiplier:getProp(p,'Roulette_Multiplier','number')||1,
   })).sort((a,b)=>a.playerIndex-b.playerIndex);
 }
 
 function getEffectiveChallengeId(asg){
+  const playerName=PLAYERS[asg.playerIndex]?.name;
+  const swapper=STATE.assignments.find(a=>a.powerUsed&&a.powerType==='🔄 Swap'&&a.powerTarget===playerName&&a.playerIndex!==asg.playerIndex);
+  if(swapper)return(swapper.rerollChallengeId&&swapper.rerollChallengeId>0)?swapper.rerollChallengeId:swapper.challengeId;
+  if(asg.powerUsed&&asg.powerType==='🔄 Swap'&&asg.powerTarget){
+    const target=STATE.assignments.find(a=>PLAYERS[a.playerIndex]?.name===asg.powerTarget);
+    if(target)return(target.rerollChallengeId&&target.rerollChallengeId>0)?target.rerollChallengeId:target.challengeId;
+  }
   return(asg.rerollChallengeId&&asg.rerollChallengeId>0)?asg.rerollChallengeId:asg.challengeId;
 }
 
-// Assign random powers to all players
 async function assignPowers(){
-  // Shuffle powers — guarantee 1 Shield
-  const nonShieldPowers=ALL_POWERS.filter(p=>p!=='🛡️ Shield');
-  const shuffled=[...nonShieldPowers].sort(()=>Math.random()-0.5);
-  // Shield goes to random player
-  const shieldIndex=Math.floor(Math.random()*PLAYERS.length);
+  const nonShield=ALL_POWERS.filter(p=>p!=='🛡️ Shield');
+  const shuffled=[...nonShield].sort(()=>Math.random()-0.5);
+  const shieldIdx=Math.floor(Math.random()*PLAYERS.length);
   const powers=PLAYERS.map((_,i)=>{
-    if(i===shieldIndex)return'🛡️ Shield';
-    return shuffled[i<shieldIndex?i:i-1]||shuffled[i];
+    if(i===shieldIdx)return'🛡️ Shield';
+    const off=i<shieldIdx?i:i-1;
+    return shuffled[off]||shuffled[0];
   });
-
-  for(let i=0;i<STATE.assignments.length;i++){
-    const asg=STATE.assignments[i];
+  for(const asg of STATE.assignments){
     const power=powers[asg.playerIndex]||'❌ None';
     await notionPatch(asg.pageId,{
       Power_Type:{select:{name:power}},
@@ -183,21 +179,22 @@ async function assignPowers(){
       Power_Target:{rich_text:[{text:{content:''}}]},
       Roulette_Multiplier:{number:1},
     });
-    asg.powerType=power;
-    asg.powerUsed=false;
+    asg.powerType=power;asg.powerUsed=false;
   }
 }
 
-async function launchDefis(){
+async function launchDay(){
   const btn=document.getElementById('btn-launch');
-  btn.disabled=true;btn.textContent='⏳ Launching...';
+  if(btn){btn.disabled=true;btn.textContent='⏳ Assigning powers...';}
   try{
     await assignPowers();
-    await notionPatch(STATE.systemPageId,{Defis_Launched:{checkbox:true}});
-    STATE.defiLaunched=true;
-    showToast('🌅 Challenges launched! Powers assigned!','#00FF88');
+    // Do NOT set Defis_Launched yet — that happens after reveal on player page
+    showToast('🎴 Powers assigned! Go to player page for reveal →','#00FF88');
     await loadData();render();
-  }catch(e){showToast('❌ Error: '+e.message,'#FF2D4B');btn.disabled=false;btn.textContent='🌅 LAUNCH CHALLENGES';}
+  }catch(e){
+    showToast('❌ Error: '+e.message,'#FF2D4B');
+    if(btn){btn.disabled=false;btn.textContent='🌅 LAUNCH DAY';}
+  }
 }
 
 async function toggleValidation(pageId,current){
@@ -211,37 +208,45 @@ async function toggleValidation(pageId,current){
 
 async function nextDay(){
   const btn=document.getElementById('btn-nextday');
-  btn.disabled=true;btn.textContent='⏳ UPDATING...';
+  if(btn){btn.disabled=true;btn.textContent='⏳ UPDATING...';}
   try{
     for(const asg of STATE.assignments){
       const effectiveId=getEffectiveChallengeId(asg);
       const challenge=STATE.challenges[effectiveId];
-      const pts=challenge?.points??0;
+
+      // Get effective points (Bridage, Pas si vite, Roulette)
+      let pts=challenge?.points??0;
+      // Bridage
+      const bridager=STATE.assignments.find(a=>a.powerUsed&&a.powerType==='💀 Bridage'&&(a.powerTarget===PLAYERS[asg.playerIndex]?.name||(a.playerIndex===asg.playerIndex&&a.powerTarget==='myself')));
+      if(bridager&&asg.isValidated)pts=Math.ceil(pts*0.5);
+      // Pas si vite
+      const upgrader=STATE.assignments.find(a=>a.powerUsed&&a.powerType==='⚡ Pas si vite'&&a.powerTarget&&a.powerTarget.startsWith(PLAYERS[asg.playerIndex]?.name+'|'));
+      if(upgrader){
+        const dir=upgrader.powerTarget.split('|')[1];
+        const spiceStr=challenge?.spice||'';
+        const currentSpice=SPICE_ORDER.find(s=>spiceStr.includes(s.replace(/\S+ /,'')));
+        if(currentSpice){
+          const idx=SPICE_ORDER.indexOf(currentSpice);
+          const newIdx=dir==='upgrade'?Math.min(idx+1,3):Math.max(idx-1,0);
+          pts=SPICE_PTS[SPICE_ORDER[newIdx]]||pts;
+        }
+      }
+      // Roulette
+      if(asg.powerUsed&&asg.powerType==='🎰 Roulette'&&asg.isValidated)pts=pts*asg.rouletteMultiplier;
+
       const bonus=asg.isValidated?streakBonus(asg.winStreak):0;
 
-      // Handle Entourloupeur — check if someone copied this player
+      // Entourloupeur: someone stole this player's points
       const entourloupeur=STATE.assignments.find(a=>a.powerUsed&&a.powerType==='🦹 Entourloupeur'&&a.powerTarget===PLAYERS[asg.playerIndex]?.name&&a.isValidated);
-      const thisPlayerScore=entourloupeur?0:asg.isValidated?asg.totalScore+pts+bonus:asg.totalScore;
-      const thisPlayerStreak=asg.isValidated?asg.winStreak+1:0;
+      let finalPts=entourloupeur?0:(asg.isValidated?pts+bonus:0);
 
-      // Handle Copier-Coller — check if this player was targeted
-      const copierTarget=STATE.assignments.find(a=>a.powerUsed&&a.powerType==='👯 Copier-Coller'&&a.powerTarget===PLAYERS[asg.playerIndex]?.name);
-      let finalScore=thisPlayerScore;
-      if(copierTarget&&copierTarget.isValidated&&asg.isValidated){
-        // Both completed — ×2 each
-        finalScore=asg.totalScore+(pts*2)+bonus;
-      }
-
-      // Handle Bridage
-      const bridager=STATE.assignments.find(a=>a.powerUsed&&a.powerType==='💀 Bridage'&&(a.powerTarget===PLAYERS[asg.playerIndex]?.name));
-      if(bridager&&asg.isValidated){
-        const gainedPts=finalScore-asg.totalScore;
-        finalScore=asg.totalScore+Math.ceil(gainedPts*0.5);
-      }
+      // Copier-Coller: both complete = ×2
+      const copier=STATE.assignments.find(a=>a.powerUsed&&a.powerType==='👯 Copier-Coller'&&a.powerTarget===PLAYERS[asg.playerIndex]?.name);
+      if(copier&&copier.isValidated&&asg.isValidated&&!entourloupeur)finalPts=pts*2+bonus;
 
       await notionPatch(asg.pageId,{
-        Total_Score:{number:finalScore},
-        Win_Streak:{number:asg.isValidated?thisPlayerStreak:0},
+        Total_Score:{number:asg.totalScore+finalPts},
+        Win_Streak:{number:asg.isValidated?asg.winStreak+1:0},
         Defis_Reussis:{number:asg.isValidated?asg.defisReussis+1:asg.defisReussis},
         Is_Validated:{checkbox:false},
         Has_Rerolled:{checkbox:false},
@@ -252,51 +257,57 @@ async function nextDay(){
         Roulette_Multiplier:{number:1},
       });
     }
-    await notionPatch(STATE.systemPageId,{
-      Day_Counter:{number:STATE.dayCounter+1},
-      Defis_Launched:{checkbox:false},
-    });
+    await notionPatch(STATE.systemPageId,{Day_Counter:{number:STATE.dayCounter+1},Defis_Launched:{checkbox:false}});
     showToast('🌶️ Day '+(STATE.dayCounter+1)+' ready!','#FF6B1A');
     await loadData();render();
-  }catch(e){showToast('❌ Error: '+e.message,'#FF2D4B');btn.disabled=false;btn.textContent='⏭️ NEXT DAY';}
+  }catch(e){
+    showToast('❌ Error: '+e.message,'#FF2D4B');
+    if(btn){btn.disabled=false;btn.textContent='⏭️ NEXT DAY';}
+  }
 }
 
 function render(){
   const root=document.getElementById('root');
+  const powersAssigned=STATE.assignments.some(a=>a.powerType&&a.powerType!=='❌ None');
+
   root.innerHTML=`
-    <div class="day-card">
-      <div class="day-label">Current Day</div>
-      <div class="day-number">${STATE.dayCounter}</div>
-    </div>
+    <div class="day-card"><div class="day-label">Current Day</div><div class="day-number">${STATE.dayCounter}</div></div>
 
     <div style="text-align:center;margin-bottom:16px">
-      <span class="status-badge ${STATE.defiLaunched?'status-launched':'status-waiting'}">
-        ${STATE.defiLaunched?'✅ Challenges launched':'⏳ Waiting to launch'}
+      <span class="status-badge ${STATE.defiLaunched?'status-launched':powersAssigned?'status-reveal':'status-waiting'}">
+        ${STATE.defiLaunched?'✅ Day in progress':powersAssigned?'🌅 Reveal in progress on player page':'⏳ Not launched yet'}
       </span>
     </div>
 
-    ${!STATE.defiLaunched?`
-      <button class="btn-launch" id="btn-launch" onclick="launchDefis()">🌅 LAUNCH CHALLENGES</button>
-      <div class="warning">Assigns random powers to all players and reveals today's challenges.</div>
-    `:`
-      <div class="warning"><strong>⚠️ Next Day</strong> saves scores, resets everything, and moves to Day ${STATE.dayCounter+1}. Make sure all validations are done!</div>
-      <button class="btn-nextday" id="btn-nextday" onclick="nextDay()">⏭️ NEXT DAY</button>
-    `}
+    ${!powersAssigned&&!STATE.defiLaunched?`
+      <button class="btn-launch" id="btn-launch" onclick="launchDay()">🌅 LAUNCH DAY</button>
+      <div class="warning">Assigns random powers. Players then do the Morning Reveal on the main page.</div>
+    `:''}
 
-    <div class="section-title">✅ Today's Validations</div>
+    ${powersAssigned&&!STATE.defiLaunched?`
+      <div class="info">🌅 Powers assigned! Players are doing the Morning Reveal on the main page → <strong>zest-your-day.vercel.app</strong></div>
+    `:''}
+
+    ${STATE.defiLaunched?`
+      <div class="warning"><strong>⚠️ NEXT DAY</strong> saves all scores and resets everything for Day ${STATE.dayCounter+1}. Confirm all validations first!</div>
+      <button class="btn-nextday" id="btn-nextday" onclick="nextDay()">⏭️ NEXT DAY</button>
+    `:''}
+
+    <div class="section-title">✅ Validations</div>
     <div class="players-grid">
       ${STATE.assignments.map(asg=>{
         const player=PLAYERS[asg.playerIndex]||{name:asg.name,emoji:'🎮',color:'#8892A4'};
         const effectiveId=getEffectiveChallengeId(asg);
         const challenge=STATE.challenges[effectiveId];
         const powerColor=POWER_COLORS[asg.powerType]||'#6B7280';
+        const hasPower=asg.powerType&&asg.powerType!=='❌ None';
         return`<div class="player-row" style="border-color:${asg.isValidated?'rgba(0,255,136,0.2)':'rgba(255,255,255,0.05)'}">
           <div class="player-left">
-            <span class="player-emoji">${player.emoji}</span>
+            <span class="player-emoji-sm">${player.emoji}</span>
             <div class="player-info">
-              <div class="player-name-admin" style="color:${player.color}">${player.name}</div>
-              <div class="player-challenge">${challenge?.name??'—'}</div>
-              ${asg.powerType&&asg.powerType!=='❌ None'?`<div class="player-power" style="background:${powerColor}20;color:${powerColor};margin-top:4px">${asg.powerType}${asg.powerUsed?' ✓':''}</div>`:''}
+              <div class="player-name-sm" style="color:${player.color}">${player.name}</div>
+              <div class="player-challenge-sm">${challenge?.name??'—'}</div>
+              ${hasPower?`<span class="player-power-sm" style="background:${powerColor}20;color:${powerColor}">${asg.powerType}${asg.powerUsed?' ✓':''}</span>`:''}
             </div>
           </div>
           <div class="player-right">
@@ -312,23 +323,12 @@ function render(){
         </div>`;
       }).join('')}
     </div>
-
-    <div class="divider"></div>
-    <div class="section-title">🎴 Powers Reference</div>
-    <div class="power-grid">
-      ${ALL_POWERS.map(p=>`
-        <div class="power-info-card" style="border-color:${POWER_COLORS[p]}30">
-          <div class="power-info-icon">${p.split(' ')[0]}</div>
-          <div class="power-info-name" style="color:${POWER_COLORS[p]}">${p.split(' ').slice(1).join(' ')}</div>
-          <div class="power-info-desc">${POWER_DESCS[p]}</div>
-        </div>`).join('')}
-    </div>
   `;
 }
 
 async function init(){
   try{await loadData();render();}
-  catch(e){document.getElementById('root').innerHTML='<div style="color:#FF2D4B;padding:20px">❌ '+e.message+'</div>';}
+  catch(e){document.getElementById('root').innerHTML='<div style="color:#FF2D4B;padding:20px;font-weight:700">❌ '+e.message+'</div>';}
 }
 init();
 </script>
