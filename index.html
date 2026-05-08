@@ -186,9 +186,10 @@
 <div id="modal-container"></div>
 <div class="toast" id="toast"></div>
 <script>
-// PARTICLES
+// PARTICLES DISABLED - using aurora instead
 (function(){
   const canvas=document.getElementById('particle-canvas');
+  if(!canvas) return;
   const ctx=canvas.getContext('2d');
   const colors=['#FF2D4B','#FF6B1A','#FFD700','#00FF88','#00EEFF','#BF00FF'];
   let particles=[];
