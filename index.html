@@ -4,14 +4,30 @@
 <body>
 <div id="root">start</div>
 <script>
-document.getElementById('root').textContent = 'step1';
 var PLAYERS=[
   {name:'Banuu',emoji:'🌵',color:'#00FF88'},
   {name:'Luzz',emoji:'🔥',color:'#FF2D4B'},
   {name:'Y',emoji:'⚡',color:'#FFD700'},
   {name:'Nicooo',emoji:'💰',color:'#FF6B1A'}
 ];
-document.getElementById('root').textContent = 'step2 - PLAYERS ok';
+var S={day:1,challenges:{},players:[],ids:[]};
+
+function render(){
+  var html='<h2 style="color:#FFD700">Day '+S.day+'</h2>';
+  S.players.forEach(function(a){
+    var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+    html+='<div style="padding:10px;margin-bottom:8px;background:#0A0A18;border-radius:10px">'
+      +'<div style="color:'+pl.color+'">'+pl.emoji+' '+pl.name+'</div>'
+      +'</div>';
+  });
+  document.getElementById('root').innerHTML=html;
+}
+
+S.players=[
+  {playerIndex:0,winStreak:0,totalScore:0,defisReussis:0,isValidated:false,challengeId:1,hasRerolled:false,rerollId:0,pageId:'test'},
+  {playerIndex:1,winStreak:0,totalScore:0,defisReussis:0,isValidated:false,challengeId:2,hasRerolled:false,rerollId:0,pageId:'test2'}
+];
+render();
 </script>
 </body>
 </html>
