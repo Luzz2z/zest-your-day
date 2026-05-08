@@ -5,46 +5,13 @@
 <div id="root">start</div>
 <script>
 document.getElementById('root').textContent = 'step1';
-function query(dbId){
-  return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
-}
-document.getElementById('root').textContent = 'step2';
-function gp(page,name,type){
-  var p=page.properties[name];if(!p)return null;
-  if(type==='num')return p.number!=null?p.number:0;
-  if(type==='title')return p.title&&p.title[0]?p.title[0].plain_text:'';
-  if(type==='check')return p.checkbox===true;
-  if(type==='fnum')return p.formula?p.formula.number||0:0;
-  if(type==='fstr')return p.formula?p.formula.string||'':'';
-  if(type==='sel')return p.select?p.select.name||'':'';
-  return null;
-}
-document.getElementById('root').textContent = 'step3';
-var DB={
-  system:'354403dde0e380aa85bfe7d9fd139be5',
-  challenges:'354403dde0e3804f8644d242a0ec6bf6',
-  assignments:'354403dde0e380f797ccfb85ad5a072e'
-};
-document.getElementById('root').textContent = 'step4';
 var PLAYERS=[
-  {name:'Banuu',emoji:'B',color:'#00FF88'},
+  {name:'Banuu',emoji:'🌵',color:'#00FF88'},
   {name:'Luzz',emoji:'L',color:'#FF2D4B'},
   {name:'Y',emoji:'Y',color:'#FFD700'},
   {name:'Nicooo',emoji:'N',color:'#FF6B1A'}
 ];
-document.getElementById('root').textContent = 'step5';
-var S={day:1,challenges:{},players:[],ids:[]};
-document.getElementById('root').textContent = 'step6';
-function render(){
-  document.getElementById('root').textContent = 'render called';
-}
-document.getElementById('root').textContent = 'step7 - launching fetch';
-query(DB.system).then(function(sys){
-  S.day=1;
-  render();
-}).catch(function(e){
-  document.getElementById('root').textContent='ERROR: '+e.message;
-});
+document.getElementById('root').textContent = 'step2 - PLAYERS ok';
 </script>
 </body>
 </html>
