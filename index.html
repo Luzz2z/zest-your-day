@@ -3,13 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <style>
-body{background:#050508;color:#F5F5F5;}
+body{background:#050508;color:#F5F5F5;padding:20px;}
 </style>
 </head>
-<body style="padding:20px;">
+<body>
 <div id="root">Loading...</div>
 <script>
-document.getElementById('root').textContent = 'JS works';
+var DB={
+  system:'354403dde0e380aa85bfe7d9fd139be5',
+  challenges:'354403dde0e3804f8644d242a0ec6bf6',
+  assignments:'354403dde0e380f797ccfb85ad5a072e'
+};
+var S={day:1,challenges:{},players:[],ids:[]};
+
+function query(dbId){
+  return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
+}
+
+function init(){
+  document.getElementById('root').textContent='fetching...';
+  query(DB.system).then(function(sys){
+    document.getElementById('root').textContent='OK day='+sys[0].properties.Day_Counter.number;
+  }).catch(function(e){
+    document.getElementById('root').textContent='ERROR: '+e.message;
+  });
+}
+init();
 </script>
 </body>
 </html>
