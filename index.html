@@ -17,15 +17,42 @@ async function query(dbId){
   return d.results;
 }
 
+function gp(page,name,type){
+  var p=page.properties[name];
+  if(!p)return null;
+  if(type==='num')return p.number!=null?p.number:0;
+  if(type==='title')return p.title&&p.title[0]?p.title[0].plain_text:'';
+  if(type==='check')return p.checkbox===true;
+  if(type==='fnum')return p.formula?p.formula.number||0:0;
+  if(type==='fstr')return p.formula?p.formula.string||'':'';
+  if(type==='sel')return p.select?p.select.name||'':'';
+  return null;
+}
+
 async function init(){
   try{
-    document.getElementById('r').textContent='Querying system...';
     var sys=await query(DB.system);
-    document.getElementById('r').textContent='System OK - querying challenges...';
+    var day=gp(sys[0],'Day_Counter','num')||1;
+
     var chs=await query(DB.challenges);
-    document.getElementById('r').textContent='Challenges OK ('+chs.length+') - querying assignments...';
+    var active=chs.filter(function(p){var s=gp(p,'Status','sel');return s==='✅ Active'||!s;});
+
     var asgs=await query(DB.assignments);
-    document.getElementById('r').textContent='ALL OK! System:'+sys.length+' Challenges:'+chs.length+' Assignments:'+asgs.length;
+    var parsed=asgs.map(function(p){
+      return{
+        name:gp(p,'Name','title'),
+        playerIndex:gp(p,'Player_Index','num')||0,
+        winStreak:gp(p,'Win_Streak','num')||0,
+        totalScore:gp(p,'Total_Score','num')||0,
+        challengeId:gp(p,'Challenge_ID_Today','fnum')||0,
+        powerType:gp(p,'Power_Type','sel')||'None',
+      };
+    });
+
+    document.getElementById('r').innerHTML=
+      'Day: '+day+'<br>'
+      +'Active challenges: '+active.length+'<br>'
+      +'Players: '+parsed.map(function(a){return a.name+' (idx:'+a.playerIndex+' ch:'+a.challengeId+')';}).join(', ');
   }catch(e){
     document.getElementById('r').textContent='ERROR: '+e.message;
   }
