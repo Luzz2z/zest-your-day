@@ -138,10 +138,7 @@ async function patch(pageId,props){
 var r=await fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:props})});
 var d=await r.json();if(!r.ok)throw new Error(d.message);return d;
 }
-async function create(dbId,props){
-var r=await fetch(’/api/notion/pages’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({parent:{database_id:dbId},properties:props})});
-var d=await r.json();if(!r.ok)throw new Error(d.message);return d;
-}
+
 function gp(page,name,type){
 var p=page.properties[name];if(!p)return null;
 if(type===‘num’)return p.number!=null?p.number:0;
@@ -177,16 +174,15 @@ a.hasRerolled=true;a.rerollId=newId;
 render();toast(‘Rerolled!’,’#BF00FF’);
 };
 
-function render(){
-var lb=S.players.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
-
-var cards=S.players.map(function(a){
+function makeCard(a){
 var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:‘🎮’,color:’#8892A4’};
 var cid=a.rerollId>0?a.rerollId:a.challengeId;
 var ch=S.challenges[cid]||{name:’?’,pts:0,spice:’’};
 var bonus=sb(a.winStreak);
-return ‘<div class="card'+(a.isValidated?' validated':'')+'">’
-+’<div class="card-band" style="background:'+pl.color+'"></div>’
+var div=document.createElement(‘div’);
+div.className=‘card’+(a.isValidated?’ validated’:’’);
+div.innerHTML=
+‘<div class="card-band" style="background:'+pl.color+'"></div>’
 +’<div class="card-cover" style="--cover-color:'+pl.color+'">’
 +’<span style="font-size:36px">’+pl.emoji+’</span>’
 +’<span class="player-name" style="color:'+pl.color+'">’+pl.name+’</span>’
@@ -198,7 +194,7 @@ return ‘<div class="card'+(a.isValidated?' validated':'')+'">’
 +’</div>’
 +’<div class="challenge-box">’
 +’<div class="challenge-num">Challenge #’+cid+’</div>’
-+’<div class="challenge-name">’+(ch?ch.name:’…’)+’</div>’
++’<div class="challenge-name">’+ch.name+’</div>’
 +’<div style="display:flex;gap:8px">’
 +’<span class="spice-badge" style="color:'+sc(ch.pts)+'">’+ch.spice+’ - ‘+ch.pts+’ pt’+(ch.pts>1?‘s’:’’)+’</span>’
 +(bonus>0?’<span class="total-badge">’+(ch.pts+bonus)+’ pts total</span>’:’’)
@@ -207,13 +203,18 @@ return ‘<div class="card'+(a.isValidated?' validated':'')+'">’
 +’<div style="display:flex;align-items:center;gap:10px">’
 +’<span class="done-label">Done?</span>’
 +’<label class="checkbox-wrap">’
-+’<input type=“checkbox”’+(a.isValidated?’ checked’:’’)+’ onchange=“validate('’+a.pageId+’',’+a.isValidated+’)”>’
++’<input type=“checkbox”’+(a.isValidated?’ checked’:’’)+’>’
 +’<div class="checkbox-custom">’+(a.isValidated?‘✓’:’’)+’</div>’
 +’</label></div>’
-+’<button class=“btn-reroll” onclick=“reroll('’+a.pageId+’')”’+(a.hasRerolled?’ disabled’:’’)+’>🎲 ‘+(a.hasRerolled?‘Rerolled’:‘Reroll’)+’</button>’
-+’</div></div></div>’;
-}).join(’’);
++’<button class=“btn-reroll”’+(a.hasRerolled?’ disabled’:’’)+’>🎲 ‘+(a.hasRerolled?‘Rerolled’:‘Reroll’)+’</button>’
++’</div></div>’;
+div.querySelector(‘input’).addEventListener(‘change’,function(){validate(a.pageId,a.isValidated);});
+div.querySelector(‘button’).addEventListener(‘click’,function(){reroll(a.pageId);});
+return div;
+}
 
+function render(){
+var lb=S.players.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
 var lbRows=lb.map(function(a,i){
 var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:‘🎮’,color:’#8892A4’};
 return ‘<div class="lb-row">’
@@ -225,16 +226,22 @@ return ‘<div class="lb-row">’
 +’</div>’;
 }).join(’’);
 
-document.getElementById(‘root’).innerHTML=
+var root=document.getElementById(‘root’);
+root.innerHTML=
 ‘<div class="header"><span class="mascot">🌶️</span><div class="title">ZEST YOUR DAY</div><div class="subtitle">Mexico Edition</div><div class="day-badge">Day ‘+S.day+’</div></div>’
 +’<div class="section-title">Today Challenges</div>’
-+’<div class="cards">’+cards+’</div>’
++’<div class="cards" id="cards-container"></div>’
 +’<div class="divider"></div>’
 +’<div class="section-title">Leaderboard</div>’
 +’<div class="leaderboard"><div class="lb-card">’
 +’<div class="lb-header"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>Done</span></div>’
 +lbRows
 +’</div></div>’;
+
+var container=document.getElementById(‘cards-container’);
+S.players.forEach(function(a){
+container.appendChild(makeCard(a));
+});
 }
 
 async function init(){
