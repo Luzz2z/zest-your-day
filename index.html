@@ -15,6 +15,9 @@ var S={day:1,challenges:{},players:[],ids:[]};
 function query(dbId){
   return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
 }
+function patch(pageId,props){
+  return fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:props})}).then(function(r){return r.json();});
+}
 function gp(page,name,type){
   var p=page.properties[name];if(!p)return null;
   if(type==='num')return p.number!=null?p.number:0;
@@ -26,15 +29,38 @@ function gp(page,name,type){
   return null;
 }
 
+window.validate=function(pageId,cur){
+  var nv=!cur;
+  patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
+    var a=S.players.find(function(x){return x.pageId===pageId;});
+    if(a)a.isValidated=nv;
+    render();
+  });
+};
+window.reroll=function(pageId){
+  var a=S.players.find(function(x){return x.pageId===pageId;});
+  if(!a||a.hasRerolled)return;
+  var cur=a.rerollId>0?a.rerollId:a.challengeId;
+  var avail=S.ids.filter(function(id){return id!==cur;});
+  if(!avail.length)return;
+  var newId=avail[Math.floor(Math.random()*avail.length)];
+  patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}).then(function(){
+    a.hasRerolled=true;a.rerollId=newId;
+    render();
+  });
+};
+
 function render(){
   var html='<h2 style="color:#FFD700">Day '+S.day+'</h2>';
   S.players.forEach(function(a){
     var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
     var cid=a.rerollId>0?a.rerollId:a.challengeId;
     var ch=S.challenges[cid]||{name:'?',pts:0,spice:''};
-    html+='<div style="padding:10px;margin-bottom:8px;background:#0A0A18;border-radius:10px">'
-      +'<div style="color:'+pl.color+'">'+pl.emoji+' '+pl.name+'</div>'
-      +'<div style="font-size:13px;color:#aaa">'+ch.name+'</div>'
+    html+='<div style="padding:12px;margin-bottom:8px;background:#0A0A18;border-radius:10px;border:1px solid '+(a.isValidated?'#00FF88':'rgba(255,255,255,0.06)')+'">'
+      +'<div style="color:'+pl.color+';font-weight:900;margin-bottom:4px">'+pl.emoji+' '+pl.name+'</div>'
+      +'<div style="font-size:13px;color:#aaa;margin-bottom:8px">'+ch.name+' - '+ch.pts+'pts</div>'
+      +'<button onclick="validate(\''+a.pageId+'\','+a.isValidated+')" style="margin-right:8px;padding:6px 12px;border-radius:8px;border:1px solid rgba(0,255,136,0.3);background:rgba(0,255,136,0.1);color:#00FF88;cursor:pointer;font-weight:900">'+(a.isValidated?'Done':'Mark done')+'</button>'
+      +'<button onclick="reroll(\''+a.pageId+'\')" '+(a.hasRerolled?'disabled':'')+' style="padding:6px 12px;border-radius:8px;border:1px solid rgba(191,0,255,0.3);background:rgba(191,0,255,0.08);color:#e879f9;cursor:pointer;font-weight:900">Reroll</button>'
       +'</div>';
   });
   document.getElementById('root').innerHTML=html;
@@ -46,7 +72,6 @@ var DB={
   assignments:'354403dde0e380f797ccfb85ad5a072e'
 };
 
-document.getElementById('root').textContent='fetching...';
 query(DB.system).then(function(sys){
   S.day=gp(sys[0],'Day_Counter','num')||1;
   return query(DB.challenges);
