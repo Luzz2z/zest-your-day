@@ -4,7 +4,14 @@
 <body>
 <div id="root">start</div>
 <script>
-document.getElementById('root').textContent = 'JS ok';
+document.getElementById('root').textContent = 'fetching...';
+fetch('/api/notion/databases/354403dde0e380aa85bfe7d9fd139be5/query', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: '{}'
+}).then(function(r){ return r.json(); })
+.then(function(d){ document.getElementById('root').textContent = 'ok: ' + d.results.length + ' results'; })
+.catch(function(e){ document.getElementById('root').textContent = 'error: ' + e.message; });
 </script>
 </body>
 </html>
