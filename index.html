@@ -5,10 +5,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zest Your Day</title>
-
+<style>
+:root{--red:#FF2D4B;--orange:#FF6B1A;--yellow:#FFD700;--green:#00FF88;--cyan:#00EEFF;--darker:#050508;--card:#0A0A18;--text:#F5F5F5;--muted:#6B7280;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:sans-serif;background:var(--darker);color:var(--text);min-height:100vh;}
+.app{max-width:480px;margin:0 auto;padding:20px;}
+.card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.06);}
+.card.validated{border-color:rgba(0,255,136,0.3);}
+.name{font-size:22px;font-weight:900;margin-bottom:8px;}
+.challenge{font-size:14px;color:#aaa;margin-bottom:8px;}
+.pts{font-size:12px;color:#FFD700;margin-bottom:10px;}
+.btn{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:10px;padding:10px 16px;color:#00FF88;font-weight:900;cursor:pointer;font-family:sans-serif;font-size:14px;margin-right:8px;}
+.btn:disabled{opacity:0.4;}
+</style>
 </head>
-<body style="background:#050508;color:#F5F5F5;font-family:sans-serif;padding:20px;">
-<div id="root">Loading...</div>
+<body>
+<div class="app">
+  <div id="root">Loading...</div>
+</div>
 <div id="toast" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s;white-space:nowrap;"></div>
 <script>
 var DB={
@@ -78,24 +92,20 @@ S.players.forEach(function(a){
 var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
 var cid=a.rerollId>0?a.rerollId:a.challengeId;
 var ch=S.challenges[cid]||{name:’?’,pts:0,spice:’’};
-html+=’<div style="background:#0A0A18;border-radius:16px;padding:16px;margin-bottom:16px;border:1px solid '+(a.isValidated?'#00FF88':'rgba(255,255,255,0.06)')+'">’
-+’<div style="font-size:22px;font-weight:900;color:'+pl.color+';margin-bottom:8px">’+pl.emoji+’ ‘+pl.name+’</div>’
-+’<div style="font-size:14px;margin-bottom:4px">’+ch.name+’</div>’
-+’<div style="font-size:12px;color:#FFD700;margin-bottom:12px">’+ch.spice+’ - ‘+ch.pts+’ pts | Streak: ‘+a.winStreak+’</div>’
-+’<div style="display:flex;gap:10px">’
-+’<button onclick="validate(\''+a.pageId+'\','+a.isValidated+')" style="background:'+(a.isValidated?'#00FF88':'rgba(0,255,136,0.1)')+';border:1px solid rgba(0,255,136,0.3);border-radius:10px;padding:10px 16px;color:'+(a.isValidated?'#000':'#00FF88')+';font-weight:900;cursor:pointer;font-family:sans-serif">’+(a.isValidated?‘✓ Done’:‘Mark done’)+’</button>’
-+’<button onclick=“reroll('’+a.pageId+’')”’+(a.hasRerolled?’ disabled’:’’)+’ style=“background:rgba(191,0,255,0.1);border:1px solid rgba(191,0,255,0.3);border-radius:10px;padding:10px 16px;color:#e879f9;font-weight:900;cursor:pointer;font-family:sans-serif”>🎲 ‘+(a.hasRerolled?‘Rerolled’:‘Reroll’)+’</button>’
-+’</div></div>’;
+html+=’<div class="card'+(a.isValidated?' validated':'')+'">’
++’<div class="name" style="color:'+pl.color+'">’+pl.emoji+’ ‘+pl.name+’</div>’
++’<div class="challenge">’+ch.name+’</div>’
++’<div class="pts">’+ch.spice+’ - ‘+ch.pts+’ pts | Streak: ‘+a.winStreak+’</div>’
++’<button class="btn" onclick="validate(\''+a.pageId+'\','+a.isValidated+')">’+(a.isValidated?‘Done’:‘Mark done’)+’</button>’
++’<button class=“btn” onclick=“reroll('’+a.pageId+’')”’+(a.hasRerolled?’ disabled’:’’)+’>Reroll</button>’
++’</div>’;
 });
 document.getElementById(‘root’).innerHTML=html;
 }
 
 async function init(){
-  document.getElementById('root').textContent='Step 1';
-  try{
-    var sys=await query(DB.system);
-    document.getElementById('root').textContent='Step 2';
-
+try{
+var sys=await query(DB.system);
 S.sysId=sys[0].id;
 S.day=gp(sys[0],‘Day_Counter’,‘num’)||1;
 var chs=await query(DB.challenges);
