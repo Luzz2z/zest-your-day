@@ -4,26 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zest Your Day</title>
-<style>
-:root{--red:#FF2D4B;--orange:#FF6B1A;--yellow:#FFD700;--green:#00FF88;--cyan:#00EEFF;--darker:#050508;--card:#0A0A18;--text:#F5F5F5;--muted:#6B7280;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:sans-serif;background:var(--darker);color:var(--text);min-height:100vh;}
-.app{max-width:480px;margin:0 auto;padding:20px;}
-.card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.06);}
-.card.validated{border-color:rgba(0,255,136,0.3);}
-.name{font-size:22px;font-weight:900;margin-bottom:8px;}
-.challenge{font-size:14px;color:#aaa;margin-bottom:8px;}
-.pts{font-size:12px;color:#FFD700;margin-bottom:10px;}
-.btn{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:10px;padding:10px 16px;color:#00FF88;font-weight:900;cursor:pointer;font-family:sans-serif;font-size:14px;margin-right:8px;}
-.btn:disabled{opacity:0.4;}
-</style>
 </head>
-<body>
-<div class="app">
-  <div id="root">Loading...</div>
-</div>
-<div id="toast" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s;white-space:nowrap;"></div>
+<body style="background:#050508;color:#F5F5F5;font-family:sans-serif;padding:20px;">
+<div id="root">Loading...</div>
 <script>
 var DB={
   system:'354403dde0e380aa85bfe7d9fd139be5',
@@ -37,21 +20,25 @@ var PLAYERS=[
   {name:'Nicooo',emoji:'💰',color:'#FF6B1A'}
 ];
 
-function toast(msg,col){
-var t=document.getElementById(‘toast’);
-t.textContent=msg;t.style.background=col||’#00FF88’;
-t.style.transform=‘translateX(-50%) translateY(0)’;
-setTimeout(function(){t.style.transform=‘translateX(-50%) translateY(120px)’;},3000);
+function query(dbId){
+return fetch(’/api/notion/databases/’+dbId+’/query’,{
+method:‘POST’,
+headers:{‘Content-Type’:‘application/json’},
+body:’{}’
+}).then(function(r){return r.json();}).then(function(d){
+if(d.error)throw new Error(d.error);
+return d.results;
+});
 }
 
-async function query(dbId){
-var r=await fetch(’/api/notion/databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:’{}’});
-var d=await r.json();if(!r.ok)throw new Error(d.message);return d.results;
+function patch(pageId,props){
+return fetch(’/api/notion/pages/’+pageId,{
+method:‘PATCH’,
+headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({properties:props})
+}).then(function(r){return r.json();});
 }
-async function patch(pageId,props){
-var r=await fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:props})});
-var d=await r.json();if(!r.ok)throw new Error(d.message);return d;
-}
+
 function gp(page,name,type){
 var p=page.properties[name];if(!p)return null;
 if(type===‘num’)return p.number!=null?p.number:0;
@@ -63,28 +50,7 @@ if(type===‘sel’)return p.select?p.select.name||’’:’’;
 return null;
 }
 
-var S={day:1,sysId:null,challenges:{},players:[],ids:[]};
-
-window.validate=async function(pageId,cur){
-var nv=!cur;
-await patch(pageId,{Is_Validated:{checkbox:nv}});
-var a=S.players.find(function(x){return x.pageId===pageId;});
-if(a)a.isValidated=nv;
-render();
-toast(nv?‘Done!’:‘Removed’,nv?’#00FF88’:’#FF2D4B’);
-};
-
-window.reroll=async function(pageId){
-var a=S.players.find(function(x){return x.pageId===pageId;});
-if(!a||a.hasRerolled)return;
-var cur=a.rerollId>0?a.rerollId:a.challengeId;
-var avail=S.ids.filter(function(id){return id!==cur;});
-if(!avail.length){toast(‘No other challenges!’,’#FF6B1A’);return;}
-var newId=avail[Math.floor(Math.random()*avail.length)];
-await patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}});
-a.hasRerolled=true;a.rerollId=newId;
-render();toast(‘Rerolled!’,’#BF00FF’);
-};
+var S={day:1,challenges:{},players:[],ids:[]};
 
 function render(){
 var html=’<h2 style="color:#FFD700;margin-bottom:16px">Day ‘+S.day+’</h2>’;
@@ -92,38 +58,39 @@ S.players.forEach(function(a){
 var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
 var cid=a.rerollId>0?a.rerollId:a.challengeId;
 var ch=S.challenges[cid]||{name:’?’,pts:0,spice:’’};
-html+=’<div class="card'+(a.isValidated?' validated':'')+'">’
-+’<div class="name" style="color:'+pl.color+'">’+pl.emoji+’ ‘+pl.name+’</div>’
-+’<div class="challenge">’+ch.name+’</div>’
-+’<div class="pts">’+ch.spice+’ - ‘+ch.pts+’ pts | Streak: ‘+a.winStreak+’</div>’
-+’<button class="btn" onclick="validate(\''+a.pageId+'\','+a.isValidated+')">’+(a.isValidated?‘Done’:‘Mark done’)+’</button>’
-+’<button class=“btn” onclick=“reroll('’+a.pageId+’')”’+(a.hasRerolled?’ disabled’:’’)+’>Reroll</button>’
+html+=’<div style="background:#0A0A18;border-radius:14px;padding:16px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.06)">’
++’<div style="color:'+pl.color+';font-weight:900;font-size:20px;margin-bottom:6px">’+pl.emoji+’ ‘+pl.name+’</div>’
++’<div style="font-size:14px;margin-bottom:4px">’+ch.name+’</div>’
++’<div style="font-size:12px;color:#FFD700">’+ch.spice+’ - ‘+ch.pts+’ pts</div>’
 +’</div>’;
 });
 document.getElementById(‘root’).innerHTML=html;
 }
 
-async function init(){
-try{
-var sys=await query(DB.system);
-S.sysId=sys[0].id;
+function init(){
+document.getElementById(‘root’).textContent=‘Fetching system…’;
+query(DB.system).then(function(sys){
 S.day=gp(sys[0],‘Day_Counter’,‘num’)||1;
-var chs=await query(DB.challenges);
-S.challenges={};S.ids=[];
+document.getElementById(‘root’).textContent=‘Fetching challenges…’;
+return query(DB.challenges);
+}).then(function(chs){
 chs.forEach(function(p){
 var id=gp(p,‘ID_Global’,‘num’);
 var st=gp(p,‘Status’,‘sel’);
 if(st===‘✅ Active’||!st){
-S.challenges[id]={name:gp(p,‘Name’,‘title’),pts:gp(p,‘Points’,‘num’)||0,spice:gp(p,‘Spice_Level’,‘fstr’)||gp(p,‘Spice_Level’,‘sel’)||’’};
+S.challenges[id]={name:gp(p,‘Name’,‘title’),pts:gp(p,‘Points’,‘num’)||0,spice:gp(p,‘Spice_Level’,‘fstr’)||’’};
 S.ids.push(id);
 }
 });
-var asgs=await query(DB.assignments);
+document.getElementById(‘root’).textContent=‘Fetching players…’;
+return query(DB.assignments);
+}).then(function(asgs){
 S.players=asgs.map(function(p){
 return{
-pageId:p.id,playerIndex:gp(p,‘Player_Index’,‘num’)||0,
-winStreak:gp(p,‘Win_Streak’,‘num’)||0,totalScore:gp(p,‘Total_Score’,‘num’)||0,
-defisReussis:gp(p,‘Defis_Reussis’,‘num’)||0,
+pageId:p.id,
+playerIndex:gp(p,‘Player_Index’,‘num’)||0,
+winStreak:gp(p,‘Win_Streak’,‘num’)||0,
+totalScore:gp(p,‘Total_Score’,‘num’)||0,
 isValidated:gp(p,‘Is_Validated’,‘check’),
 challengeId:gp(p,‘Challenge_ID_Today’,‘fnum’)||0,
 hasRerolled:gp(p,‘Has_Rerolled’,‘check’),
@@ -131,10 +98,11 @@ rerollId:gp(p,‘Reroll_Challenge_ID’,‘num’)||0
 };
 }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
 render();
-}catch(e){
-document.getElementById(‘root’).innerHTML=’Error: ’+e.message;
+}).catch(function(e){
+document.getElementById(‘root’).textContent=’Error: ’+e.message;
+});
 }
-}
+
 init();
 </script>
 
