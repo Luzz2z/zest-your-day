@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"></head>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{background:#050508;color:#F5F5F5;font-family:sans-serif;padding:20px;}
+.card{background:#0A0A18;border-radius:16px;padding:16px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.06);}
+.name{font-size:22px;font-weight:900;margin-bottom:8px;}
+.challenge{font-size:14px;color:#aaa;margin-bottom:8px;}
+.pts{font-size:12px;color:#FFD700;}
+.check{margin-top:10px;}
+</style>
+</head>
 <body>
 <div id="r">Loading...</div>
 <script>
@@ -9,17 +20,19 @@ var DB={
   challenges:'354403dde0e3804f8644d242a0ec6bf6',
   assignments:'354403dde0e380f797ccfb85ad5a072e'
 };
+var PLAYERS=[
+  {name:'Banuu',emoji:'🌵',color:'#00FF88'},
+  {name:'Luzz',emoji:'🔥',color:'#FF2D4B'},
+  {name:'Y',emoji:'⚡',color:'#FFD700'},
+  {name:'Nicooo',emoji:'💰',color:'#FF6B1A'}
+];
 
 async function query(dbId){
   var r=await fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
-  var d=await r.json();
-  if(!r.ok)throw new Error(d.message||'Error');
-  return d.results;
+  var d=await r.json();if(!r.ok)throw new Error(d.message);return d.results;
 }
-
 function gp(page,name,type){
-  var p=page.properties[name];
-  if(!p)return null;
+  var p=page.properties[name];if(!p)return null;
   if(type==='num')return p.number!=null?p.number:0;
   if(type==='title')return p.title&&p.title[0]?p.title[0].plain_text:'';
   if(type==='check')return p.checkbox===true;
@@ -33,26 +46,36 @@ async function init(){
   try{
     var sys=await query(DB.system);
     var day=gp(sys[0],'Day_Counter','num')||1;
-
     var chs=await query(DB.challenges);
-    var active=chs.filter(function(p){var s=gp(p,'Status','sel');return s==='✅ Active'||!s;});
-
-    var asgs=await query(DB.assignments);
-    var parsed=asgs.map(function(p){
-      return{
-        name:gp(p,'Name','title'),
-        playerIndex:gp(p,'Player_Index','num')||0,
-        winStreak:gp(p,'Win_Streak','num')||0,
-        totalScore:gp(p,'Total_Score','num')||0,
-        challengeId:gp(p,'Challenge_ID_Today','fnum')||0,
-        powerType:gp(p,'Power_Type','sel')||'None',
-      };
+    var challenges={};
+    chs.forEach(function(p){
+      var id=gp(p,'ID_Global','num');
+      challenges[id]={name:gp(p,'Name','title'),pts:gp(p,'Points','num')||0,spice:gp(p,'Spice_Level','fstr')||''};
     });
+    var asgs=await query(DB.assignments);
+    var players=asgs.map(function(p){
+      return{
+        pageId:p.id,playerIndex:gp(p,'Player_Index','num')||0,
+        winStreak:gp(p,'Win_Streak','num')||0,totalScore:gp(p,'Total_Score','num')||0,
+        isValidated:gp(p,'Is_Validated','check'),
+        challengeId:gp(p,'Challenge_ID_Today','fnum')||0,
+        rerollId:gp(p,'Reroll_Challenge_ID','num')||0
+      };
+    }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
 
-    document.getElementById('r').innerHTML=
-      'Day: '+day+'<br>'
-      +'Active challenges: '+active.length+'<br>'
-      +'Players: '+parsed.map(function(a){return a.name+' (idx:'+a.playerIndex+' ch:'+a.challengeId+')';}).join(', ');
+    var html='<h2 style="color:#FFD700;margin-bottom:16px">Day '+day+'</h2>';
+    players.forEach(function(a){
+      var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+      var cid=a.rerollId>0?a.rerollId:a.challengeId;
+      var ch=challenges[cid]||{name:'?',pts:0,spice:''};
+      html+='<div class="card">'
+        +'<div class="name" style="color:'+pl.color+'">'+pl.emoji+' '+pl.name+'</div>'
+        +'<div class="challenge">'+ch.name+'</div>'
+        +'<div class="pts">'+ch.spice+' - '+ch.pts+' pts | Streak: '+a.winStreak+'</div>'
+        +'<div class="check">Done: '+(a.isValidated?'YES':'no')+'</div>'
+        +'</div>';
+    });
+    document.getElementById('r').innerHTML=html;
   }catch(e){
     document.getElementById('r').textContent='ERROR: '+e.message;
   }
