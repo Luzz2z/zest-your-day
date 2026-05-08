@@ -255,6 +255,7 @@ async function nextDay(){
         Power_Used:{checkbox:false},
         Power_Target:{rich_text:[{text:{content:''}}]},
         Roulette_Multiplier:{number:1},
+        Shield_Used_Today:{checkbox:false},
       });
     }
     await notionPatch(STATE.systemPageId,{Day_Counter:{number:STATE.dayCounter+1},Defis_Launched:{checkbox:false}});
