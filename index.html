@@ -4,28 +4,42 @@
 <body>
 <div id="root">start</div>
 <script>
-document.getElementById('root').textContent = 'step 1';
 var DB={
   system:'354403dde0e380aa85bfe7d9fd139be5',
   challenges:'354403dde0e3804f8644d242a0ec6bf6',
   assignments:'354403dde0e380f797ccfb85ad5a072e'
 };
-document.getElementById('root').textContent = 'step 2';
-var S={day:1,challenges:{},players:[],ids:[]};
-document.getElementById('root').textContent = 'step 3';
+
 function query(dbId){
   return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
 }
-document.getElementById('root').textContent = 'step 4';
+
+function gp(page,name,type){
+  var p=page.properties[name];if(!p)return null;
+  if(type==='num')return p.number!=null?p.number:0;
+  if(type==='title')return p.title&&p.title[0]?p.title[0].plain_text:'';
+  if(type==='check')return p.checkbox===true;
+  if(type==='fnum')return p.formula?p.formula.number||0:0;
+  if(type==='fstr')return p.formula?p.formula.string||'':'';
+  if(type==='sel')return p.select?p.select.name||'':'';
+  return null;
+}
+
 function init(){
-  document.getElementById('root').textContent = 'init called';
+  document.getElementById('root').textContent='loading system...';
   query(DB.system).then(function(sys){
-    document.getElementById('root').textContent = 'got system: '+sys.length+' results';
+    var day=gp(sys[0],'Day_Counter','num')||1;
+    document.getElementById('root').textContent='system ok, day='+day+', loading challenges...';
+    return query(DB.challenges);
+  }).then(function(chs){
+    document.getElementById('root').textContent='challenges ok: '+chs.length+', loading players...';
+    return query(DB.assignments);
+  }).then(function(asgs){
+    document.getElementById('root').textContent='ALL OK! Players: '+asgs.length;
   }).catch(function(e){
-    document.getElementById('root').textContent = 'error: '+e.message;
+    document.getElementById('root').textContent='ERROR: '+e.message;
   });
 }
-document.getElementById('root').textContent = 'step 5 - calling init';
 init();
 </script>
 </body>
