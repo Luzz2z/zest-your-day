@@ -8,12 +8,15 @@ body{background:#050508;color:#F5F5F5;font-family:sans-serif;padding:20px;}
 .card{background:#0A0A18;border-radius:16px;padding:16px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.06);}
 .name{font-size:22px;font-weight:900;margin-bottom:8px;}
 .challenge{font-size:14px;color:#aaa;margin-bottom:8px;}
-.pts{font-size:12px;color:#FFD700;}
-.check{margin-top:10px;}
+.pts{font-size:12px;color:#FFD700;margin-bottom:10px;}
+.btn{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:10px;padding:10px 16px;color:#00FF88;font-weight:900;cursor:pointer;font-family:sans-serif;font-size:14px;}
+.btn:disabled{opacity:0.4;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#00FF88;color:#000;padding:12px 24px;border-radius:30px;font-weight:900;display:none;}
 </style>
 </head>
 <body>
 <div id="r">Loading...</div>
+<div class="toast" id="toast"></div>
 <script>
 var DB={
   system:'354403dde0e380aa85bfe7d9fd139be5',
@@ -31,6 +34,10 @@ async function query(dbId){
   var r=await fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
   var d=await r.json();if(!r.ok)throw new Error(d.message);return d.results;
 }
+async function patch(pageId,props){
+  var r=await fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:props})});
+  var d=await r.json();if(!r.ok)throw new Error(d.message);return d;
+}
 function gp(page,name,type){
   var p=page.properties[name];if(!p)return null;
   if(type==='num')return p.number!=null?p.number:0;
@@ -41,19 +48,52 @@ function gp(page,name,type){
   if(type==='sel')return p.select?p.select.name||'':'';
   return null;
 }
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  setTimeout(function(){t.style.display='none';},2000);
+}
+
+var S={challenges:{},players:[]};
+
+window.validate=async function(pageId,cur){
+  var nv=!cur;
+  await patch(pageId,{Is_Validated:{checkbox:nv}});
+  var a=S.players.find(function(x){return x.pageId===pageId;});
+  if(a)a.isValidated=nv;
+  toast(nv?'Done!':'Removed');
+  render();
+};
+
+function render(){
+  var html='<h2 style="color:#FFD700;margin-bottom:16px">Day '+S.day+'</h2>';
+  S.players.forEach(function(a){
+    var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+    var cid=a.rerollId>0?a.rerollId:a.challengeId;
+    var ch=S.challenges[cid]||{name:'?',pts:0,spice:''};
+    html+='<div class="card" style="border-color:'+(a.isValidated?'rgba(0,255,136,0.3)':'rgba(255,255,255,0.06)')+'">'
+      +'<div class="name" style="color:'+pl.color+'">'+pl.emoji+' '+pl.name+'</div>'
+      +'<div class="challenge">'+ch.name+'</div>'
+      +'<div class="pts">'+ch.spice+' - '+ch.pts+' pts | Streak: '+a.winStreak+'</div>'
+      +'<button class="btn" onclick="validate(\''+a.pageId+'\','+a.isValidated+')">'
+      +(a.isValidated?'✓ Done!':'Mark as done')
+      +'</button>'
+      +'</div>';
+  });
+  document.getElementById('r').innerHTML=html;
+}
 
 async function init(){
   try{
     var sys=await query(DB.system);
-    var day=gp(sys[0],'Day_Counter','num')||1;
+    S.day=gp(sys[0],'Day_Counter','num')||1;
     var chs=await query(DB.challenges);
-    var challenges={};
     chs.forEach(function(p){
       var id=gp(p,'ID_Global','num');
-      challenges[id]={name:gp(p,'Name','title'),pts:gp(p,'Points','num')||0,spice:gp(p,'Spice_Level','fstr')||''};
+      S.challenges[id]={name:gp(p,'Name','title'),pts:gp(p,'Points','num')||0,spice:gp(p,'Spice_Level','fstr')||''};
     });
     var asgs=await query(DB.assignments);
-    var players=asgs.map(function(p){
+    S.players=asgs.map(function(p){
       return{
         pageId:p.id,playerIndex:gp(p,'Player_Index','num')||0,
         winStreak:gp(p,'Win_Streak','num')||0,totalScore:gp(p,'Total_Score','num')||0,
@@ -62,20 +102,7 @@ async function init(){
         rerollId:gp(p,'Reroll_Challenge_ID','num')||0
       };
     }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
-
-    var html='<h2 style="color:#FFD700;margin-bottom:16px">Day '+day+'</h2>';
-    players.forEach(function(a){
-      var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
-      var cid=a.rerollId>0?a.rerollId:a.challengeId;
-      var ch=challenges[cid]||{name:'?',pts:0,spice:''};
-      html+='<div class="card">'
-        +'<div class="name" style="color:'+pl.color+'">'+pl.emoji+' '+pl.name+'</div>'
-        +'<div class="challenge">'+ch.name+'</div>'
-        +'<div class="pts">'+ch.spice+' - '+ch.pts+' pts | Streak: '+a.winStreak+'</div>'
-        +'<div class="check">Done: '+(a.isValidated?'YES':'no')+'</div>'
-        +'</div>';
-    });
-    document.getElementById('r').innerHTML=html;
+    render();
   }catch(e){
     document.getElementById('r').textContent='ERROR: '+e.message;
   }
