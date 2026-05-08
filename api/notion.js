@@ -5,14 +5,31 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
 
-  // Debug — montre l'URL reçue
   var fullUrl = req.url || '';
   var endpoint = fullUrl.replace(/^\/api\/notion\/?/, '').split('?')[0];
-  
-  res.status(200).json({ 
-    debug: true,
-    req_url: fullUrl,
-    endpoint: endpoint,
-    query: req.query
-  });
+
+  if (!endpoint) { res.status(400).json({ error: 'Missing endpoint' }); return; }
+
+  var notionUrl = 'https://api.notion.com/v1/' + endpoint;
+
+  var options = {
+    method: req.method,
+    headers: {
+      'Authorization': 'Bearer ' + process.env.NOTION_TOKEN,
+      'Notion-Version': '2022-06-28',
+      'Content-Type': 'application/json',
+    },
+  };
+
+  if (req.method === 'POST' || req.method === 'PATCH') {
+    options.body = JSON.stringify(req.body || {});
+  }
+
+  try {
+    var response = await fetch(notionUrl, options);
+    var data = await response.json();
+    res.status(response.status).json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
