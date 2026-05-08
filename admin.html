@@ -3,14 +3,36 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zest Admin</title>
 <style>
-body{background:#050508;color:#F5F5F5;padding:20px;font-family:sans-serif;}
-.card{background:#0A0A18;border-radius:14px;padding:16px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.06);}
+body{background:#050508;color:#F5F5F5;font-family:sans-serif;padding:0 0 80px;}
+.card{background:#0A0A18;border-radius:20px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;margin:0 16px 14px;}
 .card.validated{border-color:rgba(0,255,136,0.3);}
-.btn{border-radius:10px;padding:9px 14px;font-size:12px;font-weight:900;cursor:pointer;font-family:sans-serif;margin-right:8px;}
-.btn-done{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:#00FF88;}
-.btn-reroll{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);color:#e879f9;}
+.card-band{height:3px;}
+.card-cover{height:64px;display:flex;align-items:center;padding:0 18px;gap:12px;}
+.player-name{font-size:22px;font-weight:900;}
+.card-body{padding:12px 18px 16px;}
+.challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:14px;margin-bottom:12px;}
+.challenge-name{font-weight:900;font-size:16px;margin-bottom:6px;}
+.spice{font-size:12px;font-weight:700;padding:3px 10px;border-radius:8px;background:rgba(255,255,255,0.06);display:inline-block;}
+.card-actions{display:flex;align-items:center;justify-content:space-between;}
+.done-label{font-size:11px;color:#6B7280;font-weight:700;text-transform:uppercase;}
+.check-box{width:34px;height:34px;border-radius:10px;border:2px solid rgba(255,255,255,0.12);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;}
+.check-box.checked{background:#00FF88;border-color:#00FF88;box-shadow:0 0 20px rgba(0,255,136,0.5);}
+.btn-reroll{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:10px;padding:9px 14px;font-size:12px;font-weight:900;color:#e879f9;cursor:pointer;font-family:sans-serif;}
 .btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
+.section-title{font-size:15px;font-weight:900;text-transform:uppercase;letter-spacing:2px;padding:0 20px 12px;color:#6B7280;}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:24px 16px;}
+.lb-wrap{padding:0 16px;}
+.lb-card{background:#0A0A18;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
+.lb-row{display:grid;grid-template-columns:40px 1fr 60px 60px 52px;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.03);}
+.lb-row:last-child{border-bottom:none;}
+.lb-rank{font-size:20px;text-align:center;}
+.lb-name{font-weight:900;font-size:14px;}
+.lb-stat{text-align:center;}
+.lb-val{font-weight:900;font-size:15px;}
+.lb-lbl{font-size:9px;color:#6B7280;text-transform:uppercase;}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);color:white;font-weight:900;padding:12px 24px;border-radius:40px;font-size:14px;z-index:999;transition:transform 0.3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 </style>
@@ -30,7 +52,8 @@ var PLAYERS=[
   {name:'Y',emoji:'⚡',color:'#FFD700'},
   {name:'Nicooo',emoji:'💰',color:'#FF6B1A'}
 ];
-var S={day:1,challenges:{},players:[],ids:[]};
+var ALL_POWERS=['🦹 Entourloupeur','🔄 Swap','💀 Bridage','⚡ Pas si vite','🛡️ Shield','🎰 Roulette','👯 Copier-Coller','🔥 Extincteur'];
+var S={day:1,sysId:null,challenges:{},players:[],ids:[],launched:false};
 
 function toast(msg,col){
 var t=document.getElementById(‘toast’);
@@ -55,57 +78,161 @@ if(type===‘sel’)return p.select?p.select.name||’’:’’;
 return null;
 }
 
-window.validate=function(pageId,cur){
+window.toggleValidation=function(pageId,cur){
 var nv=!cur;
 patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
 var a=S.players.find(function(x){return x.pageId===pageId;});
 if(a)a.isValidated=nv;
 render();
-toast(nv?‘Challenge done!’:‘Removed’,nv?’#00FF88’:’#FF2D4B’);
+toast(nv?‘Validated!’:‘Removed’,nv?’#00FF88’:’#FF2D4B’);
 });
 };
-window.reroll=function(pageId){
-var a=S.players.find(function(x){return x.pageId===pageId;});
-if(!a||a.hasRerolled)return;
-var cur=a.rerollId>0?a.rerollId:a.challengeId;
-var avail=S.ids.filter(function(id){return id!==cur;});
-if(!avail.length){toast(‘No other challenges!’,’#FF6B1A’);return;}
-var newId=avail[Math.floor(Math.random()*avail.length)];
-patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}).then(function(){
-a.hasRerolled=true;a.rerollId=newId;
-render();toast(‘Rerolled!’,’#BF00FF’);
+
+window.launchDay=function(){
+var btn=document.getElementById(‘btn-launch’);
+if(btn)btn.disabled=true;
+var nonShield=ALL_POWERS.filter(function(p){return p!==‘🛡️ Shield’;});
+var shuffled=nonShield.slice().sort(function(){return Math.random()-0.5;});
+var shieldIdx=Math.floor(Math.random()*PLAYERS.length);
+var powers=PLAYERS.map(function(_,i){
+if(i===shieldIdx)return ‘🛡️ Shield’;
+var off=i<shieldIdx?i:i-1;
+return shuffled[off]||shuffled[0];
+});
+var chain=Promise.resolve();
+S.players.forEach(function(a){
+var power=powers[a.playerIndex]||‘❌ None’;
+chain=chain.then(function(){
+return patch(a.pageId,{
+Power_Type:{select:{name:power}},
+Power_Used:{checkbox:false},
+Power_Target:{rich_text:[{text:{content:’’}}]},
+Roulette_Multiplier:{number:1}
+});
+}).then(function(){a.powerType=power;});
+});
+chain.then(function(){
+toast(‘Powers assigned! Go to player page’,’#00FF88’);
+render();
+}).catch(function(e){
+toast(‘Error: ‘+e.message,’#FF2D4B’);
+if(btn)btn.disabled=false;
+});
+};
+
+window.nextDay=function(){
+var btn=document.getElementById(‘btn-nextday’);
+if(btn)btn.disabled=true;
+var chain=Promise.resolve();
+S.players.forEach(function(a){
+chain=chain.then(function(){
+var cid=a.rerollId>0?a.rerollId:a.challengeId;
+var pts=a.isValidated?(S.challenges[cid]||{pts:0}).pts:0;
+var bonus=a.isValidated?(a.winStreak>=10?3:a.winStreak>=5?2:a.winStreak>=3?1:0):0;
+return patch(a.pageId,{
+Total_Score:{number:a.totalScore+(a.isValidated?pts+bonus:0)},
+Win_Streak:{number:a.isValidated?a.winStreak+1:0},
+Defis_Reussis:{number:a.isValidated?a.defisReussis+1:a.defisReussis},
+Is_Validated:{checkbox:false},
+Has_Rerolled:{checkbox:false},
+Reroll_Challenge_ID:{number:0},
+Power_Type:{select:{name:‘❌ None’}},
+Power_Used:{checkbox:false},
+Power_Target:{rich_text:[{text:{content:’’}}]},
+Roulette_Multiplier:{number:1},
+Shield_Used_Today:{checkbox:false}
+});
+});
+});
+chain.then(function(){
+return patch(S.sysId,{Day_Counter:{number:S.day+1},Defis_Launched:{checkbox:false}});
+}).then(function(){
+toast(‘Day ‘+(S.day+1)+’ ready!’,’#FF6B1A’);
+return loadAndRender();
+}).catch(function(e){
+toast(‘Error: ‘+e.message,’#FF2D4B’);
+if(btn)btn.disabled=false;
 });
 };
 
 function render(){
-var html=’<h2 style="color:#FFD700;margin-bottom:16px">Day ‘+S.day+’</h2>’;
+var lb=S.players.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
+var medals=[‘🥇’,‘🥈’,‘🥉’,‘4’];
+var powersAssigned=S.players.some(function(a){return a.powerType&&a.powerType!==‘❌ None’;});
+
+var html=’<div style="padding:32px 20px 16px;text-align:center">’
++’<div style="font-size:48px">⚙️</div>’
++’<div style="font-size:28px;font-weight:900;color:#FF6B1A;margin:8px 0 4px">ADMIN PANEL</div>’
++’<div style="font-size:11px;color:#6B7280;text-transform:uppercase;letter-spacing:3px">Game Master Only</div>’
++’<div style="display:inline-flex;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:6px 18px;font-size:14px;font-weight:900;color:#FFD700;margin-top:12px">Day ‘+S.day+’</div>’
++’</div>’;
+
+if(!powersAssigned){
+html+=’<div style="padding:0 16px;margin-bottom:12px">’
++’<button id="btn-launch" onclick="launchDay()" style="width:100%;background:linear-gradient(135deg,#00FF88,#1db954);border:none;border-radius:14px;padding:16px;font-size:18px;font-weight:900;color:#000;cursor:pointer;margin-bottom:10px">Launch Day</button>’
++’<div style="background:rgba(255,107,26,0.06);border:1px solid rgba(255,107,26,0.2);border-radius:12px;padding:12px;font-size:12px;color:#6B7280;line-height:1.6">Assigns random powers. Players then do the Morning Reveal on the main page.</div>’
++’</div>’;
+} else {
+html+=’<div style="padding:0 16px;margin-bottom:12px">’
++’<div style="background:rgba(0,238,255,0.05);border:1px solid rgba(0,238,255,0.2);border-radius:12px;padding:12px;font-size:13px;color:#00EEFF;line-height:1.6">Powers assigned! Players are doing the Morning Reveal on the main page.</div>’
++’</div>’;
+}
+
+if(S.launched){
+html+=’<div style="padding:0 16px;margin-bottom:12px">’
++’<div style="background:rgba(255,107,26,0.06);border:1px solid rgba(255,107,26,0.2);border-radius:12px;padding:12px;font-size:12px;color:#6B7280;margin-bottom:10px;line-height:1.6"><strong style="color:#FF6B1A">Next Day</strong> saves all scores and resets for Day ‘+(S.day+1)+’.</div>’
++’<button id="btn-nextday" onclick="nextDay()" style="width:100%;background:linear-gradient(135deg,#FF2D4B,#FF6B1A);border:none;border-radius:14px;padding:16px;font-size:18px;font-weight:900;color:white;cursor:pointer">Next Day</button>’
++’</div>’;
+}
+
+html+=’<div class="section-title">Validations</div>’;
 S.players.forEach(function(a){
 var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
 var cid=a.rerollId>0?a.rerollId:a.challengeId;
 var ch=S.challenges[cid]||{name:’?’,pts:0,spice:’’};
 html+=’<div class="card'+(a.isValidated?' validated':'')+'">’
-+’<div style="color:'+pl.color+';font-weight:900;font-size:20px;margin-bottom:6px">’+pl.emoji+’ ‘+pl.name+’</div>’
-+’<div style="font-size:14px;margin-bottom:4px">’+ch.name+’</div>’
-+’<div style="font-size:12px;color:#FFD700;margin-bottom:10px">’+ch.spice+’ - ‘+ch.pts+’ pts | Streak: ‘+a.winStreak+’</div>’
-+’<button class="btn btn-done" onclick="validate(\''+a.pageId+'\','+a.isValidated+')">’+(a.isValidated?‘Done’:‘Mark done’)+’</button>’
-+’<button class=“btn btn-reroll” onclick=“reroll('’+a.pageId+’')”’+(a.hasRerolled?’ disabled’:’’)+’>🎲 ‘+(a.hasRerolled?‘Rerolled’:‘Reroll’)+’</button>’
++’<div class="card-band" style="background:'+pl.color+'"></div>’
++’<div class="card-cover"><span style="font-size:32px">’+pl.emoji+’</span><span class="player-name" style="color:'+pl.color+'">’+pl.name+’</span></div>’
++’<div class="card-body">’
++’<div class="challenge-box">’
++’<div class="challenge-name">’+ch.name+’</div>’
++’<span class="spice">’+ch.spice+’ - ‘+ch.pts+‘pts</span>’
++’</div>’
++’<div class="card-actions">’
++’<div style="display:flex;align-items:center;gap:8px"><span class="done-label">Done?</span>’
++’<div class="check-box'+(a.isValidated?' checked':'')+'" onclick="toggleValidation(\''+a.pageId+'\','+a.isValidated+')">’+(a.isValidated?‘✓’:’’)+’</div></div>’
++’<div style="font-weight:900;font-size:15px;color:#FFD700">’+a.totalScore+’ pts</div>’
++’</div></div></div>’;
+});
+
+html+=’<div class="divider"></div><div class="section-title">Leaderboard</div>’;
+html+=’<div class="lb-wrap"><div class="lb-card">’;
+lb.forEach(function(a,i){
+var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
+html+=’<div class="lb-row">’
++’<div class="lb-rank">’+(medals[i]||i+1)+’</div>’
++’<div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">’+pl.emoji+’</span><span class="lb-name" style="color:'+pl.color+'">’+pl.name+’</span></div>’
++’<div class="lb-stat"><div class="lb-val" style="color:#FFD700">’+a.totalScore+’</div><div class="lb-lbl">pts</div></div>’
++’<div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">’+a.winStreak+’</div><div class="lb-lbl">streak</div></div>’
++’<div class="lb-stat"><div class="lb-val" style="color:#00FF88">’+a.defisReussis+’</div><div class="lb-lbl">done</div></div>’
 +’</div>’;
 });
+html+=’</div></div>’;
+html+=’<div style="text-align:center;margin-top:24px"><a href="/" style="color:#6B7280;font-size:13px;font-weight:700;text-decoration:none">Back to player view</a></div>’;
+
 document.getElementById(‘root’).innerHTML=html;
 }
 
-function init(){
-query(DB.system).then(function(sys){
+function loadAndRender(){
+return query(DB.system).then(function(sys){
+S.sysId=sys[0].id;
 S.day=gp(sys[0],‘Day_Counter’,‘num’)||1;
+S.launched=gp(sys[0],‘Defis_Launched’,‘check’);
 return query(DB.challenges);
 }).then(function(chs){
 chs.forEach(function(p){
 var id=gp(p,‘ID_Global’,‘num’);
-var st=gp(p,‘Status’,‘sel’);
-if(st===‘✅ Active’||!st){
 S.challenges[id]={name:gp(p,‘Name’,‘title’),pts:gp(p,‘Points’,‘num’)||0,spice:gp(p,‘Spice_Level’,‘fstr’)||’’};
-S.ids.push(id);
-}
 });
 return query(DB.assignments);
 }).then(function(asgs){
@@ -117,15 +244,18 @@ defisReussis:gp(p,‘Defis_Reussis’,‘num’)||0,
 isValidated:gp(p,‘Is_Validated’,‘check’),
 challengeId:gp(p,‘Challenge_ID_Today’,‘fnum’)||0,
 hasRerolled:gp(p,‘Has_Rerolled’,‘check’),
-rerollId:gp(p,‘Reroll_Challenge_ID’,‘num’)||0
+rerollId:gp(p,‘Reroll_Challenge_ID’,‘num’)||0,
+powerType:gp(p,‘Power_Type’,‘sel’)||‘❌ None’,
+powerUsed:gp(p,‘Power_Used’,‘check’)
 };
 }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
 render();
-}).catch(function(e){
-document.getElementById(‘root’).innerHTML=’ERROR: ’+e.message;
 });
 }
-init();
+
+loadAndRender().catch(function(e){
+document.getElementById(‘root’).textContent=’ERROR: ’+e.message;
+});
 </script>
 
 </body>
