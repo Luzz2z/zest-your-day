@@ -1,1 +1,124 @@
-test 
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌶️ Zest Your Day — Bienvenue</title>
+  <link rel="icon" type="image/png" href="LOGOZEST.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{--red:#FF2D4B;--orange:#FF6B1A;--yellow:#FFD700;--green:#00FF88;--cyan:#00EEFF;--darker:#050508;--card:#0A0A18;--text:#F5F5F5;--muted:#6B7280;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;overflow-x:hidden;}
+    #particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+    body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:1;}
+    .container{position:relative;z-index:2;max-width:420px;width:100%;text-align:center;}
+    .mascot{font-size:80px;display:block;margin-bottom:16px;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 0 24px rgba(255,107,26,0.9));}
+    @keyframes bounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+    .title{font-family:'Bangers',cursive;font-size:48px;letter-spacing:5px;background:linear-gradient(135deg,var(--red),var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:6px;}
+    .subtitle{font-size:12px;color:var(--cyan);text-transform:uppercase;letter-spacing:4px;font-weight:700;margin-bottom:28px;}
+    .desc{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.75;margin-bottom:28px;text-align:left;}
+    .desc strong{color:var(--text);}
+    .highlights{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+    .highlight{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;text-align:left;animation:slide-in 0.5s ease forwards;opacity:0;transform:translateY(20px);}
+    .highlight:nth-child(1){animation-delay:0.1s}
+    .highlight:nth-child(2){animation-delay:0.2s}
+    .highlight:nth-child(3){animation-delay:0.3s}
+    .highlight:nth-child(4){animation-delay:0.4s}
+    .highlight:nth-child(5){animation-delay:0.5s}
+    .highlight:nth-child(6){animation-delay:0.6s}
+    @keyframes slide-in{to{opacity:1;transform:translateY(0)}}
+    .hi{font-size:32px;flex-shrink:0;}
+    .ht strong{display:block;font-size:14px;font-weight:900;margin-bottom:3px;}
+    .ht span{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.4;}
+    .btns{display:flex;flex-direction:column;gap:10px;}
+    .btn-go{background:linear-gradient(135deg,var(--red),var(--orange));border:none;border-radius:18px;padding:18px;font-family:'Bangers',cursive;font-size:24px;letter-spacing:3px;color:white;cursor:pointer;box-shadow:0 0 30px rgba(255,45,75,0.4);transition:transform 0.15s;text-decoration:none;display:block;}
+    .btn-go:active{transform:scale(0.97);}
+    .btn-rules{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:14px;font-family:'Bangers',cursive;font-size:18px;letter-spacing:1px;color:rgba(255,255,255,0.5);cursor:pointer;text-decoration:none;display:block;}
+    .powers-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+    .power-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:10px 12px;text-align:left;}
+    .power-icon{font-size:20px;margin-bottom:4px;}
+    .power-name{font-size:12px;font-weight:900;margin-bottom:2px;}
+    .power-desc{font-size:10px;color:rgba(255,255,255,0.45);line-height:1.4;}
+    .section-label{font-family:'Bangers',cursive;font-size:16px;letter-spacing:2px;color:var(--muted);margin:24px 0 12px;text-align:left;display:flex;align-items:center;gap:8px;}
+    .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,75,0.3),transparent);}
+    .neon-table{background:rgba(255,255,255,0.02);border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);margin-bottom:12px;}
+    .neon-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;}
+    .neon-row:last-child{border-bottom:none;}
+    .neon-row span:first-child{color:var(--orange);font-weight:700;}
+    .neon-row span:last-child{color:var(--yellow);font-weight:900;}
+  </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+<div class="container">
+  <span class="mascot">🌶️</span>
+  <div class="title">ZEST YOUR DAY</div>
+  <div class="subtitle">Mexico Edition</div>
+
+  <div class="desc">
+    Bienvenue dans le jeu du groupe ! Chaque jour, chaque joueur reçoit un <strong>défi unique</strong> à relever. Points, streaks, pouvoirs spéciaux... tout est là pour pimenter le voyage 🌶️
+  </div>
+
+  <div class="highlights">
+    <div class="highlight">
+      <span class="hi">🎯</span>
+      <div class="ht"><strong>Un défi par jour</strong><span>Complète ton défi pour gagner des points. Plus c'est épicé, plus ça rapporte !</span></div>
+    </div>
+    <div class="highlight">
+      <span class="hi">🌶️</span>
+      <div class="ht"><strong>Niveaux de piment</strong><span>🌱 Mild = 1pt · 🌶️ Spicy = 2pts · 🔥 Hot = 3pts · ⚡ Atomic = 5pts</span></div>
+    </div>
+    <div class="highlight">
+      <span class="hi">🔥</span>
+      <div class="ht"><strong>Streak bonus</strong><span>3 jours d'affilée = +1pt · 5 jours = +2pts · 10 jours = +3pts</span></div>
+    </div>
+    <div class="highlight">
+      <span class="hi">🌅</span>
+      <div class="ht"><strong>Morning Reveal</strong><span>Chaque matin, les joueurs se passent le téléphone pour révéler leur défi et leur pouvoir.</span></div>
+    </div>
+    <div class="highlight">
+      <span class="hi">🎲</span>
+      <div class="ht"><strong>Reroll</strong><span>Tu peux reroll ton défi une fois par jour — mais tu perds ton pouvoir !</span></div>
+    </div>
+    <div class="highlight">
+      <span class="hi">✅</span>
+      <div class="ht"><strong>Validation</strong><span>Le Game Master coche les défis réussis. Sois honnête — la honte est la vraie punition 😈</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">🎴 Les 8 Pouvoirs</div>
+  <div class="powers-grid">
+    <div class="power-item"><div class="power-icon">🦹</div><div class="power-name" style="color:#BF00FF">Entourloupeur</div><div class="power-desc">Copie & vole les points de quelqu'un</div></div>
+    <div class="power-item"><div class="power-icon">🔄</div><div class="power-name" style="color:#00EEFF">Swap</div><div class="power-desc">Échange de défi imposé</div></div>
+    <div class="power-item"><div class="power-icon">💀</div><div class="power-name" style="color:#FF2D4B">Bridage</div><div class="power-desc">×0.5 points aujourd'hui</div></div>
+    <div class="power-item"><div class="power-icon">⚡</div><div class="power-name" style="color:#FFD700">Pas si vite</div><div class="power-desc">Change la difficulté du défi</div></div>
+    <div class="power-item"><div class="power-icon">🛡️</div><div class="power-name" style="color:#00EEFF">Shield</div><div class="power-desc">Bloque n'importe quel pouvoir</div></div>
+    <div class="power-item"><div class="power-icon">🎰</div><div class="power-name" style="color:#FF6B1A">Roulette</div><div class="power-desc">×0, ×1 ou ×2 aléatoire</div></div>
+    <div class="power-item"><div class="power-icon">👯</div><div class="power-name" style="color:#00FF88">Copier-Coller</div><div class="power-desc">Partagez le défi, ×2 si les deux réussissent</div></div>
+    <div class="power-item"><div class="power-icon">🔥</div><div class="power-name" style="color:#FF2D4B">Extincteur</div><div class="power-desc">Remet la streak de quelqu'un à 0</div></div>
+  </div>
+
+  <div class="btns" style="margin-top:24px">
+    <a href="/" class="btn-go">🌶️ C'EST PARTI !</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  const canvas=document.getElementById('particle-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const colors=['#FF2D4B','#FF6B1A','#FFD700','#00FF88','#00EEFF','#BF00FF'];
+  let particles=[];
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(let i=0;i<50;i++){particles.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.5+0.3,color:colors[Math.floor(Math.random()*colors.length)],vx:(Math.random()-0.5)*0.3,vy:-Math.random()*0.4-0.1,alpha:Math.random()*0.5+0.1});}
+  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color+Math.floor(p.alpha*255).toString(16).padStart(2,'0');ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.y<-5){p.y=canvas.height+5;p.x=Math.random()*canvas.width;}if(p.x<-5)p.x=canvas.width+5;if(p.x>canvas.width+5)p.x=-5;});requestAnimationFrame(draw);}
+  draw();
+})();
+</script>
+
+</body>
+</html>
