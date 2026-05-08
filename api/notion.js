@@ -3,19 +3,13 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
+  if (req.method === 'OPTIONS') { res.status(200).end(); return; }
 
-  var endpoint = req.query.endpoint;
-  if (!endpoint) {
-    res.status(400).json({ error: 'Missing endpoint' });
-    return;
-  }
+  var url = req.url || '';
+  var match = url.match(/[?&]endpoint=([^&]+)/);
+  if (!match) { res.status(400).json({ error: 'Missing endpoint' }); return; }
 
-  try { endpoint = decodeURIComponent(endpoint); } catch(e) {}
-
+  var endpoint = decodeURIComponent(match[1]);
   var notionUrl = 'https://api.notion.com/v1/' + endpoint;
 
   var options = {
