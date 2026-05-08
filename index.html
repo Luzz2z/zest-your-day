@@ -2,11 +2,31 @@
 <html>
 <head><meta charset="UTF-8"></head>
 <body>
-<div id="root">Before script</div>
+<div id="root">start</div>
 <script>
-document.getElementById('root').textContent = 'Script works';
-var DB = {system:'test'};
-document.getElementById('root').textContent = 'DB defined: ' + DB.system;
+document.getElementById('root').textContent = 'step 1';
+var DB={
+  system:'354403dde0e380aa85bfe7d9fd139be5',
+  challenges:'354403dde0e3804f8644d242a0ec6bf6',
+  assignments:'354403dde0e380f797ccfb85ad5a072e'
+};
+document.getElementById('root').textContent = 'step 2';
+var S={day:1,challenges:{},players:[],ids:[]};
+document.getElementById('root').textContent = 'step 3';
+function query(dbId){
+  return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
+}
+document.getElementById('root').textContent = 'step 4';
+function init(){
+  document.getElementById('root').textContent = 'init called';
+  query(DB.system).then(function(sys){
+    document.getElementById('root').textContent = 'got system: '+sys.length+' results';
+  }).catch(function(e){
+    document.getElementById('root').textContent = 'error: '+e.message;
+  });
+}
+document.getElementById('root').textContent = 'step 5 - calling init';
+init();
 </script>
 </body>
 </html>
