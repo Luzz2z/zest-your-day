@@ -176,7 +176,7 @@ isValidated:getProp(p,‘Is_Validated’,‘checkbox’),
 challengeId:getProp(p,‘Challenge_ID_Today’,‘formula_number’)||0,
 hasRerolled:getProp(p,‘Has_Rerolled’,‘checkbox’),
 rerollChallengeId:getProp(p,‘Reroll_Challenge_ID’,‘number’)||0,
-powerType:getProp(p,‘Power_Type’,‘select’)||‘None’,
+powerType:'None',
 powerUsed:getProp(p,‘Power_Used’,‘checkbox’)
 };
 }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
