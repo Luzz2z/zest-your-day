@@ -14,13 +14,22 @@ body{background:#050508;color:#F5F5F5;font-family:sans-serif;}
 <body>
 <div id="root"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
 <script>
-fetch('/api/notion/databases/354403dde0e380aa85bfe7d9fd139be5/query',{
-  method:'POST',
-  headers:{'Content-Type':'application/json'},
-  body:'{}'
-}).then(function(r){return r.json();})
-.then(function(d){
-  document.getElementById('root').textContent='OK: '+d.results.length+' results';
+var DB={
+  system:'354403dde0e380aa85bfe7d9fd139be5',
+  challenges:'354403dde0e3804f8644d242a0ec6bf6',
+  assignments:'354403dde0e380f797ccfb85ad5a072e'
+};
+function query(dbId){
+  return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
+}
+query(DB.system).then(function(sys){
+  document.getElementById('root').textContent='system ok, day='+sys[0].properties.Day_Counter.number;
+  return query(DB.challenges);
+}).then(function(chs){
+  document.getElementById('root').textContent='challenges ok: '+chs.length;
+  return query(DB.assignments);
+}).then(function(asgs){
+  document.getElementById('root').textContent='ALL OK! Players: '+asgs.length;
 }).catch(function(e){
   document.getElementById('root').textContent='ERROR: '+e.message;
 });
