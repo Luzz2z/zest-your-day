@@ -32,23 +32,66 @@ body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);
   draw();
 })();
 
-var DB={
-  system:'354403dde0e380aa85bfe7d9fd139be5',
-  challenges:'354403dde0e3804f8644d242a0ec6bf6',
-  assignments:'354403dde0e380f797ccfb85ad5a072e'
+var CONFIG={
+  db_system:'354403dde0e380aa85bfe7d9fd139be5',
+  db_challenges:'354403dde0e3804f8644d242a0ec6bf6',
+  db_assignments:'354403dde0e380f797ccfb85ad5a072e'
 };
+var STATE={dayCounter:1,systemPageId:null,challenges:{},assignments:[],allChallengeIds:[],defiLaunched:false};
+
 function query(dbId){
   return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
 }
-query(DB.system).then(function(sys){
-  document.getElementById('root').textContent='system ok';
-  return query(DB.challenges);
-}).then(function(chs){
-  document.getElementById('root').textContent='challenges ok: '+chs.length;
-  return query(DB.assignments);
-}).then(function(asgs){
-  document.getElementById('root').textContent='ALL OK! Players: '+asgs.length;
-}).catch(function(e){
+function getProp(page,name,type){
+  var p=page.properties[name];
+  if(!p)return null;
+  if(type==='number')return p.number!=null?p.number:0;
+  if(type==='title')return p.title&&p.title[0]?p.title[0].plain_text:'';
+  if(type==='checkbox')return p.checkbox===true;
+  if(type==='formula_number')return p.formula?p.formula.number||0:0;
+  if(type==='formula_string')return p.formula?p.formula.string||'':'';
+  if(type==='select')return p.select?p.select.name||'':'';
+  if(type==='text')return p.rich_text&&p.rich_text[0]?p.rich_text[0].plain_text:'';
+  return null;
+}
+
+function loadData(){
+  return query(CONFIG.db_system).then(function(sysPages){
+    var sys=sysPages[0];
+    STATE.systemPageId=sys.id;
+    STATE.dayCounter=getProp(sys,'Day_Counter','number')||1;
+    STATE.defiLaunched=getProp(sys,'Defis_Launched','checkbox');
+    return query(CONFIG.db_challenges);
+  }).then(function(chPages){
+    STATE.challenges={};STATE.allChallengeIds=[];
+    for(var i=0;i<chPages.length;i++){
+      var p=chPages[i];
+      var id=getProp(p,'ID_Global','number');
+      STATE.challenges[id]={id:id,name:getProp(p,'Name','title'),points:getProp(p,'Points','number')||0,spice:getProp(p,'Spice_Level','formula_string')||getProp(p,'Spice_Level','select')||''};
+      STATE.allChallengeIds.push(id);
+    }
+    return query(CONFIG.db_assignments);
+  }).then(function(asgPages){
+    STATE.assignments=asgPages.map(function(p){
+      return{
+        pageId:p.id,
+        playerIndex:getProp(p,'Player_Index','number')||0,
+        winStreak:getProp(p,'Win_Streak','number')||0,
+        totalScore:getProp(p,'Total_Score','number')||0,
+        defisReussis:getProp(p,'Defis_Reussis','number')||0,
+        isValidated:getProp(p,'Is_Validated','checkbox'),
+        challengeId:getProp(p,'Challenge_ID_Today','formula_number')||0,
+        hasRerolled:getProp(p,'Has_Rerolled','checkbox'),
+        rerollChallengeId:getProp(p,'Reroll_Challenge_ID','number')||0,
+        powerType:getProp(p,'Power_Type','select')||'None',
+        powerUsed:getProp(p,'Power_Used','checkbox')
+      };
+    }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
+    document.getElementById('root').textContent='ALL OK! Day '+STATE.dayCounter+' | Players: '+STATE.assignments.length+' | Challenges: '+STATE.allChallengeIds.length;
+  });
+}
+
+loadData().catch(function(e){
   document.getElementById('root').textContent='ERROR: '+e.message;
 });
 </script>
