@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -21,7 +22,7 @@ body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);
 .cards{padding:0 16px;display:flex;flex-direction:column;gap:16px;margin-bottom:32px;}
 .card{background:var(--card);border-radius:24px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;}
 .card-band{height:3px;}
-.card-cover{height:72px;display:flex;align-items:center;padding:0 20px;gap:14px;}
+.card-cover{height:72px;display:flex;align-items:center;padding:0 20px;gap:14px;position:relative;}
 .player-name-big{font-family:'Bangers',cursive;font-size:26px;letter-spacing:2px;}
 .card-body{padding:14px 20px 18px;}
 .challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:16px;margin-bottom:14px;}
@@ -62,126 +63,131 @@ body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);
 })();
 
 var CONFIG={
-  db_system:'354403dde0e380aa85bfe7d9fd139be5',
-  db_challenges:'354403dde0e3804f8644d242a0ec6bf6',
-  db_assignments:'354403dde0e380f797ccfb85ad5a072e'
+db_system:‘354403dde0e380aa85bfe7d9fd139be5’,
+db_challenges:‘354403dde0e3804f8644d242a0ec6bf6’,
+db_assignments:‘354403dde0e380f797ccfb85ad5a072e’
 };
 var PLAYERS=[
-  {name:'Banuu',emoji:'\u{1F335}',color:'#00FF88'},
-  {name:'Luzz',emoji:'\u{1F525}',color:'#FF2D4B'},
-  {name:'Y',emoji:'\u26A1',color:'#FFD700'},
-  {name:'Nicooo',emoji:'\u{1F4B0}',color:'#FF6B1A'}
+{name:‘Banuu’,emoji:’\u{1F335}’,color:’#00FF88’},
+{name:‘Luzz’,emoji:’\u{1F525}’,color:’#FF2D4B’},
+{name:‘Y’,emoji:’\u26A1’,color:’#FFD700’},
+{name:‘Nicooo’,emoji:’\u{1F4B0}’,color:’#FF6B1A’}
 ];
 var STATE={dayCounter:1,systemPageId:null,challenges:{},assignments:[],allChallengeIds:[],defiLaunched:false};
 
 function query(dbId){
-  return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
+return fetch(’/api/notion/databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:’{}’}).then(function(r){return r.json();}).then(function(d){return d.results;});
 }
 function getProp(page,name,type){
-  var p=page.properties[name];
-  if(!p)return null;
-  if(type==='number')return p.number!=null?p.number:0;
-  if(type==='title')return p.title&&p.title[0]?p.title[0].plain_text:'';
-  if(type==='checkbox')return p.checkbox===true;
-  if(type==='formula_number')return p.formula?p.formula.number||0:0;
-  if(type==='formula_string')return p.formula?p.formula.string||'':'';
-  if(type==='select')return p.select?p.select.name||'':'';
-  if(type==='text')return p.rich_text&&p.rich_text[0]?p.rich_text[0].plain_text:'';
-  return null;
+var p=page.properties[name];
+if(!p)return null;
+if(type===‘number’)return p.number!=null?p.number:0;
+if(type===‘title’)return p.title&&p.title[0]?p.title[0].plain_text:’’;
+if(type===‘checkbox’)return p.checkbox===true;
+if(type===‘formula_number’)return p.formula?p.formula.number||0:0;
+if(type===‘formula_string’)return p.formula?p.formula.string||’’:’’;
+if(type===‘select’)return p.select?p.select.name||’’:’’;
+if(type===‘text’)return p.rich_text&&p.rich_text[0]?p.rich_text[0].plain_text:’’;
+return null;
 }
 function showToast(msg,color){
-  var t=document.getElementById('toast');
-  t.textContent=msg;t.style.background=color||'#00FF88';
-  t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},3000);
+var t=document.getElementById(‘toast’);
+t.textContent=msg;t.style.background=color||’#00FF88’;
+t.classList.add(‘show’);
+setTimeout(function(){t.classList.remove(‘show’);},3000);
 }
 
 function render(){
-  var lb=STATE.assignments.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
-  var html='<div class="header"><span class="header-mascot">\u{1F336}\uFE0F</span><h1>ZEST YOUR DAY</h1><div class="header-sub">Mexico Edition</div><div class="day-badge">Day '+STATE.dayCounter+'</div></div>';
-  html+='<div class="section-title">Challenges</div><div class="cards">';
-  STATE.assignments.forEach(function(asg){
-    var player=PLAYERS[asg.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
-    var cid=asg.rerollChallengeId>0?asg.rerollChallengeId:asg.challengeId;
-    var ch=STATE.challenges[cid]||{name:'?',points:0,spice:''};
-    html+='<div class="card '+(asg.isValidated?'validated':'')+'">'
-      +'<div class="card-band" style="background:'+player.color+'"></div>'
-      +'<div class="card-cover"><span style="font-size:36px">'+player.emoji+'</span><span class="player-name-big" style="color:'+player.color+'">'+player.name+'</span></div>'
-      +'<div class="card-body"><div class="challenge-box">'
-      +'<div class="challenge-name">'+ch.name+'</div>'
-      +'<span class="spice-badge">'+ch.spice+' - '+ch.points+'pts</span>'
-      +'</div>'
-      +'<div class="card-actions">'
-      +'<div style="display:flex;align-items:center;gap:8px"><span class="done-label">Done?</span>'
-      +'<div class="check-box'+(asg.isValidated?' checked':'')+'" onclick="toggleValidation(\''+asg.pageId+'\','+asg.isValidated+')">'+(asg.isValidated?'\u2713':'')+'</div></div>'
-      +'<button class="btn-reroll" onclick="reroll(\''+asg.pageId+'\')" '+(asg.hasRerolled?'disabled':'')+'>Reroll</button>'
-      +'</div></div></div>';
-  });
-  html+='</div>';
-  document.getElementById('root').innerHTML=html;
+var html=’<div class="header"><span class="header-mascot">\u{1F336}\uFE0F</span><h1>ZEST YOUR DAY</h1><div class="header-sub">Mexico Edition</div><div class="day-badge">Day ‘+STATE.dayCounter+’</div></div>’;
+html+=’<div class="section-title">Challenges</div><div class="cards">’;
+STATE.assignments.forEach(function(asg){
+var player=PLAYERS[asg.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
+var cid=asg.rerollChallengeId>0?asg.rerollChallengeId:asg.challengeId;
+var ch=STATE.challenges[cid]||{name:’?’,points:0,spice:’’};
+var hasPower=asg.powerType&&asg.powerType.indexOf(‘None’)<0&&asg.powerType.indexOf(’\u274C’)<0;
+html+=’<div class="card '+(asg.isValidated?'validated':'')+'">’
++’<div class="card-band" style="background:'+player.color+'"></div>’
++’<div class="card-cover">’
++’<span style="font-size:36px">’+player.emoji+’</span>’
++’<span class="player-name-big" style="color:'+player.color+'">’+player.name+’</span>’
++(hasPower?’<span style="position:absolute;right:16px;font-size:20px;font-weight:900;color:#FFD700">’+asg.powerType+’</span>’:’’)
++’</div>’
++’<div class="card-body"><div class="challenge-box">’
++’<div class="challenge-name">’+ch.name+’</div>’
++’<span class="spice-badge">’+ch.spice+’ - ‘+ch.points+‘pts</span>’
++’</div>’
++’<div class="card-actions">’
++’<div style="display:flex;align-items:center;gap:8px"><span class="done-label">Done?</span>’
++’<div class="check-box'+(asg.isValidated?' checked':'')+'" onclick="toggleValidation(\''+asg.pageId+'\','+asg.isValidated+')">’+(asg.isValidated?’\u2713’:’’)+’</div></div>’
++’<button class=“btn-reroll” onclick=“reroll('’+asg.pageId+’')” ‘+(asg.hasRerolled?‘disabled’:’’)+’>Reroll</button>’
++’</div></div></div>’;
+});
+html+=’</div>’;
+document.getElementById(‘root’).innerHTML=html;
 }
 
 window.toggleValidation=function(pageId,cur){
-  var nv=!cur;
-  fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:{Is_Validated:{checkbox:nv}}})}).then(function(){
-    var a=STATE.assignments.find(function(x){return x.pageId===pageId;});
-    if(a)a.isValidated=nv;
-    render();
-    showToast(nv?'Challenge done!':'Removed',nv?'#00FF88':'#FF2D4B');
-  });
+var nv=!cur;
+fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:{Is_Validated:{checkbox:nv}}})}).then(function(){
+var a=STATE.assignments.find(function(x){return x.pageId===pageId;});
+if(a)a.isValidated=nv;
+render();
+showToast(nv?‘Challenge done!’:‘Removed’,nv?’#00FF88’:’#FF2D4B’);
+});
 };
 window.reroll=function(pageId){
-  var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
-  if(!asg||asg.hasRerolled)return;
-  var current=asg.rerollChallengeId>0?asg.rerollChallengeId:asg.challengeId;
-  var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
-  if(available.length===0){showToast('No other challenges!','#FF6B1A');return;}
-  var newId=available[Math.floor(Math.random()*available.length)];
-  fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}})}).then(function(){
-    asg.hasRerolled=true;asg.rerollChallengeId=newId;
-    render();showToast('Rerolled!','#BF00FF');
-  });
+var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
+if(!asg||asg.hasRerolled)return;
+var current=asg.rerollChallengeId>0?asg.rerollChallengeId:asg.challengeId;
+var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
+if(available.length===0){showToast(‘No other challenges!’,’#FF6B1A’);return;}
+var newId=available[Math.floor(Math.random()*available.length)];
+fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}})}).then(function(){
+asg.hasRerolled=true;asg.rerollChallengeId=newId;
+render();showToast(‘Rerolled!’,’#BF00FF’);
+});
 };
 
 function loadData(){
-  return query(CONFIG.db_system).then(function(sysPages){
-    var sys=sysPages[0];
-    STATE.systemPageId=sys.id;
-    STATE.dayCounter=getProp(sys,'Day_Counter','number')||1;
-    STATE.defiLaunched=getProp(sys,'Defis_Launched','checkbox');
-    return query(CONFIG.db_challenges);
-  }).then(function(chPages){
-    STATE.challenges={};STATE.allChallengeIds=[];
-    for(var i=0;i<chPages.length;i++){
-      var p=chPages[i];
-      var id=getProp(p,'ID_Global','number');
-      STATE.challenges[id]={id:id,name:getProp(p,'Name','title'),points:getProp(p,'Points','number')||0,spice:getProp(p,'Spice_Level','formula_string')||getProp(p,'Spice_Level','select')||''};
-      STATE.allChallengeIds.push(id);
-    }
-    return query(CONFIG.db_assignments);
-  }).then(function(asgPages){
-    STATE.assignments=asgPages.map(function(p){
-      return{
-        pageId:p.id,
-        playerIndex:getProp(p,'Player_Index','number')||0,
-        winStreak:getProp(p,'Win_Streak','number')||0,
-        totalScore:getProp(p,'Total_Score','number')||0,
-        defisReussis:getProp(p,'Defis_Reussis','number')||0,
-        isValidated:getProp(p,'Is_Validated','checkbox'),
-        challengeId:getProp(p,'Challenge_ID_Today','formula_number')||0,
-        hasRerolled:getProp(p,'Has_Rerolled','checkbox'),
-        rerollChallengeId:getProp(p,'Reroll_Challenge_ID','number')||0,
-        powerType:getProp(p,'Power_Type','select')||'None',
-        powerUsed:getProp(p,'Power_Used','checkbox')
-      };
-    }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
-    render();
-  });
+return query(CONFIG.db_system).then(function(sysPages){
+var sys=sysPages[0];
+STATE.systemPageId=sys.id;
+STATE.dayCounter=getProp(sys,‘Day_Counter’,‘number’)||1;
+STATE.defiLaunched=getProp(sys,‘Defis_Launched’,‘checkbox’);
+return query(CONFIG.db_challenges);
+}).then(function(chPages){
+STATE.challenges={};STATE.allChallengeIds=[];
+for(var i=0;i<chPages.length;i++){
+var p=chPages[i];
+var id=getProp(p,‘ID_Global’,‘number’);
+STATE.challenges[id]={id:id,name:getProp(p,‘Name’,‘title’),points:getProp(p,‘Points’,‘number’)||0,spice:getProp(p,‘Spice_Level’,‘formula_string’)||getProp(p,‘Spice_Level’,‘select’)||’’};
+STATE.allChallengeIds.push(id);
+}
+return query(CONFIG.db_assignments);
+}).then(function(asgPages){
+STATE.assignments=asgPages.map(function(p){
+return{
+pageId:p.id,
+playerIndex:getProp(p,‘Player_Index’,‘number’)||0,
+winStreak:getProp(p,‘Win_Streak’,‘number’)||0,
+totalScore:getProp(p,‘Total_Score’,‘number’)||0,
+defisReussis:getProp(p,‘Defis_Reussis’,‘number’)||0,
+isValidated:getProp(p,‘Is_Validated’,‘checkbox’),
+challengeId:getProp(p,‘Challenge_ID_Today’,‘formula_number’)||0,
+hasRerolled:getProp(p,‘Has_Rerolled’,‘checkbox’),
+rerollChallengeId:getProp(p,‘Reroll_Challenge_ID’,‘number’)||0,
+powerType:getProp(p,‘Power_Type’,‘select’)||‘None’,
+powerUsed:getProp(p,‘Power_Used’,‘checkbox’)
+};
+}).sort(function(a,b){return a.playerIndex-b.playerIndex;});
+render();
+});
 }
 
 loadData().catch(function(e){
-  document.getElementById('root').innerHTML='<div style="padding:20px;color:#FF2D4B">ERROR: '+e.message+'</div>';
+document.getElementById(‘root’).innerHTML=’<div style="padding:20px;color:#FF2D4B">ERROR: ‘+e.message+’</div>’;
 });
 </script>
+
 </body>
 </html>
