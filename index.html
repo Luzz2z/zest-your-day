@@ -7,17 +7,46 @@
 <style>
 :root{--red:#FF2D4B;--orange:#FF6B1A;--yellow:#FFD700;--green:#00FF88;--purple:#BF00FF;--cyan:#00EEFF;--darker:#050508;--card:#0A0A18;--text:#F5F5F5;--muted:#6B7280;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);min-height:100vh;}
+body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);min-height:100vh;overflow-x:hidden;}
 #particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.app{position:relative;z-index:2;max-width:480px;margin:0 auto;padding:0 0 120px;}
+.header{padding:48px 20px 24px;text-align:center;}
+.header-mascot{font-size:72px;display:block;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 0 24px rgba(255,107,26,0.9));}
+@keyframes bounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+.header h1{font-family:'Bangers',cursive;font-size:54px;letter-spacing:5px;background:linear-gradient(135deg,var(--red),var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:8px 0 4px;}
+.header-sub{font-size:11px;color:var(--cyan);text-transform:uppercase;letter-spacing:5px;font-weight:700;}
+.day-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:7px 20px;font-size:15px;font-weight:900;color:var(--yellow);margin-top:16px;}
+.section-title{font-family:'Bangers',cursive;font-size:18px;letter-spacing:3px;text-transform:uppercase;padding:0 20px 14px;display:flex;align-items:center;gap:10px;color:var(--muted);}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,75,0.4),transparent);}
+.cards{padding:0 16px;display:flex;flex-direction:column;gap:16px;margin-bottom:32px;}
+.card{background:var(--card);border-radius:24px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;}
+.card-band{height:3px;}
+.card-cover{height:72px;display:flex;align-items:center;padding:0 20px;gap:14px;}
+.player-name-big{font-family:'Bangers',cursive;font-size:26px;letter-spacing:2px;}
+.card-body{padding:14px 20px 18px;}
+.challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:16px;margin-bottom:14px;}
+.challenge-name{font-weight:900;font-size:17px;line-height:1.4;margin-bottom:8px;}
+.spice-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.card-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.done-label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.check-box{width:36px;height:36px;border-radius:12px;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;}
+.check-box.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 24px rgba(0,255,136,0.6);}
+.btn-reroll{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:12px;padding:10px 16px;font-size:13px;font-weight:900;color:#e879f9;cursor:pointer;font-family:'Nunito',sans-serif;}
+.btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;position:relative;z-index:2;}
 .spinner{width:48px;height:48px;border:2px solid rgba(255,45,75,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:3px;font-size:11px;}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 <canvas id="particle-canvas"></canvas>
+<div class="app">
 <div id="root"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
+</div>
+<div class="toast" id="toast"></div>
 <script>
 (function(){
   var canvas=document.getElementById('particle-canvas');
@@ -37,6 +66,12 @@ var CONFIG={
   db_challenges:'354403dde0e3804f8644d242a0ec6bf6',
   db_assignments:'354403dde0e380f797ccfb85ad5a072e'
 };
+var PLAYERS=[
+  {name:'Banuu',emoji:'\u{1F335}',color:'#00FF88'},
+  {name:'Luzz',emoji:'\u{1F525}',color:'#FF2D4B'},
+  {name:'Y',emoji:'\u26A1',color:'#FFD700'},
+  {name:'Nicooo',emoji:'\u{1F4B0}',color:'#FF6B1A'}
+];
 var STATE={dayCounter:1,systemPageId:null,challenges:{},assignments:[],allChallengeIds:[],defiLaunched:false};
 
 function query(dbId){
@@ -54,6 +89,59 @@ function getProp(page,name,type){
   if(type==='text')return p.rich_text&&p.rich_text[0]?p.rich_text[0].plain_text:'';
   return null;
 }
+function showToast(msg,color){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=color||'#00FF88';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+
+function render(){
+  var lb=STATE.assignments.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
+  var html='<div class="header"><span class="header-mascot">\u{1F336}\uFE0F</span><h1>ZEST YOUR DAY</h1><div class="header-sub">Mexico Edition</div><div class="day-badge">Day '+STATE.dayCounter+'</div></div>';
+  html+='<div class="section-title">Challenges</div><div class="cards">';
+  STATE.assignments.forEach(function(asg){
+    var player=PLAYERS[asg.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+    var cid=asg.rerollChallengeId>0?asg.rerollChallengeId:asg.challengeId;
+    var ch=STATE.challenges[cid]||{name:'?',points:0,spice:''};
+    html+='<div class="card '+(asg.isValidated?'validated':'')+'">'
+      +'<div class="card-band" style="background:'+player.color+'"></div>'
+      +'<div class="card-cover"><span style="font-size:36px">'+player.emoji+'</span><span class="player-name-big" style="color:'+player.color+'">'+player.name+'</span></div>'
+      +'<div class="card-body"><div class="challenge-box">'
+      +'<div class="challenge-name">'+ch.name+'</div>'
+      +'<span class="spice-badge">'+ch.spice+' - '+ch.points+'pts</span>'
+      +'</div>'
+      +'<div class="card-actions">'
+      +'<div style="display:flex;align-items:center;gap:8px"><span class="done-label">Done?</span>'
+      +'<div class="check-box'+(asg.isValidated?' checked':'')+'" onclick="toggleValidation(\''+asg.pageId+'\','+asg.isValidated+')">'+(asg.isValidated?'\u2713':'')+'</div></div>'
+      +'<button class="btn-reroll" onclick="reroll(\''+asg.pageId+'\')" '+(asg.hasRerolled?'disabled':'')+'>Reroll</button>'
+      +'</div></div></div>';
+  });
+  html+='</div>';
+  document.getElementById('root').innerHTML=html;
+}
+
+window.toggleValidation=function(pageId,cur){
+  var nv=!cur;
+  fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:{Is_Validated:{checkbox:nv}}})}).then(function(){
+    var a=STATE.assignments.find(function(x){return x.pageId===pageId;});
+    if(a)a.isValidated=nv;
+    render();
+    showToast(nv?'Challenge done!':'Removed',nv?'#00FF88':'#FF2D4B');
+  });
+};
+window.reroll=function(pageId){
+  var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
+  if(!asg||asg.hasRerolled)return;
+  var current=asg.rerollChallengeId>0?asg.rerollChallengeId:asg.challengeId;
+  var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
+  if(available.length===0){showToast('No other challenges!','#FF6B1A');return;}
+  var newId=available[Math.floor(Math.random()*available.length)];
+  fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}})}).then(function(){
+    asg.hasRerolled=true;asg.rerollChallengeId=newId;
+    render();showToast('Rerolled!','#BF00FF');
+  });
+};
 
 function loadData(){
   return query(CONFIG.db_system).then(function(sysPages){
@@ -87,12 +175,12 @@ function loadData(){
         powerUsed:getProp(p,'Power_Used','checkbox')
       };
     }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
-    document.getElementById('root').textContent='ALL OK! Day '+STATE.dayCounter+' | Players: '+STATE.assignments.length+' | Challenges: '+STATE.allChallengeIds.length;
+    render();
   });
 }
 
 loadData().catch(function(e){
-  document.getElementById('root').textContent='ERROR: '+e.message;
+  document.getElementById('root').innerHTML='<div style="padding:20px;color:#FF2D4B">ERROR: '+e.message+'</div>';
 });
 </script>
 </body>
