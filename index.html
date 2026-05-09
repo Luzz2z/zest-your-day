@@ -112,7 +112,7 @@ setTimeout(function(){t.classList.remove(‘show’);},3000);
 }
 
 function render(){
-var lb=STATE.assignments.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
+var lb=STATE.assignments.slice().sort(function(a,b){return (b.totalScore||0)-(a.totalScore||0);});
 var medals=[‘1’,‘2’,‘3’,‘4’];
 var html=’<div class="header"><span class="header-mascot">\u{1F336}\uFE0F</span><h1>ZEST YOUR DAY</h1><div class="header-sub">Mexico Edition</div><div class="day-badge">Day ‘+STATE.dayCounter+’</div></div>’;
 html+=’<div class="section-title">Challenges</div><div class="cards">’;
@@ -143,9 +143,9 @@ var player=PLAYERS[asg.playerIndex]||{name:’?’,emoji:’?’,color:’#fff�
 html+=’<div class="lb-row">’
 +’<div class="lb-rank">’+(medals[i]||i+1)+’</div>’
 +’<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">’+player.emoji+’</span><span class="lb-name" style="color:'+player.color+'">’+player.name+’</span></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#FFD700">’+asg.totalScore+’</div><div class="lb-lbl">pts</div></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">’+asg.winStreak+’</div><div class="lb-lbl">streak</div></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#00FF88">’+asg.defisReussis+’</div><div class="lb-lbl">done</div></div>’
++’<div class="lb-stat"><div class="lb-val" style="color:#FFD700">’+(asg.totalScore||0)+’</div><div class="lb-lbl">pts</div></div>’
++’<div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">’+(asg.winStreak||0)+’</div><div class="lb-lbl">streak</div></div>’
++’<div class="lb-stat"><div class="lb-val" style="color:#00FF88">’+(asg.defisReussis||0)+’</div><div class="lb-lbl">done</div></div>’
 +’</div>’;
 });
 html+=’</div></div>’;
@@ -186,20 +186,29 @@ STATE.challenges={};STATE.allChallengeIds=[];
 for(var i=0;i<chPages.length;i++){
 var p=chPages[i];
 var id=getProp(p,‘ID_Global’,‘number’);
-STATE.challenges[id]={id:id,name:getProp(p,‘Name’,‘title’),points:getProp(p,‘Points’,‘number’)||0,spice:getProp(p,‘Spice_Level’,‘formula_string’)||getProp(p,‘Spice_Level’,‘select’)||’’};
+if(!id)continue;
+var spice=’’;
+try{spice=getProp(p,‘Spice_Level’,‘formula_string’)||getProp(p,‘Spice_Level’,‘select’)||’’;}catch(e){}
+var pts=0;
+try{pts=getProp(p,‘Points’,‘number’)||0;}catch(e){}
+STATE.challenges[id]={id:id,name:getProp(p,‘Name’,‘title’)||’’,points:pts,spice:spice};
 STATE.allChallengeIds.push(id);
 }
 return query(CONFIG.db_assignments);
 }).then(function(asgPages){
 STATE.assignments=asgPages.map(function(p){
+var totalScore=0;
+try{totalScore=getProp(p,‘Total_Score’,‘formula_number’)||getProp(p,‘Total_Score’,‘number’)||0;}catch(e){}
+var challengeId=0;
+try{challengeId=getProp(p,‘Challenge_ID_Today’,‘formula_number’)||0;}catch(e){}
 return{
 pageId:p.id,
 playerIndex:getProp(p,‘Player_Index’,‘number’)||0,
 winStreak:getProp(p,‘Win_Streak’,‘number’)||0,
-totalScore:getProp(p,‘Total_Score’,‘formula_number’)||getProp(p,‘Total_Score’,‘number’)||0,
+totalScore:totalScore,
 defisReussis:getProp(p,‘Defis_Reussis’,‘number’)||0,
 isValidated:getProp(p,‘Is_Validated’,‘checkbox’),
-challengeId:getProp(p,‘Challenge_ID_Today’,‘formula_number’)||0,
+challengeId:challengeId,
 hasRerolled:getProp(p,‘Has_Rerolled’,‘checkbox’),
 rerollChallengeId:getProp(p,‘Reroll_Challenge_ID’,‘number’)||0,
 powerType:getProp(p,‘Power_Type’,‘select’)||‘None’,
@@ -211,7 +220,7 @@ render();
 }
 
 loadData().catch(function(e){
-document.getElementById(‘root’).innerHTML=’<div style="padding:20px;color:#FF2D4B">ERROR: ‘+e.message+’</div>’;
+document.getElementById(‘root’).innerHTML=’<div style="padding:20px;color:#FF2D4B;font-weight:700">ERROR: ‘+e.message+’</div>’;
 });
 </script>
 
