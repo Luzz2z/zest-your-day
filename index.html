@@ -112,7 +112,7 @@ setTimeout(function(){t.classList.remove(‘show’);},3000);
 }
 
 function render(){
-var lb=STATE.assignments.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
+var lb=STATE.assignments.slice();
 var medals=[’\u{1F947}’,’\u{1F948}’,’\u{1F949}’,‘4’];
 var html=’<div class="header"><span class="header-mascot">\u{1F336}\uFE0F</span><h1>ZEST YOUR DAY</h1><div class="header-sub">Mexico Edition</div><div class="day-badge">Day ‘+STATE.dayCounter+’</div></div>’;
 html+=’<div class="section-title">Challenges</div><div class="cards">’;
