@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -20,10 +21,15 @@ body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);
 .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,75,0.4),transparent);}
 .cards{padding:0 16px;display:flex;flex-direction:column;gap:16px;margin-bottom:32px;}
 .card{background:var(--card);border-radius:24px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;}
+.card.validated{border-color:rgba(0,255,136,0.15);box-shadow:0 0 30px rgba(0,255,136,0.06);}
 .card-band{height:3px;}
-.card-cover{height:72px;display:flex;align-items:center;padding:0 20px;gap:14px;}
+.card-cover{height:72px;display:flex;align-items:center;padding:0 20px;gap:14px;position:relative;}
 .player-name-big{font-family:'Bangers',cursive;font-size:26px;letter-spacing:2px;}
+.power-badge-cover{position:absolute;right:16px;font-size:22px;}
 .card-body{padding:14px 20px 18px;}
+.pills{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:900;}
+.pill-streak{background:rgba(255,107,26,0.1);border:1px solid rgba(255,107,26,0.3);color:var(--orange);}
 .challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:16px;margin-bottom:14px;}
 .challenge-name{font-weight:900;font-size:17px;line-height:1.4;margin-bottom:8px;}
 .spice-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
@@ -33,6 +39,76 @@ body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);
 .check-box.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 24px rgba(0,255,136,0.6);}
 .btn-reroll{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:12px;padding:10px 16px;font-size:13px;font-weight:900;color:#e879f9;cursor:pointer;font-family:'Nunito',sans-serif;}
 .btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:28px 16px;}
+.collapsible-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);margin:0 16px 16px;}
+.collapsible-header{padding:18px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+.collapsible-header h3{font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px;}
+.collapsible-body{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
+.collapsible-body.open{max-height:2000px;}
+.collapsible-inner{padding:0 20px 20px;}
+.form-group{margin-bottom:16px;}
+.form-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:block;}
+.form-input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 16px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;outline:none;}
+.form-input:focus{border-color:var(--green);}
+.spice-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.spice-option{display:none;}
+.spice-option+label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:rgba(255,255,255,0.02);border:2px solid rgba(255,255,255,0.05);border-radius:14px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;}
+.spice-option:checked+label{border-color:var(--green);background:rgba(0,255,136,0.06);}
+.spice-emoji{font-size:24px;}
+.btn-suggest{width:100%;background:linear-gradient(135deg,rgba(0,255,136,0.15),rgba(0,238,255,0.08));border:1px solid rgba(0,255,136,0.35);border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px;color:var(--green);cursor:pointer;}
+.btn-suggest:disabled{opacity:0.4;cursor:not-allowed;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.rule-item:last-child{border-bottom:none;}
+.rule-icon{font-size:24px;flex-shrink:0;}
+.rule-title{font-weight:900;font-size:15px;margin-bottom:4px;}
+.rule-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.neon-table{margin-top:10px;background:rgba(255,255,255,0.02);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);}
+.neon-row{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px;}
+.neon-row:last-child{border-bottom:none;}
+.neon-row span:first-child{color:var(--orange);font-weight:700;}
+.neon-row span:last-child{color:var(--yellow);font-weight:900;}
+.reveal-phase{padding:0 16px;}
+.reveal-progress{display:flex;justify-content:center;align-items:center;gap:16px;padding:20px 0;}
+.progress-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);}
+.progress-dot.done{background:rgba(255,255,255,0.3);}
+.progress-dot.active{width:14px;height:14px;background:var(--yellow);box-shadow:0 0 12px rgba(255,215,0,0.6);}
+.reveal-card{background:var(--card);border-radius:28px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;margin-bottom:16px;}
+.reveal-cover{padding:28px 24px 20px;text-align:center;}
+.reveal-step{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:3px;margin-bottom:8px;}
+.reveal-emoji-big{font-size:72px;display:block;margin:8px 0;}
+.reveal-player-name{font-family:'Bangers',cursive;font-size:40px;letter-spacing:3px;margin-bottom:4px;}
+.reveal-body{padding:0 20px 20px;}
+.reveal-challenge-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:18px;margin-bottom:14px;}
+.reveal-challenge-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
+.reveal-challenge-name{font-weight:900;font-size:19px;line-height:1.4;margin-bottom:10px;}
+.reveal-power-box{border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid;}
+.reveal-power-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;opacity:0.7;}
+.reveal-power-name{font-family:'Bangers',cursive;font-size:32px;letter-spacing:2px;margin-bottom:6px;}
+.reveal-power-desc{font-size:13px;line-height:1.5;opacity:0.8;}
+.target-section{margin-bottom:14px;}
+.target-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;}
+.target-grid{display:flex;flex-direction:column;gap:8px;}
+.target-btn{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;color:var(--text);width:100%;text-align:left;}
+.target-btn.selected{border-color:var(--green);background:rgba(0,255,136,0.08);}
+.upgrade-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.upgrade-btn{border:none;border-radius:14px;padding:15px;font-family:'Bangers',cursive;font-size:18px;cursor:pointer;opacity:0.6;}
+.upgrade-btn.selected{opacity:1;}
+.reveal-actions{display:flex;flex-direction:column;gap:10px;}
+.btn-activate{background:linear-gradient(135deg,var(--orange),var(--red));border:none;border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:22px;letter-spacing:2px;color:white;cursor:pointer;}
+.btn-skip-reveal{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px;font-family:'Bangers',cursive;font-size:18px;color:var(--muted);cursor:pointer;}
+.btn-reroll-reveal{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:14px;padding:12px;font-family:'Bangers',cursive;font-size:16px;color:#e879f9;cursor:pointer;}
+.effect-log{margin-bottom:16px;}
+.effect-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:10px 14px;margin-bottom:6px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.shield-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+.shield-modal{background:#060620;border:2px solid var(--cyan);border-radius:28px;padding:36px 28px;width:100%;max-width:420px;text-align:center;}
+.shield-big-icon{font-size:72px;display:block;margin-bottom:16px;}
+.shield-pass-to{font-size:12px;color:var(--cyan);text-transform:uppercase;letter-spacing:3px;margin-bottom:6px;}
+.shield-player-name{font-family:'Bangers',cursive;font-size:44px;margin-bottom:8px;}
+.shield-desc{font-size:15px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:8px;}
+.shield-attacker-info{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:28px;}
+.shield-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.shield-yes-btn{background:linear-gradient(135deg,var(--cyan),var(--green));border:none;border-radius:16px;padding:18px;font-family:'Bangers',cursive;font-size:22px;color:#000;cursor:pointer;}
+.shield-no-btn{background:rgba(255,45,75,0.12);border:1.5px solid rgba(255,45,75,0.4);border-radius:16px;padding:18px;font-family:'Bangers',cursive;font-size:22px;color:var(--red);cursor:pointer;}
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;position:relative;z-index:2;}
 .spinner{width:48px;height:48px;border:2px solid rgba(255,45,75,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -46,6 +122,7 @@ body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);
 <div class="app">
 <div id="root"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
 </div>
+<div id="shield-container"></div>
 <div class="toast" id="toast"></div>
 <script>
 (function(){
@@ -62,126 +139,500 @@ body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);
 })();
 
 var CONFIG={
-  db_system:'354403dde0e380aa85bfe7d9fd139be5',
-  db_challenges:'354403dde0e3804f8644d242a0ec6bf6',
-  db_assignments:'354403dde0e380f797ccfb85ad5a072e'
+db_system:‘354403dde0e380aa85bfe7d9fd139be5’,
+db_challenges:‘354403dde0e3804f8644d242a0ec6bf6’,
+db_assignments:‘354403dde0e380f797ccfb85ad5a072e’
 };
 var PLAYERS=[
-  {name:'Banuu',emoji:'\u{1F335}',color:'#00FF88'},
-  {name:'Luzz',emoji:'\u{1F525}',color:'#FF2D4B'},
-  {name:'Y',emoji:'\u26A1',color:'#FFD700'},
-  {name:'Nicooo',emoji:'\u{1F4B0}',color:'#FF6B1A'}
+{name:‘Banuu’,emoji:’\u{1F335}’,color:’#00FF88’,colorDark:‘rgba(0,255,136,0.15)’},
+{name:‘Luzz’,emoji:’\u{1F525}’,color:’#FF2D4B’,colorDark:‘rgba(255,45,75,0.15)’},
+{name:‘Y’,emoji:’\u26A1’,color:’#FFD700’,colorDark:‘rgba(255,215,0,0.15)’},
+{name:‘Nicooo’,emoji:’\u{1F4B0}’,color:’#FF6B1A’,colorDark:‘rgba(255,107,26,0.15)’}
 ];
-var STATE={dayCounter:1,systemPageId:null,challenges:{},assignments:[],allChallengeIds:[],defiLaunched:false};
+var POWERS={
+‘Entourloupeur’:{emoji:’\u{1F9B9}’,color:’#BF00FF’,bg:‘rgba(191,0,255,0.12)’,border:‘rgba(191,0,255,0.4)’,desc:‘Copy someone challenge. Complete it before them to steal their points!’,needsTarget:true,targetSelf:false,reactive:false},
+‘Swap’:{emoji:’\u{1F504}’,color:’#00EEFF’,bg:‘rgba(0,238,255,0.1)’,border:‘rgba(0,238,255,0.4)’,desc:‘Force a challenge swap with someone.’,needsTarget:true,targetSelf:false,reactive:false},
+‘Bridage’:{emoji:’\u{1F480}’,color:’#FF2D4B’,bg:‘rgba(255,45,75,0.1)’,border:‘rgba(255,45,75,0.4)’,desc:‘x0.5 points today. Target yourself or someone else.’,needsTarget:true,targetSelf:true,reactive:false},
+‘Pas si vite’:{emoji:’\u26A1’,color:’#FFD700’,bg:‘rgba(255,215,0,0.1)’,border:‘rgba(255,215,0,0.4)’,desc:‘Upgrade or downgrade someone challenge difficulty.’,needsTarget:true,targetSelf:false,reactive:false,needsUpDown:true},
+‘Shield’:{emoji:’\u{1F6E1}\uFE0F’,color:’#00EEFF’,bg:‘rgba(0,238,255,0.08)’,border:‘rgba(0,238,255,0.3)’,desc:‘Block any power when targeted. Reactive.’,needsTarget:false,targetSelf:false,reactive:true},
+‘Roulette’:{emoji:’\u{1F3B0}’,color:’#FF6B1A’,bg:‘rgba(255,107,26,0.1)’,border:‘rgba(255,107,26,0.4)’,desc:‘x0, x1 or x2 random at end of day.’,needsTarget:false,targetSelf:false,reactive:true},
+‘Copier-Coller’:{emoji:’\u{1F46F}’,color:’#00FF88’,bg:‘rgba(0,255,136,0.1)’,border:‘rgba(0,255,136,0.4)’,desc:‘Share your challenge. Both complete it = x2 each!’,needsTarget:true,targetSelf:false,reactive:false},
+‘Extincteur’:{emoji:’\u{1F525}’,color:’#FF2D4B’,bg:‘rgba(255,45,75,0.1)’,border:‘rgba(255,45,75,0.4)’,desc:‘Reset someone streak to 0.’,needsTarget:true,targetSelf:false,reactive:false},
+‘None’:{emoji:’\u274C’,color:’#6B7280’,bg:‘transparent’,border:‘transparent’,desc:’’,needsTarget:false,reactive:false}
+};
+var SPICE_PTS={‘Mild’:1,‘Spicy’:2,‘Hot’:3,‘Atomic’:5};
+
+function getPowerKey(powerType){
+if(!powerType)return ‘None’;
+var keys=Object.keys(POWERS);
+for(var i=0;i<keys.length;i++){if(powerType.indexOf(keys[i])>=0)return keys[i];}
+return ‘None’;
+}
+
+var STATE={
+dayCounter:1,systemPageId:null,challenges:{},assignments:[],allChallengeIds:[],
+defiLaunched:false,revealPhase:false,revealOrder:[],revealStep:0,
+effectLog:[],pendingShield:null,selectedTarget:null,selectedUpgradeDir:null
+};
 
 function query(dbId){
-  return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
+return fetch(’/api/notion/databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:’{}’}).then(function(r){return r.json();}).then(function(d){return d.results;});
+}
+function patch(pageId,props){
+return fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:props})}).then(function(r){return r.json();});
+}
+function notionCreate(dbId,props){
+return fetch(’/api/notion/pages’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({parent:{database_id:dbId},properties:props})}).then(function(r){return r.json();});
 }
 function getProp(page,name,type){
-  var p=page.properties[name];
-  if(!p)return null;
-  if(type==='number')return p.number!=null?p.number:0;
-  if(type==='title')return p.title&&p.title[0]?p.title[0].plain_text:'';
-  if(type==='checkbox')return p.checkbox===true;
-  if(type==='formula_number')return p.formula?p.formula.number||0:0;
-  if(type==='formula_string')return p.formula?p.formula.string||'':'';
-  if(type==='select')return p.select?p.select.name||'':'';
-  if(type==='text')return p.rich_text&&p.rich_text[0]?p.rich_text[0].plain_text:'';
-  return null;
+var p=page.properties[name];
+if(!p)return null;
+if(type===‘number’)return p.number!=null?p.number:0;
+if(type===‘title’)return p.title&&p.title[0]?p.title[0].plain_text:’’;
+if(type===‘checkbox’)return p.checkbox===true;
+if(type===‘formula_number’)return p.formula?p.formula.number||0:0;
+if(type===‘formula_string’)return p.formula?p.formula.string||’’:’’;
+if(type===‘select’)return p.select?p.select.name||’’:’’;
+if(type===‘text’)return p.rich_text&&p.rich_text[0]?p.rich_text[0].plain_text:’’;
+return null;
 }
 function showToast(msg,color){
-  var t=document.getElementById('toast');
-  t.textContent=msg;t.style.background=color||'#00FF88';
-  t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},3000);
+var t=document.getElementById(‘toast’);
+t.textContent=msg;t.style.background=color||’#00FF88’;
+t.classList.add(‘show’);
+setTimeout(function(){t.classList.remove(‘show’);},3000);
 }
 
-function render(){
-  var lb=STATE.assignments.slice().sort(function(a,b){return b.totalScore-a.totalScore;});
-  var html='<div class="header"><span class="header-mascot">\u{1F336}\uFE0F</span><h1>ZEST YOUR DAY</h1><div class="header-sub">Mexico Edition</div><div class="day-badge">Day '+STATE.dayCounter+'</div></div>';
-  html+='<div class="section-title">Challenges</div><div class="cards">';
-  STATE.assignments.forEach(function(asg){
-    var player=PLAYERS[asg.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
-    var cid=asg.rerollChallengeId>0?asg.rerollChallengeId:asg.challengeId;
-    var ch=STATE.challenges[cid]||{name:'?',points:0,spice:''};
-    html+='<div class="card '+(asg.isValidated?'validated':'')+'">'
-      +'<div class="card-band" style="background:'+player.color+'"></div>'
-      +'<div class="card-cover"><span style="font-size:36px">'+player.emoji+'</span><span class="player-name-big" style="color:'+player.color+'">'+player.name+'</span></div>'
-      +'<div class="card-body"><div class="challenge-box">'
-      +'<div class="challenge-name">'+ch.name+'</div>'
-      +'<span class="spice-badge">'+ch.spice+' - '+ch.points+'pts</span>'
-      +'</div>'
-      +'<div class="card-actions">'
-      +'<div style="display:flex;align-items:center;gap:8px"><span class="done-label">Done?</span>'
-      +'<div class="check-box'+(asg.isValidated?' checked':'')+'" onclick="toggleValidation(\''+asg.pageId+'\','+asg.isValidated+')">'+(asg.isValidated?'\u2713':'')+'</div></div>'
-      +'<button class="btn-reroll" onclick="reroll(\''+asg.pageId+'\')" '+(asg.hasRerolled?'disabled':'')+'>Reroll</button>'
-      +'</div></div></div>';
-  });
-  html+='</div>';
-  document.getElementById('root').innerHTML=html;
+function loadData(){
+return query(CONFIG.db_system).then(function(sysPages){
+var sys=sysPages[0];
+STATE.systemPageId=sys.id;
+STATE.dayCounter=getProp(sys,‘Day_Counter’,‘number’)||1;
+STATE.defiLaunched=getProp(sys,‘Defis_Launched’,‘checkbox’);
+return query(CONFIG.db_challenges);
+}).then(function(chPages){
+STATE.challenges={};STATE.allChallengeIds=[];
+for(var i=0;i<chPages.length;i++){
+var p=chPages[i];
+var id=getProp(p,‘ID_Global’,‘number’);
+if(!id)continue;
+STATE.challenges[id]={id:id,name:getProp(p,‘Name’,‘title’)||’’,points:getProp(p,‘Points’,‘number’)||0,spice:getProp(p,‘Spice_Level’,‘formula_string’)||getProp(p,‘Spice_Level’,‘select’)||’’};
+STATE.allChallengeIds.push(id);
+}
+return query(CONFIG.db_assignments);
+}).then(function(asgPages){
+STATE.assignments=asgPages.map(function(p){
+return{
+pageId:p.id,
+playerIndex:getProp(p,‘Player_Index’,‘number’)||0,
+winStreak:getProp(p,‘Win_Streak’,‘number’)||0,
+totalScore:getProp(p,‘Total_Score’,‘number’)||0,
+defisReussis:getProp(p,‘Defis_Reussis’,‘number’)||0,
+isValidated:getProp(p,‘Is_Validated’,‘checkbox’),
+challengeId:getProp(p,‘Challenge_ID_Today’,‘formula_number’)||0,
+hasRerolled:getProp(p,‘Has_Rerolled’,‘checkbox’),
+rerollChallengeId:getProp(p,‘Reroll_Challenge_ID’,‘number’)||0,
+powerType:getProp(p,‘Power_Type’,‘select’)||‘None’,
+powerTarget:getProp(p,‘Power_Target’,‘text’)||’’,
+powerUsed:getProp(p,‘Power_Used’,‘checkbox’),
+rouletteMultiplier:getProp(p,‘Roulette_Multiplier’,‘number’)||1,
+shieldUsedToday:getProp(p,‘Shield_Used_Today’,‘checkbox’),
+effectBridage:false,effectUpgrade:null
+};
+}).sort(function(a,b){return a.playerIndex-b.playerIndex;});
+
+```
+STATE.effectLog=[];
+STATE.assignments.forEach(function(asg){
+  if(asg.powerUsed&&asg.powerType&&asg.powerType.indexOf('None')<0){
+    var pk=getPowerKey(asg.powerType);
+    var pw=POWERS[pk];
+    var pl=PLAYERS[asg.playerIndex];
+    if(pw&&pl){
+      STATE.effectLog.push({msg:pl.emoji+' '+pl.name+' used '+asg.powerType+(asg.powerTarget?' on '+asg.powerTarget.split('|')[0]:''),color:pw.color});
+      if(pk==='Bridage'){
+        var tgt=asg.powerTarget==='myself'?asg:STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===asg.powerTarget;});
+        if(tgt)tgt.effectBridage=true;
+      }
+      if(pk==='Pas si vite'&&asg.powerTarget){
+        var parts=asg.powerTarget.split('|');
+        var tgt2=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===parts[0];});
+        if(tgt2)tgt2.effectUpgrade=parts[1]||null;
+      }
+    }
+  }
+});
+
+if(!STATE.defiLaunched&&STATE.assignments.some(function(a){return a.powerType&&a.powerType.indexOf('None')<0;})){
+  var allDone=STATE.assignments.every(function(a){return a.powerUsed||a.powerType.indexOf('None')>=0;});
+  if(!allDone&&!STATE.revealPhase){
+    var order=[];
+    for(var j=0;j<PLAYERS.length;j++)order.push((j+STATE.dayCounter-1)%PLAYERS.length);
+    STATE.revealOrder=order;
+    var step=0;
+    for(var s=0;s<order.length;s++){
+      var asgS=STATE.assignments.find(function(a){return a.playerIndex===order[s];});
+      if(asgS&&!asgS.powerUsed)break;
+      step=s+1;
+    }
+    STATE.revealStep=step;
+    STATE.revealPhase=true;
+  }
+}
+```
+
+});
+}
+
+function getBaseChallenge(asg){return(asg.rerollChallengeId&&asg.rerollChallengeId>0)?asg.rerollChallengeId:asg.challengeId;}
+function getEffectiveChallengeId(asg){
+var playerName=PLAYERS[asg.playerIndex]?PLAYERS[asg.playerIndex].name:null;
+var swapper=STATE.assignments.find(function(a){return a.powerUsed&&a.powerType.indexOf(‘Swap’)>=0&&a.powerTarget===playerName&&a.playerIndex!==asg.playerIndex;});
+if(swapper)return getBaseChallenge(swapper);
+if(asg.powerUsed&&asg.powerType.indexOf(‘Swap’)>=0&&asg.powerTarget){
+var tgt=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===asg.powerTarget;});
+if(tgt)return getBaseChallenge(tgt);
+}
+return getBaseChallenge(asg);
+}
+
+function getCurrentRevealAsg(){
+var idx=STATE.revealOrder[STATE.revealStep];
+return STATE.assignments.find(function(a){return a.playerIndex===idx;});
+}
+
+window.selectTarget=function(name){
+STATE.selectedTarget=name;
+document.querySelectorAll(’.target-btn’).forEach(function(b){b.classList.toggle(‘selected’,b.dataset.name===name);});
+};
+window.selectUpgradeDir=function(dir,btn){
+STATE.selectedUpgradeDir=dir;
+document.querySelectorAll(’.upgrade-btn’).forEach(function(b){b.classList.remove(‘selected’);});
+btn.classList.add(‘selected’);
+};
+
+window.activatePower=function(){
+var asg=getCurrentRevealAsg();
+var pk=getPowerKey(asg.powerType);
+var pw=POWERS[pk];
+if(pw.needsTarget&&!STATE.selectedTarget){showToast(‘Select a target!’,’#FF6B1A’);return;}
+if(pw.needsUpDown&&!STATE.selectedUpgradeDir){showToast(‘Choose upgrade or downgrade!’,’#FF6B1A’);return;}
+var target=STATE.selectedTarget;
+if(target&&target!==‘myself’){
+var targetAsg=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
+if(targetAsg&&targetAsg.powerType.indexOf(‘Shield’)>=0&&!targetAsg.powerUsed&&!targetAsg.shieldUsedToday){
+STATE.pendingShield={attackerAsg:asg,targetAsg:targetAsg,target:target,upgradeDir:STATE.selectedUpgradeDir};
+showShieldPrompt(asg,targetAsg);return;
+}
+}
+doActivatePower(asg,target,STATE.selectedUpgradeDir);
+};
+
+function showShieldPrompt(attackerAsg,targetAsg){
+var attacker=PLAYERS[attackerAsg.playerIndex];
+var target=PLAYERS[targetAsg.playerIndex];
+document.getElementById(‘shield-container’).innerHTML=
+‘<div class="shield-overlay"><div class="shield-modal">’
++’<span class="shield-big-icon">\u{1F6E1}\uFE0F</span>’
++’<div class="shield-pass-to">Pass phone to</div>’
++’<div class="shield-player-name" style="color:'+target.color+'">’+target.emoji+’ ‘+target.name+’</div>’
++’<div class="shield-desc">’+attacker.emoji+’ ‘+attacker.name+’ used ‘+attackerAsg.powerType+’ on you!</div>’
++’<div class="shield-attacker-info">Activate your Shield?</div>’
++’<div class="shield-btns">’
++’<button class="shield-yes-btn" onclick="resolveShield(true)">ACTIVATE!</button>’
++’<button class="shield-no-btn" onclick="resolveShield(false)">Allow it</button>’
++’</div></div></div>’;
+}
+
+window.resolveShield=function(activate){
+document.getElementById(‘shield-container’).innerHTML=’’;
+var pd=STATE.pendingShield;
+var shieldPl=PLAYERS[pd.targetAsg.playerIndex];
+var attackPl=PLAYERS[pd.attackerAsg.playerIndex];
+if(activate){
+patch(pd.targetAsg.pageId,{Power_Used:{checkbox:true},Shield_Used_Today:{checkbox:true}}).then(function(){
+pd.targetAsg.powerUsed=true;pd.targetAsg.shieldUsedToday=true;
+STATE.effectLog.push({msg:shieldPl.emoji+’ ‘+shieldPl.name+’ blocked ‘+attackPl.emoji+’ ‘+attackPl.name+’!’,color:’#00EEFF’});
+showToast(‘Shield activated!’,’#00EEFF’);
+STATE.pendingShield=null;STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
+nextRevealStep();
+});
+} else {
+patch(pd.targetAsg.pageId,{Shield_Used_Today:{checkbox:true}}).then(function(){});
+pd.targetAsg.shieldUsedToday=true;
+STATE.effectLog.push({msg:shieldPl.emoji+’ ‘+shieldPl.name+’ refused Shield!’,color:’#FF2D4B’});
+STATE.pendingShield=null;
+doActivatePower(pd.attackerAsg,pd.target,pd.upgradeDir);
+}
+};
+
+function doActivatePower(asg,target,upgradeDir){
+var pk=getPowerKey(asg.powerType);
+var pw=POWERS[pk];
+var pl=PLAYERS[asg.playerIndex];
+var updates={Power_Used:{checkbox:true}};
+if(target)updates.Power_Target={rich_text:[{text:{content:target}}]};
+
+if(pk===‘Extincteur’&&target&&target!==‘myself’){
+var tgt=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
+if(tgt){patch(tgt.pageId,{Win_Streak:{number:0}}).then(function(){});tgt.winStreak=0;}
+STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ wiped ‘+target+‘s streak!’,color:pw.color});
+}
+if(pk===‘Bridage’){
+var tgt2=target===‘myself’?asg:STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
+if(tgt2)tgt2.effectBridage=true;
+STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ bridaged ‘+(target===‘myself’?‘themselves’:target)+’! (x0.5)’,color:pw.color});
+}
+if(pk===‘Pas si vite’&&target&&upgradeDir){
+var tgt3=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
+if(tgt3)tgt3.effectUpgrade=upgradeDir;
+updates.Power_Target={rich_text:[{text:{content:target+’|’+upgradeDir}}]};
+STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ ‘+upgradeDir+‘d ‘+target+‘s challenge!’,color:pw.color});
+}
+if(pk===‘Roulette’){
+var mult=[0,1,2][Math.floor(Math.random()*3)];
+updates.Roulette_Multiplier={number:mult};asg.rouletteMultiplier=mult;
+STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ rolled x’+mult+’!’,color:mult===2?’#00FF88’:mult===0?’#FF2D4B’:’#FFD700’});
+}
+if(pk===‘Entourloupeur’||pk===‘Swap’||pk===‘Copier-Coller’){
+STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ activated ‘+asg.powerType+(target?’ on ‘+target:’’)+’!’,color:pw.color});
+}
+
+patch(asg.pageId,updates).then(function(){
+asg.powerUsed=true;asg.powerTarget=target||’’;
+STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
+nextRevealStep();
+});
+}
+
+window.skipPower=function(){nextRevealStep();};
+
+function nextRevealStep(){
+STATE.revealStep++;STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
+if(STATE.revealStep>=STATE.revealOrder.length){
+patch(STATE.systemPageId,{Defis_Launched:{checkbox:true}}).then(function(){
+STATE.defiLaunched=true;STATE.revealPhase=false;
+showToast(‘All revealed! Lets go!’,’#00FF88’);
+render();
+});
+return;
+}
+render();
 }
 
 window.toggleValidation=function(pageId,cur){
-  var nv=!cur;
-  fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:{Is_Validated:{checkbox:nv}}})}).then(function(){
-    var a=STATE.assignments.find(function(x){return x.pageId===pageId;});
-    if(a)a.isValidated=nv;
-    render();
-    showToast(nv?'Challenge done!':'Removed',nv?'#00FF88':'#FF2D4B');
-  });
-};
-window.reroll=function(pageId){
-  var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
-  if(!asg||asg.hasRerolled)return;
-  var current=asg.rerollChallengeId>0?asg.rerollChallengeId:asg.challengeId;
-  var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
-  if(available.length===0){showToast('No other challenges!','#FF6B1A');return;}
-  var newId=available[Math.floor(Math.random()*available.length)];
-  fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}})}).then(function(){
-    asg.hasRerolled=true;asg.rerollChallengeId=newId;
-    render();showToast('Rerolled!','#BF00FF');
-  });
+var nv=!cur;
+patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
+var a=STATE.assignments.find(function(x){return x.pageId===pageId;});
+if(a)a.isValidated=nv;
+render();
+showToast(nv?‘Challenge done!’:‘Removed’,nv?’#00FF88’:’#FF2D4B’);
+});
 };
 
-function loadData(){
-  return query(CONFIG.db_system).then(function(sysPages){
-    var sys=sysPages[0];
-    STATE.systemPageId=sys.id;
-    STATE.dayCounter=getProp(sys,'Day_Counter','number')||1;
-    STATE.defiLaunched=getProp(sys,'Defis_Launched','checkbox');
-    return query(CONFIG.db_challenges);
-  }).then(function(chPages){
-    STATE.challenges={};STATE.allChallengeIds=[];
-    for(var i=0;i<chPages.length;i++){
-      var p=chPages[i];
-      var id=getProp(p,'ID_Global','number');
-      STATE.challenges[id]={id:id,name:getProp(p,'Name','title'),points:getProp(p,'Points','number')||0,spice:getProp(p,'Spice_Level','formula_string')||getProp(p,'Spice_Level','select')||''};
-      STATE.allChallengeIds.push(id);
-    }
-    return query(CONFIG.db_assignments);
-  }).then(function(asgPages){
-    STATE.assignments=asgPages.map(function(p){
-      return{
-        pageId:p.id,
-        playerIndex:getProp(p,'Player_Index','number')||0,
-        winStreak:getProp(p,'Win_Streak','number')||0,
-        totalScore:getProp(p,'Total_Score','number')||0,
-        defisReussis:getProp(p,'Defis_Reussis','number')||0,
-        isValidated:getProp(p,'Is_Validated','checkbox'),
-        challengeId:getProp(p,'Challenge_ID_Today','formula_number')||0,
-        hasRerolled:getProp(p,'Has_Rerolled','checkbox'),
-        rerollChallengeId:getProp(p,'Reroll_Challenge_ID','number')||0,
-        powerType:getProp(p,'Power_Type','select')||'None',
-        powerUsed:getProp(p,'Power_Used','checkbox')
-      };
-    }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
-    render();
-  });
+window.reroll=function(pageId){
+var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
+if(!asg||asg.hasRerolled)return;
+var current=getEffectiveChallengeId(asg);
+var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
+if(available.length===0){showToast(‘No other challenges!’,’#FF6B1A’);return;}
+var newId=available[Math.floor(Math.random()*available.length)];
+patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId},Power_Type:{select:{name:’\u274C None’}},Power_Used:{checkbox:false}}).then(function(){
+asg.hasRerolled=true;asg.rerollChallengeId=newId;asg.powerType=’\u274C None’;
+render();showToast(‘Rerolled! Power lost!’,’#BF00FF’);
+});
+};
+
+window.rerollReveal=function(pageId){
+var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
+if(!asg||asg.hasRerolled)return;
+var current=getEffectiveChallengeId(asg);
+var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
+if(available.length===0){showToast(‘No other challenges!’,’#FF6B1A’);return;}
+var newId=available[Math.floor(Math.random()*available.length)];
+patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId},Power_Type:{select:{name:’\u274C None’}},Power_Used:{checkbox:false}}).then(function(){
+asg.hasRerolled=true;asg.rerollChallengeId=newId;asg.powerType=’\u274C None’;
+showToast(‘Rerolled! Power lost!’,’#BF00FF’);
+nextRevealStep();
+});
+};
+
+window.suggestChallenge=function(){
+var nameEl=document.getElementById(‘suggest-name’);
+var spiceEl=document.querySelector(‘input[name=“spice”]:checked’);
+if(!nameEl||!nameEl.value.trim()){showToast(‘Enter a name!’,’#FF6B1A’);return;}
+if(!spiceEl){showToast(‘Pick spice level!’,’#FF6B1A’);return;}
+var btn=document.getElementById(‘btn-suggest’);btn.disabled=true;btn.textContent=‘Sending…’;
+var pts=SPICE_PTS[spiceEl.value]||1;
+notionCreate(CONFIG.db_challenges,{Name:{title:[{text:{content:nameEl.value.trim()}}]},Points:{number:pts},Status:{select:{name:‘Pending’}}}).then(function(){
+showToast(‘Suggestion sent!’,’#00FF88’);nameEl.value=’’;if(spiceEl)spiceEl.checked=false;
+btn.disabled=false;btn.textContent=‘SUGGEST CHALLENGE’;
+}).catch(function(e){showToast(‘Error: ‘+e.message,’#FF2D4B’);btn.disabled=false;btn.textContent=‘SUGGEST CHALLENGE’;});
+};
+
+function toggleSection(bodyId){
+var el=document.getElementById(bodyId);
+if(el)el.classList.toggle(‘open’);
 }
 
-loadData().catch(function(e){
-  document.getElementById('root').innerHTML='<div style="padding:20px;color:#FF2D4B">ERROR: '+e.message+'</div>';
+function render(){
+var root=document.getElementById(‘root’);
+
+if(STATE.revealPhase){
+var asg=getCurrentRevealAsg();
+if(!asg){nextRevealStep();return;}
+var player=PLAYERS[asg.playerIndex];
+var effectiveId=getEffectiveChallengeId(asg);
+var challenge=STATE.challenges[effectiveId];
+var pts=challenge?challenge.points:0;
+var pk=getPowerKey(asg.powerType);
+var pw=POWERS[pk];
+var hasPower=pk!==‘None’;
+var otherPlayers=PLAYERS.filter(function(_,i){return i!==asg.playerIndex;});
+var progressDots=STATE.revealOrder.map(function(pIdx,step){
+var p=PLAYERS[pIdx];
+var cls=‘progress-dot’+(step<STATE.revealStep?’ done’:’’)+(step===STATE.revealStep?’ active’:’’);
+return ‘<div class="'+cls+'" title="'+p.name+'"></div>’;
+}).join(’’);
+
+```
+var targetHTML='';
+if(hasPower&&pw&&!pw.reactive&&pw.needsTarget){
+  targetHTML='<div class="target-section"><div class="target-label">Choose target:</div><div class="target-grid">';
+  if(pw.targetSelf)targetHTML+='<button class="target-btn '+(STATE.selectedTarget==='myself'?'selected':'')+'" data-name="myself" onclick="selectTarget(\'myself\')"><span style="font-size:24px">'+player.emoji+'</span> Myself</button>';
+  otherPlayers.forEach(function(p){targetHTML+='<button class="target-btn '+(STATE.selectedTarget===p.name?'selected':'')+'" data-name="'+p.name+'" onclick="selectTarget(\''+p.name+'\')"><span style="font-size:24px">'+p.emoji+'</span> '+p.name+'</button>';});
+  targetHTML+='</div></div>';
+}
+var upgradeHTML='';
+if(hasPower&&pw&&pw.needsUpDown){
+  upgradeHTML='<div class="upgrade-grid">'
+    +'<button class="upgrade-btn '+(STATE.selectedUpgradeDir==='upgrade'?'selected':'')+'" style="background:rgba(0,255,136,0.15);color:#00FF88;border:1px solid rgba(0,255,136,0.4)" onclick="selectUpgradeDir(\'upgrade\',this)">UP GRADE</button>'
+    +'<button class="upgrade-btn '+(STATE.selectedUpgradeDir==='downgrade'?'selected':'')+'" style="background:rgba(255,45,75,0.15);color:#FF2D4B;border:1px solid rgba(255,45,75,0.4)" onclick="selectUpgradeDir(\'downgrade\',this)">DOWN GRADE</button>'
+    +'</div>';
+}
+
+root.innerHTML=''
+  +'<div class="header"><span class="header-mascot">\u{1F305}</span><h1>MORNING REVEAL</h1><div class="header-sub">Day '+STATE.dayCounter+'</div></div>'
+  +'<div class="reveal-phase">'
+  +'<div class="reveal-progress">'+progressDots+'</div>'
+  +(STATE.effectLog.length>0?'<div class="effect-log">'+STATE.effectLog.map(function(e){return'<div class="effect-item"><span style="color:'+e.color+'">●</span>'+e.msg+'</div>';}).join('')+'</div>':'')
+  +'<div class="reveal-card" style="border-color:'+player.color+'30">'
+  +'<div class="reveal-cover" style="background:linear-gradient(135deg,'+(player.colorDark||'rgba(255,255,255,0.05)')+',transparent)">'
+  +'<div class="reveal-step">Step '+(STATE.revealStep+1)+' of '+STATE.revealOrder.length+'</div>'
+  +'<span class="reveal-emoji-big">'+player.emoji+'</span>'
+  +'<div class="reveal-player-name" style="color:'+player.color+'">'+player.name+'</div>'
+  +'</div>'
+  +'<div class="reveal-body">'
+  +'<div class="reveal-challenge-box"><div class="reveal-challenge-label">Your Challenge Today</div>'
+  +'<div class="reveal-challenge-name">'+(challenge?challenge.name:'...')+'</div>'
+  +'<span class="spice-badge" style="color:#FFD700">'+(challenge?challenge.spice:'')+' - '+pts+'pts</span>'
+  +'</div>'
+  +(hasPower&&pw?
+    '<div class="reveal-power-box" style="background:'+pw.bg+';border-color:'+pw.border+';color:'+pw.color+'">'
+    +'<div class="reveal-power-label">Your Power Today</div>'
+    +'<div class="reveal-power-name">'+asg.powerType+'</div>'
+    +'<div class="reveal-power-desc">'+pw.desc+'</div>'
+    +'</div>'
+    +(!pw.reactive?
+      targetHTML+upgradeHTML
+      +'<div class="reveal-actions">'
+      +'<button class="btn-activate" onclick="activatePower()">USE POWER</button>'
+      +'<button class="btn-skip-reveal" onclick="skipPower()">Skip - Save for later</button>'
+      +'<button class="btn-reroll-reveal" onclick="rerollReveal(\''+asg.pageId+'\')">Reroll (lose power)</button>'
+      +'</div>'
+      :'<div class="reveal-actions">'
+      +'<button class="btn-skip-reveal" style="background:'+pw.bg+';border:1px solid '+pw.border+';color:'+pw.color+'" onclick="skipPower()">Keep '+asg.powerType+' OK</button>'
+      +'<button class="btn-reroll-reveal" onclick="rerollReveal(\''+asg.pageId+'\')">Reroll (lose power)</button>'
+      +'</div>')
+    :'<div class="reveal-actions"><button class="btn-skip-reveal" onclick="skipPower()">No power - Continue</button></div>')
+  +'</div></div></div>';
+return;
+```
+
+}
+
+var html=’’
++’<div class="header"><span class="header-mascot">\u{1F336}\uFE0F</span><h1>ZEST YOUR DAY</h1><div class="header-sub">Mexico Edition</div><div class="day-badge">Day ‘+STATE.dayCounter+’</div></div>’;
+
+if(STATE.effectLog.length>0){
+html+=’<div style="padding:0 16px;margin-bottom:16px">’;
+STATE.effectLog.forEach(function(e){html+=’<div class="effect-item"><span style="color:'+e.color+'">●</span>’+e.msg+’</div>’;});
+html+=’</div>’;
+}
+
+html+=’<div class="section-title">Challenges</div><div class="cards">’;
+STATE.assignments.forEach(function(asg){
+var player=PLAYERS[asg.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’,colorDark:‘rgba(255,255,255,0.05)’};
+var effectiveId=getEffectiveChallengeId(asg);
+var ch=STATE.challenges[effectiveId]||{name:’?’,points:0,spice:’’};
+var pk=getPowerKey(asg.powerType);
+var pw=POWERS[pk];
+var hasPower=pk!==‘None’;
+var bonus=asg.winStreak>=10?3:asg.winStreak>=5?2:asg.winStreak>=3?1:0;
+html+=’<div class="card '+(asg.isValidated?'validated':'')+'">’
++’<div class="card-band" style="background:'+player.color+'"></div>’
++’<div class="card-cover">’
++’<span style="font-size:36px">’+player.emoji+’</span>’
++’<span class="player-name-big" style="color:'+player.color+'">’+player.name+’</span>’
++(hasPower?’<span class="power-badge-cover" style="color:'+pw.color+'">’+pw.emoji+’</span>’:’’)
++’</div>’
++’<div class="card-body">’
++’<div class="pills">’
++’<div class="pill pill-streak">\u{1F525} ‘+asg.winStreak+’ streak’+(bonus>0?’ +’+bonus+‘pt’:’’)+’</div>’
++(asg.rerollChallengeId>0?’<div class="pill" style="background:rgba(191,0,255,0.1);border:1px solid rgba(191,0,255,0.3);color:#e879f9">Rerolled</div>’:’’)
++(hasPower&&pw?’<div class="pill" style="background:'+pw.bg+';border:1px solid '+pw.border+';color:'+pw.color+'">’+(asg.powerUsed?asg.powerType+’ done’:asg.powerType)+’</div>’:’’)
++(asg.effectBridage?’<div class="pill" style="background:rgba(255,45,75,0.1);border:1px solid rgba(255,45,75,0.3);color:#FF2D4B">x0.5 pts</div>’:’’)
++(asg.effectUpgrade?’<div class="pill" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:#FFD700">’+(asg.effectUpgrade===‘upgrade’?‘Upgraded’:‘Downgraded’)+’</div>’:’’)
++’</div>’
++’<div class="challenge-box">’
++’<div class="challenge-name">’+ch.name+’</div>’
++’<span class="spice-badge">’+ch.spice+’ - ‘+ch.points+‘pts</span>’
++’</div>’
++’<div class="card-actions">’
++’<div style="display:flex;align-items:center;gap:8px"><span class="done-label">Done?</span>’
++’<div class="check-box'+(asg.isValidated?' checked':'')+'" onclick="toggleValidation(\''+asg.pageId+'\','+asg.isValidated+')">’+(asg.isValidated?’\u2713’:’’)+’</div></div>’
++’<button class=“btn-reroll” onclick=“reroll('’+asg.pageId+’')” ‘+(asg.hasRerolled?‘disabled’:’’)+’>Reroll</button>’
++’</div></div></div>’;
+});
+html+=’</div>’;
+
+html+=’<div class="divider"></div>’;
+html+=’<div class="section-title">Suggest</div>’;
+html+=’<div class="collapsible-card">’
++’<div class="collapsible-header" onclick="toggleSection(\'suggest-body\')">’
++’<h3 style="color:#00FF88">NEW CHALLENGE IDEA</h3><span style="color:var(--muted)">v</span></div>’
++’<div class="collapsible-body" id="suggest-body"><div class="collapsible-inner">’
++’<div class="form-group"><label class="form-label">Challenge name</label><input class="form-input" id="suggest-name" type="text" placeholder="e.g. Sing your order..." maxlength="100" /></div>’
++’<div class="form-group"><label class="form-label">Spice level</label><div class="spice-selector">’
++’<input type="radio" name="spice" id="s1" value="Mild" class="spice-option"><label for="s1"><span class="spice-emoji">\u{1F331}</span>Mild<br><small style="color:#6B7280">1pt</small></label>’
++’<input type="radio" name="spice" id="s2" value="Spicy" class="spice-option"><label for="s2"><span class="spice-emoji">\u{1F336}\uFE0F</span>Spicy<br><small style="color:#6B7280">2pts</small></label>’
++’<input type="radio" name="spice" id="s3" value="Hot" class="spice-option"><label for="s3"><span class="spice-emoji">\u{1F525}</span>Hot<br><small style="color:#6B7280">3pts</small></label>’
++’<input type="radio" name="spice" id="s4" value="Atomic" class="spice-option"><label for="s4"><span class="spice-emoji">\u26A1</span>Atomic<br><small style="color:#6B7280">5pts</small></label>’
++’</div></div>’
++’<button class="btn-suggest" id="btn-suggest" onclick="suggestChallenge()">SUGGEST CHALLENGE</button>’
++’</div></div></div>’;
+
+html+=’<div class="divider"></div>’;
+html+=’<div class="section-title">Rules</div>’;
+html+=’<div class="collapsible-card">’
++’<div class="collapsible-header" onclick="toggleSection(\'rules-body\')">’
++’<h3 style="color:#FF2D4B">HOW IT WORKS</h3><span style="color:var(--muted)">v</span></div>’
++’<div class="collapsible-body" id="rules-body"><div class="collapsible-inner">’
++’<div class="rule-item"><div class="rule-icon">\u{1F3AF}</div><div><div class="rule-title">One challenge per day</div><div class="rule-desc">Each player gets a unique challenge every day.</div></div></div>’
++’<div class="rule-item"><div class="rule-icon">\u{1F336}\uFE0F</div><div><div class="rule-title">Spice levels</div><div class="rule-desc">Difficulty determines points.</div><div class="neon-table"><div class="neon-row"><span>Mild</span><span>1pt</span></div><div class="neon-row"><span>Spicy</span><span>2pts</span></div><div class="neon-row"><span>Hot</span><span>3pts</span></div><div class="neon-row"><span>Atomic</span><span>5pts</span></div></div></div></div>’
++’<div class="rule-item"><div class="rule-icon">\u{1F525}</div><div><div class="rule-title">Streak bonuses</div><div class="rule-desc">3 days +1pt, 5 days +2pts, 10 days +3pts</div></div></div>’
++’<div class="rule-item"><div class="rule-icon">\u{1F305}</div><div><div class="rule-title">Morning Reveal</div><div class="rule-desc">Each morning, players reveal their challenge and activate their power.</div></div></div>’
++’<div class="rule-item"><div class="rule-icon">\u{1F6E1}\uFE0F</div><div><div class="rule-title">Shield</div><div class="rule-desc">When targeted, a prompt asks if you want to activate it.</div></div></div>’
++’<div class="rule-item"><div class="rule-icon">\u{1F3B2}</div><div><div class="rule-title">Reroll</div><div class="rule-desc">Reroll your challenge once per day - but you LOSE your power!</div></div></div>’
++’</div></div></div>’;
+
+root.innerHTML=html;
+}
+
+loadData().then(function(){render();}).catch(function(e){
+document.getElementById(‘root’).innerHTML=’<div style="padding:20px;color:#FF2D4B;font-weight:700">ERROR: ‘+e.message+’</div>’;
 });
 </script>
+
 </body>
 </html>
