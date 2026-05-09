@@ -8,15 +8,30 @@
 :root{--red:#FF2D4B;--orange:#FF6B1A;--yellow:#FFD700;--green:#00FF88;--purple:#BF00FF;--cyan:#00EEFF;--darker:#050508;--card:#0A0A18;--text:#F5F5F5;--muted:#6B7280;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);min-height:100vh;}
-.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;}
+#particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;position:relative;z-index:2;}
 .spinner{width:48px;height:48px;border:2px solid rgba(255,45,75,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:3px;font-size:11px;}
 </style>
 </head>
 <body>
+<canvas id="particle-canvas"></canvas>
 <div id="root"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
 <script>
+(function(){
+  var canvas=document.getElementById('particle-canvas');
+  if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  var colors=['#FF2D4B','#FF6B1A','#FFD700','#00FF88','#00EEFF','#BF00FF'];
+  var particles=[];
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(var i=0;i<50;i++){particles.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.5+0.3,color:colors[Math.floor(Math.random()*colors.length)],vx:(Math.random()-0.5)*0.3,vy:-Math.random()*0.4-0.1,alpha:Math.random()*0.5+0.1});}
+  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(function(p){ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color+Math.floor(p.alpha*255).toString(16).padStart(2,'0');ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.y<-5){p.y=canvas.height+5;p.x=Math.random()*canvas.width;}if(p.x<-5)p.x=canvas.width+5;if(p.x>canvas.width+5)p.x=-5;});requestAnimationFrame(draw);}
+  draw();
+})();
+
 var DB={
   system:'354403dde0e380aa85bfe7d9fd139be5',
   challenges:'354403dde0e3804f8644d242a0ec6bf6',
