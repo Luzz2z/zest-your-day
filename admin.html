@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -68,187 +68,186 @@ var ALL_POWERS=['\u{1F9B9} Entourloupeur','\u{1F504} Swap','\u{1F480} Bridage','
 var STATE={dayCounter:1,sysId:null,challenges:{},players:[],ids:[],launched:false};
 
 function query(dbId){
-return fetch(’/api/notion/databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:’{}’}).then(function(r){return r.json();}).then(function(d){return d.results;});
+  return fetch('/api/notion/databases/'+dbId+'/query',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(r){return r.json();}).then(function(d){return d.results;});
 }
 function patch(pageId,props){
-return fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:props})}).then(function(r){return r.json();});
+  return fetch('/api/notion/pages/'+pageId,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:props})}).then(function(r){return r.json();});
 }
 function getProp(page,name,type){
-var p=page.properties[name];
-if(!p)return null;
-if(type===‘number’)return p.number!=null?p.number:0;
-if(type===‘title’)return p.title&&p.title[0]?p.title[0].plain_text:’’;
-if(type===‘checkbox’)return p.checkbox===true;
-if(type===‘formula_number’)return p.formula?p.formula.number||0:0;
-if(type===‘formula_string’)return p.formula?p.formula.string||’’:’’;
-if(type===‘select’)return p.select?p.select.name||’’:’’;
-if(type===‘text’)return p.rich_text&&p.rich_text[0]?p.rich_text[0].plain_text:’’;
-return null;
+  var p=page.properties[name];
+  if(!p)return null;
+  if(type==='number')return p.number!=null?p.number:0;
+  if(type==='title')return p.title&&p.title[0]?p.title[0].plain_text:'';
+  if(type==='checkbox')return p.checkbox===true;
+  if(type==='formula_number')return p.formula?p.formula.number||0:0;
+  if(type==='formula_string')return p.formula?p.formula.string||'':'';
+  if(type==='select')return p.select?p.select.name||'':'';
+  if(type==='text')return p.rich_text&&p.rich_text[0]?p.rich_text[0].plain_text:'';
+  return null;
 }
 function showToast(msg,color){
-var t=document.getElementById(‘toast’);
-t.textContent=msg;t.style.background=color||’#00FF88’;
-t.classList.add(‘show’);
-setTimeout(function(){t.classList.remove(‘show’);},3000);
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=color||'#00FF88';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
 }
 
 window.toggleValidation=function(pageId,cur){
-var nv=!cur;
-patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
-var a=STATE.players.find(function(x){return x.pageId===pageId;});
-if(a)a.isValidated=nv;
-render();
-showToast(nv?‘Validated!’:‘Removed’,nv?’#00FF88’:’#FF2D4B’);
-});
+  var nv=!cur;
+  patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
+    var a=STATE.players.find(function(x){return x.pageId===pageId;});
+    if(a)a.isValidated=nv;
+    render();
+    showToast(nv?'Validated!':'Removed',nv?'#00FF88':'#FF2D4B');
+  });
 };
 
 window.launchDay=function(){
-var btn=document.getElementById(‘btn-launch’);
-if(btn)btn.disabled=true;
-var nonShield=ALL_POWERS.filter(function(p){return p.indexOf(‘Shield’)<0;});
-var shuffled=nonShield.slice().sort(function(){return Math.random()-0.5;});
-var shieldIdx=Math.floor(Math.random()*PLAYERS.length);
-var powers=PLAYERS.map(function(_,i){
-if(i===shieldIdx)return ‘\u{1F6E1}\uFE0F Shield’;
-var off=i<shieldIdx?i:i-1;
-return shuffled[off]||shuffled[0];
-});
-var chain=Promise.resolve();
-STATE.players.forEach(function(a){
-var power=powers[a.playerIndex]||’\u274C None’;
-chain=chain.then(function(){
-return patch(a.pageId,{
-Power_Type:{select:{name:power}},
-Power_Used:{checkbox:false},
-Power_Target:{rich_text:[{text:{content:’’}}]},
-Roulette_Multiplier:{number:1}
-});
-}).then(function(){a.powerType=power;});
-});
-chain.then(function(){
-showToast(‘Powers assigned!’,’#00FF88’);
-render();
-}).catch(function(e){
-showToast(‘Error: ‘+e.message,’#FF2D4B’);
-if(btn)btn.disabled=false;
-});
+  var btn=document.getElementById('btn-launch');
+  if(btn)btn.disabled=true;
+  var nonShield=ALL_POWERS.filter(function(p){return p.indexOf('Shield')<0;});
+  var shuffled=nonShield.slice().sort(function(){return Math.random()-0.5;});
+  var shieldIdx=Math.floor(Math.random()*PLAYERS.length);
+  var powers=PLAYERS.map(function(_,i){
+    if(i===shieldIdx)return '\u{1F6E1}\uFE0F Shield';
+    var off=i<shieldIdx?i:i-1;
+    return shuffled[off]||shuffled[0];
+  });
+  var chain=Promise.resolve();
+  STATE.players.forEach(function(a){
+    var power=powers[a.playerIndex]||'\u274C None';
+    chain=chain.then(function(){
+      return patch(a.pageId,{
+        Power_Type:{select:{name:power}},
+        Power_Used:{checkbox:false},
+        Power_Target:{rich_text:[{text:{content:''}}]},
+        Roulette_Multiplier:{number:1}
+      });
+    }).then(function(){a.powerType=power;});
+  });
+  chain.then(function(){
+    showToast('Powers assigned!','#00FF88');
+    render();
+  }).catch(function(e){
+    showToast('Error: '+e.message,'#FF2D4B');
+    if(btn)btn.disabled=false;
+  });
 };
 
 window.nextDay=function(){
-var btn=document.getElementById(‘btn-nextday’);
-if(btn)btn.disabled=true;
-var chain=Promise.resolve();
-STATE.players.forEach(function(a){
-chain=chain.then(function(){
-var cid=a.rerollId>0?a.rerollId:a.challengeId;
-var ch=STATE.challenges[cid]||{pts:0};
-var pts=a.isValidated?ch.pts:0;
-var bonus=a.isValidated?(a.winStreak>=10?3:a.winStreak>=5?2:a.winStreak>=3?1:0):0;
-return patch(a.pageId,{
-Total_Score:{number:a.totalScore+(a.isValidated?pts+bonus:0)},
-Win_Streak:{number:a.isValidated?a.winStreak+1:0},
-Defis_Reussis:{number:a.isValidated?a.defisReussis+1:a.defisReussis},
-Is_Validated:{checkbox:false},
-Has_Rerolled:{checkbox:false},
-Reroll_Challenge_ID:{number:0},
-Power_Type:{select:{name:’\u274C None’}},
-Power_Used:{checkbox:false},
-Power_Target:{rich_text:[{text:{content:’’}}]},
-Roulette_Multiplier:{number:1},
-Shield_Used_Today:{checkbox:false}
-});
-});
-});
-chain.then(function(){
-return patch(STATE.sysId,{Day_Counter:{number:STATE.dayCounter+1},Defis_Launched:{checkbox:false}});
-}).then(function(){
-showToast(‘Day ‘+(STATE.dayCounter+1)+’ ready!’,’#FF6B1A’);
-return loadAndRender();
-}).catch(function(e){
-showToast(‘Error: ‘+e.message,’#FF2D4B’);
-if(btn)btn.disabled=false;
-});
+  var btn=document.getElementById('btn-nextday');
+  if(btn)btn.disabled=true;
+  var chain=Promise.resolve();
+  STATE.players.forEach(function(a){
+    chain=chain.then(function(){
+      var cid=a.rerollId>0?a.rerollId:a.challengeId;
+      var ch=STATE.challenges[cid]||{pts:0};
+      var pts=a.isValidated?ch.pts:0;
+      var bonus=a.isValidated?(a.winStreak>=10?3:a.winStreak>=5?2:a.winStreak>=3?1:0):0;
+      return patch(a.pageId,{
+        Total_Score:{number:a.totalScore+(a.isValidated?pts+bonus:0)},
+        Win_Streak:{number:a.isValidated?a.winStreak+1:0},
+        Defis_Reussis:{number:a.isValidated?a.defisReussis+1:a.defisReussis},
+        Is_Validated:{checkbox:false},
+        Has_Rerolled:{checkbox:false},
+        Reroll_Challenge_ID:{number:0},
+        Power_Type:{select:{name:'\u274C None'}},
+        Power_Used:{checkbox:false},
+        Power_Target:{rich_text:[{text:{content:''}}]},
+        Roulette_Multiplier:{number:1},
+        Shield_Used_Today:{checkbox:false}
+      });
+    });
+  });
+  chain.then(function(){
+    return patch(STATE.sysId,{Day_Counter:{number:STATE.dayCounter+1},Defis_Launched:{checkbox:false}});
+  }).then(function(){
+    showToast('Day '+(STATE.dayCounter+1)+' ready!','#FF6B1A');
+    return loadAndRender();
+  }).catch(function(e){
+    showToast('Error: '+e.message,'#FF2D4B');
+    if(btn)btn.disabled=false;
+  });
 };
 
 function render(){
-var powersAssigned=STATE.players.some(function(a){return a.powerType&&a.powerType.indexOf(‘None’)<0&&a.powerType.indexOf(’\u274C’)<0;});
-var html=’’;
-html+=’<div class="header"><span class="header-mascot">\u2699\uFE0F</span><h1>ADMIN PANEL</h1><div class="header-sub">Game Master Only</div><div class="day-badge">Day ‘+STATE.dayCounter+’</div></div>’;
+  var powersAssigned=STATE.players.some(function(a){return a.powerType&&a.powerType.indexOf('None')<0&&a.powerType.indexOf('\u274C')<0;});
+  var html='';
+  html+='<div class="header"><span class="header-mascot">\u2699\uFE0F</span><h1>ADMIN PANEL</h1><div class="header-sub">Game Master Only</div><div class="day-badge">Day '+STATE.dayCounter+'</div></div>';
 
-if(!powersAssigned&&!STATE.launched){
-html+=’<button class="btn-launch" id="btn-launch" onclick="launchDay()">LAUNCH DAY</button>’;
-html+=’<div class="warning-box">Assigns random powers. Players then do the Morning Reveal on the main page.</div>’;
-}
-if(powersAssigned&&!STATE.launched){
-html+=’<div class="info-box">Powers assigned! Players are doing the Morning Reveal on the main page.</div>’;
-}
-if(STATE.launched){
-html+=’<div class="warning-box">Next Day saves all scores and resets for Day ‘+(STATE.dayCounter+1)+’.</div>’;
-html+=’<button class="btn-nextday" id="btn-nextday" onclick="nextDay()">NEXT DAY</button>’;
-}
+  if(!powersAssigned&&!STATE.launched){
+    html+='<button class="btn-launch" id="btn-launch" onclick="launchDay()">LAUNCH DAY</button>';
+    html+='<div class="warning-box">Assigns random powers. Players then do the Morning Reveal on the main page.</div>';
+  }
+  if(powersAssigned&&!STATE.launched){
+    html+='<div class="info-box">Powers assigned! Players are doing the Morning Reveal on the main page.</div>';
+  }
+  if(STATE.launched){
+    html+='<div class="warning-box">Next Day saves all scores and resets for Day '+(STATE.dayCounter+1)+'.</div>';
+    html+='<button class="btn-nextday" id="btn-nextday" onclick="nextDay()">NEXT DAY</button>';
+  }
 
-html+=’<div class="section-title">Validations</div>’;
-STATE.players.forEach(function(a){
-var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
-var cid=a.rerollId>0?a.rerollId:a.challengeId;
-var ch=STATE.challenges[cid]||{name:’?’,pts:0};
-var hasPower=a.powerType&&a.powerType.indexOf(‘None’)<0&&a.powerType.indexOf(’\u274C’)<0;
-html+=’<div class="player-row'+(a.isValidated?' validated':'')+'">’
-+’<div class="player-left">’
-+’<span style="font-size:28px">’+pl.emoji+’</span>’
-+’<div class="player-info">’
-+’<div class="player-name-row" style="color:'+pl.color+'">’+pl.name+’</div>’
-+’<div class="player-challenge-row">’+ch.name+’</div>’
-+(hasPower?’<div class="player-power-row" style="color:#FFD700">’+a.powerType+(a.powerUsed?’ (used)’:’’)+’</div>’:’’)
-+’</div></div>’
-+’<div class="player-right">’
-+’<div class="score-box"><div class="score-val">’+a.totalScore+’</div><div class="score-lbl">pts</div></div>’
-+’<div class="check-box'+(a.isValidated?' checked':'')+'" onclick="toggleValidation(\''+a.pageId+'\','+a.isValidated+')">’+(a.isValidated?’\u2713’:’’)+’</div>’
-+’</div></div>’;
-});
+  html+='<div class="section-title">Validations</div>';
+  STATE.players.forEach(function(a){
+    var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+    var cid=a.rerollId>0?a.rerollId:a.challengeId;
+    var ch=STATE.challenges[cid]||{name:'?',pts:0};
+    var hasPower=a.powerType&&a.powerType.indexOf('None')<0&&a.powerType.indexOf('\u274C')<0;
+    html+='<div class="player-row'+(a.isValidated?' validated':'')+'">'
+      +'<div class="player-left">'
+      +'<span style="font-size:28px">'+pl.emoji+'</span>'
+      +'<div class="player-info">'
+      +'<div class="player-name-row" style="color:'+pl.color+'">'+pl.name+'</div>'
+      +'<div class="player-challenge-row">'+ch.name+'</div>'
+      +(hasPower?'<div class="player-power-row" style="color:#FFD700">'+a.powerType+(a.powerUsed?' (used)':'')+'</div>':'')
+      +'</div></div>'
+      +'<div class="player-right">'
+      +'<div class="score-box"><div class="score-val">'+a.totalScore+'</div><div class="score-lbl">pts</div></div>'
+      +'<div class="check-box'+(a.isValidated?' checked':'')+'" onclick="toggleValidation(\''+a.pageId+'\','+a.isValidated+')">'+(a.isValidated?'\u2713':'')+'</div>'
+      +'</div></div>';
+  });
 
-html+=’<div class="divider"></div>’;
-html+=’<a href="/" class="back-link">Back to player view</a>’;
-document.getElementById(‘root’).innerHTML=html;
+  html+='<div class="divider"></div>';
+  html+='<a href="/" class="back-link">Back to player view</a>';
+  document.getElementById('root').innerHTML=html;
 }
 
 function loadAndRender(){
-return query(CONFIG.db_system).then(function(sys){
-STATE.sysId=sys[0].id;
-STATE.dayCounter=getProp(sys[0],‘Day_Counter’,‘number’)||1;
-STATE.launched=getProp(sys[0],‘Defis_Launched’,‘checkbox’);
-return query(CONFIG.db_challenges);
-}).then(function(chs){
-chs.forEach(function(p){
-var id=getProp(p,‘ID_Global’,‘number’);
-if(!id)return;
-STATE.challenges[id]={name:getProp(p,‘Name’,‘title’)||’’,pts:getProp(p,‘Points’,‘number’)||0};
-});
-return query(CONFIG.db_assignments);
-}).then(function(asgs){
-STATE.players=asgs.map(function(p){
-return{
-pageId:p.id,
-playerIndex:getProp(p,‘Player_Index’,‘number’)||0,
-winStreak:getProp(p,‘Win_Streak’,‘number’)||0,
-totalScore:getProp(p,‘Total_Score’,‘number’)||0,
-defisReussis:getProp(p,‘Defis_Reussis’,‘number’)||0,
-isValidated:getProp(p,‘Is_Validated’,‘checkbox’),
-challengeId:getProp(p,‘Challenge_ID_Today’,‘formula_number’)||0,
-hasRerolled:getProp(p,‘Has_Rerolled’,‘checkbox’),
-rerollId:getProp(p,‘Reroll_Challenge_ID’,‘number’)||0,
-powerType:getProp(p,‘Power_Type’,‘select’)||’’,
-powerUsed:getProp(p,‘Power_Used’,‘checkbox’)
-};
-}).sort(function(a,b){return a.playerIndex-b.playerIndex;});
-render();
-});
+  return query(CONFIG.db_system).then(function(sys){
+    STATE.sysId=sys[0].id;
+    STATE.dayCounter=getProp(sys[0],'Day_Counter','number')||1;
+    STATE.launched=getProp(sys[0],'Defis_Launched','checkbox');
+    return query(CONFIG.db_challenges);
+  }).then(function(chs){
+    chs.forEach(function(p){
+      var id=getProp(p,'ID_Global','number');
+      if(!id)return;
+      STATE.challenges[id]={name:getProp(p,'Name','title')||'',pts:getProp(p,'Points','number')||0};
+    });
+    return query(CONFIG.db_assignments);
+  }).then(function(asgs){
+    STATE.players=asgs.map(function(p){
+      return{
+        pageId:p.id,
+        playerIndex:getProp(p,'Player_Index','number')||0,
+        winStreak:getProp(p,'Win_Streak','number')||0,
+        totalScore:getProp(p,'Total_Score','number')||0,
+        defisReussis:getProp(p,'Defis_Reussis','number')||0,
+        isValidated:getProp(p,'Is_Validated','checkbox'),
+        challengeId:getProp(p,'Challenge_ID_Today','formula_number')||0,
+        hasRerolled:getProp(p,'Has_Rerolled','checkbox'),
+        rerollId:getProp(p,'Reroll_Challenge_ID','number')||0,
+        powerType:getProp(p,'Power_Type','select')||'',
+        powerUsed:getProp(p,'Power_Used','checkbox')
+      };
+    }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
+    render();
+  });
 }
 
 loadAndRender().catch(function(e){
-document.getElementById(‘root’).innerHTML=’<div style="padding:20px;color:#FF2D4B;font-weight:700">ERROR: ‘+e.message+’</div>’;
+  document.getElementById('root').innerHTML='<div style="padding:20px;color:#FF2D4B;font-weight:700">ERROR: '+e.message+'</div>';
 });
 </script>
-
 </body>
 </html>
