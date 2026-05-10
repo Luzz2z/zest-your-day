@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -106,6 +107,18 @@ body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);
 .loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:3px;font-size:11px;}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
+.leaderboard{padding:0 16px;}
+.lb-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
+.lb-header-row{display:grid;grid-template-columns:40px 1fr 60px 60px 50px;gap:8px;padding:10px 16px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);}
+.lb-header-row span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;text-align:center;font-weight:700;}
+.lb-header-row span:nth-child(2){text-align:left;}
+.lb-row{display:grid;grid-template-columns:40px 1fr 60px 60px 50px;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.03);}
+.lb-row:last-child{border-bottom:none;}
+.lb-rank{font-family:'Bangers',cursive;font-size:20px;text-align:center;}
+.lb-name{font-weight:900;font-size:14px;}
+.lb-stat{text-align:center;}
+.lb-val{font-weight:900;font-size:15px;}
+.lb-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;}
 </style>
 </head>
 <body>
@@ -206,7 +219,9 @@ function loadData(){
       var p=chPages[i];
       var id=getProp(p,'ID_Global','number');
       if(!id)continue;
-      STATE.challenges[id]={id:id,name:getProp(p,'Name','title')||'',points:getProp(p,'Points','number')||0,spice:getProp(p,'Spice_Level','formula_string')||getProp(p,'Spice_Level','select')||''};
+      var pts=getProp(p,'Points','number')||0;
+      if(pts===0)continue;
+      STATE.challenges[id]={id:id,name:getProp(p,'Name','title')||'',points:pts,spice:getProp(p,'Spice_Level','formula_string')||getProp(p,'Spice_Level','select')||''};
       STATE.allChallengeIds.push(id);
     }
     return query(CONFIG.db_assignments);
@@ -437,11 +452,30 @@ window.suggestChallenge=function(){
   var spiceEl=document.querySelector('input[name="spice"]:checked');
   if(!nameEl||!nameEl.value.trim()){showToast('Enter a name!','#FF6B1A');return;}
   if(!spiceEl){showToast('Pick spice level!','#FF6B1A');return;}
-  var btn=document.getElementById('btn-suggest');btn.disabled=true;btn.textContent='Sending...';
-  notionCreate(CONFIG.db_challenges,{Name:{title:[{text:{content:nameEl.value.trim()}}]},Points:{number:SPICE_PTS[spiceEl.value]||1},Status:{select:{name:'Pending'}}}).then(function(){
-    showToast('Suggestion sent!','#00FF88');nameEl.value='';spiceEl.checked=false;
-    btn.disabled=false;btn.textContent='SUGGEST CHALLENGE';
-  }).catch(function(e){showToast('Error: '+e.message,'#FF2D4B');btn.disabled=false;btn.textContent='SUGGEST CHALLENGE';});
+  var name=nameEl.value.trim();
+  var spice=spiceEl.value;
+  var pts=SPICE_PTS[spice]||1;
+  var confirm=document.createElement('div');
+  confirm.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;';
+  confirm.innerHTML='<div style="background:#0A0A18;border:1px solid rgba(0,255,136,0.3);border-radius:24px;padding:28px 24px;width:100%;max-width:380px;text-align:center">'
+    +'<div style="font-size:40px;margin-bottom:12px">💡</div>'
+    +'<div style="font-family:Bangers,cursive;font-size:24px;letter-spacing:2px;color:#00FF88;margin-bottom:8px">CONFIRM SUGGESTION</div>'
+    +'<div style="font-weight:900;font-size:16px;margin-bottom:6px">'+name+'</div>'
+    +'<div style="font-size:13px;color:#6B7280;margin-bottom:24px">'+spice+' - '+pts+'pt'+(pts>1?'s':'')+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'
+    +'<button onclick="this.closest('div[style]').remove()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px;font-family:Bangers,cursive;font-size:18px;color:#6B7280;cursor:pointer">CANCEL</button>'
+    +'<button id="confirm-send" style="background:linear-gradient(135deg,#00FF88,#00EEFF);border:none;border-radius:14px;padding:14px;font-family:Bangers,cursive;font-size:18px;color:#000;cursor:pointer">SEND IT!</button>'
+    +'</div></div>';
+  document.body.appendChild(confirm);
+  confirm.querySelector('#confirm-send').onclick=function(){
+    confirm.remove();
+    var btn=document.getElementById('btn-suggest');if(btn){btn.disabled=true;btn.textContent='Sending...';}
+    notionCreate(CONFIG.db_challenges,{Name:{title:[{text:{content:name}}]},Points:{number:pts},Status:{select:{name:'Pending'}}}).then(function(){
+      showToast('Suggestion sent!','#00FF88');
+      if(nameEl)nameEl.value='';if(spiceEl)spiceEl.checked=false;
+      if(btn){btn.disabled=false;btn.textContent='SUGGEST CHALLENGE';}
+    }).catch(function(e){showToast('Error: '+e.message,'#FF2D4B');if(btn){btn.disabled=false;btn.textContent='SUGGEST CHALLENGE';}});
+  };
 };
 function toggleSection(id){
   var el=document.getElementById(id);
@@ -560,6 +594,23 @@ function render(){
   });
   html+='</div>';
 
+  html+='<div class="divider"></div>';
+  html+='<div class="section-title">Leaderboard</div>';
+  var lb=STATE.assignments.slice().sort(function(a,b){return (b.totalScore||0)-(a.totalScore||0);});
+  var medals=['1','2','3','4'];
+  html+='<div class="leaderboard"><div class="lb-card">';
+  html+='<div class="lb-header-row"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>Done</span></div>';
+  lb.forEach(function(a,i){
+    var pl=PLAYERS[a.playerIndex]||{name:'?',emoji:'?',color:'#fff'};
+    html+='<div class="lb-row">'
+      +'<div class="lb-rank">'+(medals[i]||i+1)+'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">'+pl.emoji+'</span><span class="lb-name" style="color:'+pl.color+'">'+pl.name+'</span></div>'
+      +'<div class="lb-stat"><div class="lb-val" style="color:#FFD700">'+(a.totalScore||0)+'</div><div class="lb-lbl">pts</div></div>'
+      +'<div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">'+(a.winStreak||0)+'</div><div class="lb-lbl">streak</div></div>'
+      +'<div class="lb-stat"><div class="lb-val" style="color:#00FF88">'+(a.defisReussis||0)+'</div><div class="lb-lbl">done</div></div>'
+      +'</div>';
+  });
+  html+='</div></div>';
   html+='<div class="divider"></div>';
   html+='<div class="section-title">Suggest</div>';
   html+='<div class="collapsible-card">'
