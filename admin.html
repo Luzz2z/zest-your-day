@@ -4,188 +4,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zest Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-:root{--red:#FF2D4B;--orange:#FF6B1A;--yellow:#FFD700;--green:#00FF88;--purple:#BF00FF;--cyan:#00EEFF;--darker:#050508;--card:#0A0A18;--text:#F5F5F5;--muted:#6B7280;}
+:root{--red:#FF2D4B;--orange:#FF6B1A;--yellow:#FFD700;--green:#00FF88;--cyan:#00EEFF;--darker:#050508;--card:#0A0A18;--text:#F5F5F5;--muted:#6B7280;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);min-height:100vh;overflow-x:hidden;}
-#particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
-.app{position:relative;z-index:2;max-width:480px;margin:0 auto;padding:0 0 120px;}
-.header{padding:48px 20px 24px;text-align:center;}
-.header-mascot{font-size:72px;display:block;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 0 24px rgba(255,107,26,0.9));}
-@keyframes bounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
-.header h1{font-family:'Bangers',cursive;font-size:54px;letter-spacing:5px;background:linear-gradient(135deg,var(--red),var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:8px 0 4px;}
-.header-sub{font-size:11px;color:var(--cyan);text-transform:uppercase;letter-spacing:5px;font-weight:700;}
-.day-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:7px 20px;font-size:15px;font-weight:900;color:var(--yellow);margin-top:16px;}
-.section-title{font-family:'Bangers',cursive;font-size:18px;letter-spacing:3px;text-transform:uppercase;padding:0 20px 14px;display:flex;align-items:center;gap:10px;color:var(--muted);}
-.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,75,0.4),transparent);}
-.cards{padding:0 16px;display:flex;flex-direction:column;gap:16px;margin-bottom:32px;}
-.card{background:var(--card);border-radius:24px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;}
-.card.validated{border-color:rgba(0,255,136,0.2);box-shadow:0 0 20px rgba(0,255,136,0.05);}
-.card-band{height:3px;}
-.card-cover{height:72px;display:flex;align-items:center;padding:0 20px;gap:14px;position:relative;}
-.player-name-big{font-family:'Bangers',cursive;font-size:26px;letter-spacing:2px;}
-.card-body{padding:14px 20px 18px;}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-.pill{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:900;}
-.pill-streak{background:rgba(255,107,26,0.1);border:1px solid rgba(255,107,26,0.3);color:var(--orange);}
-.challenge-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:16px;margin-bottom:14px;}
-.challenge-name{font-weight:900;font-size:17px;line-height:1.4;margin-bottom:8px;}
-.spice-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
-.card-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.done-label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-.check-box{width:36px;height:36px;border-radius:12px;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;}
-.check-box.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 24px rgba(0,255,136,0.6);}
-.btn-reroll{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:12px;padding:10px 16px;font-size:13px;font-weight:900;color:#e879f9;cursor:pointer;font-family:'Nunito',sans-serif;}
-.btn-reroll:disabled{opacity:0.3;cursor:not-allowed;}
-.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:28px 16px;}
-.reveal-phase{padding:0 16px;}
-.reveal-progress{display:flex;justify-content:center;gap:12px;padding:16px 0;}
-.progress-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);}
-.progress-dot.done{background:rgba(255,255,255,0.4);}
-.progress-dot.active{width:14px;height:14px;background:var(--yellow);box-shadow:0 0 10px rgba(255,215,0,0.6);}
-.reveal-card{background:var(--card);border-radius:24px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;margin-bottom:16px;}
-.reveal-cover{padding:28px 24px 20px;text-align:center;}
-.reveal-step{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:3px;margin-bottom:8px;}
-.reveal-emoji-big{font-size:64px;display:block;margin:8px 0;}
-.reveal-player-name{font-family:'Bangers',cursive;font-size:36px;letter-spacing:3px;margin-bottom:4px;}
-.reveal-body{padding:0 20px 20px;}
-.reveal-challenge-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;margin-bottom:14px;}
-.reveal-challenge-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
-.reveal-challenge-name{font-weight:900;font-size:18px;line-height:1.4;margin-bottom:8px;}
-.reveal-power-box{border-radius:16px;padding:16px;margin-bottom:14px;border:1px solid;}
-.reveal-power-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;opacity:0.7;}
-.reveal-power-name{font-family:'Bangers',cursive;font-size:28px;letter-spacing:2px;margin-bottom:6px;}
-.reveal-power-desc{font-size:13px;line-height:1.5;opacity:0.8;}
-.target-section{margin-bottom:14px;}
-.target-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;}
-.target-grid{display:flex;flex-direction:column;gap:8px;}
-.target-btn{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:900;font-size:14px;color:var(--text);width:100%;text-align:left;}
-.target-btn.selected{border-color:var(--green);background:rgba(0,255,136,0.08);}
-.upgrade-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.upgrade-btn{border:none;border-radius:14px;padding:14px;font-family:'Bangers',cursive;font-size:17px;cursor:pointer;opacity:0.6;}
-.upgrade-btn.selected{opacity:1;}
-.reveal-actions{display:flex;flex-direction:column;gap:10px;}
-.btn-activate{background:linear-gradient(135deg,var(--orange),var(--red));border:none;border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:20px;letter-spacing:2px;color:white;cursor:pointer;}
-.btn-skip-reveal{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;font-family:'Bangers',cursive;font-size:16px;color:var(--muted);cursor:pointer;}
-.btn-reroll-reveal{background:rgba(191,0,255,0.08);border:1px solid rgba(191,0,255,0.35);border-radius:14px;padding:10px;font-family:'Bangers',cursive;font-size:14px;color:#e879f9;cursor:pointer;}
-.effect-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:10px 14px;margin-bottom:6px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
-.shield-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
-.shield-modal{background:#060620;border:2px solid var(--cyan);border-radius:28px;padding:32px 24px;width:100%;max-width:400px;text-align:center;}
-.shield-big-icon{font-size:64px;display:block;margin-bottom:12px;}
-.shield-pass-to{font-size:11px;color:var(--cyan);text-transform:uppercase;letter-spacing:3px;margin-bottom:4px;}
-.shield-player-name{font-family:'Bangers',cursive;font-size:40px;margin-bottom:8px;}
-.shield-desc{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:20px;}
-.shield-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.shield-yes-btn{background:linear-gradient(135deg,var(--cyan),var(--green));border:none;border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:20px;color:#000;cursor:pointer;}
-.shield-no-btn{background:rgba(255,45,75,0.12);border:1.5px solid rgba(255,45,75,0.4);border-radius:14px;padding:16px;font-family:'Bangers',cursive;font-size:20px;color:var(--red);cursor:pointer;}
-.collapsible-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);margin:0 16px 16px;}
-.collapsible-header{padding:18px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
-.collapsible-header h3{font-family:'Bangers',cursive;font-size:18px;letter-spacing:2px;}
-.collapsible-body{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
-.collapsible-body.open{max-height:2000px;}
-.collapsible-inner{padding:0 20px 20px;}
-.form-group{margin-bottom:14px;}
-.form-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;display:block;}
-.form-input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 14px;color:var(--text);font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;outline:none;}
-.form-input:focus{border-color:var(--green);}
-.spice-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-.spice-option{display:none;}
-.spice-option+label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;background:rgba(255,255,255,0.02);border:2px solid rgba(255,255,255,0.05);border-radius:12px;cursor:pointer;font-size:10px;font-weight:700;text-align:center;}
-.spice-option:checked+label{border-color:var(--green);background:rgba(0,255,136,0.06);}
-.spice-emoji{font-size:22px;}
-.btn-suggest{width:100%;background:linear-gradient(135deg,rgba(0,255,136,0.15),rgba(0,238,255,0.08));border:1px solid rgba(0,255,136,0.35);border-radius:12px;padding:14px;font-family:'Bangers',cursive;font-size:18px;letter-spacing:2px;color:var(--green);cursor:pointer;}
-.btn-suggest:disabled{opacity:0.4;cursor:not-allowed;}
-.rule-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-.rule-item:last-child{border-bottom:none;}
-.rule-icon{font-size:22px;flex-shrink:0;}
-.rule-title{font-weight:900;font-size:14px;margin-bottom:3px;}
-.rule-desc{font-size:12px;color:var(--muted);line-height:1.5;}
-.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;position:relative;z-index:2;}
-.spinner{width:48px;height:48px;border:2px solid rgba(255,45,75,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite;}
+body{font-family:'Nunito',sans-serif;background:var(--darker);color:var(--text);min-height:100vh;}
+.app{max-width:480px;margin:0 auto;padding:0 0 100px;}
+.header{padding:40px 20px 20px;text-align:center;}
+.header-mascot{font-size:56px;display:block;}
+.header h1{font-family:'Bangers',cursive;font-size:40px;letter-spacing:4px;background:linear-gradient(135deg,var(--red),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:8px 0 4px;}
+.header-sub{font-size:11px;color:var(--cyan);text-transform:uppercase;letter-spacing:3px;font-weight:700;}
+.day-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:6px 18px;font-size:14px;font-weight:900;color:var(--yellow);margin-top:12px;}
+.section-title{font-family:'Bangers',cursive;font-size:16px;letter-spacing:2px;text-transform:uppercase;padding:0 20px 12px;display:flex;align-items:center;gap:8px;color:var(--muted);}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,75,0.3),transparent);}
+.btn-launch{display:block;width:calc(100% - 32px);margin:0 16px 10px;background:linear-gradient(135deg,var(--green),#1db954);border:none;border-radius:16px;padding:18px;font-family:'Bangers',cursive;font-size:22px;letter-spacing:3px;color:#000;cursor:pointer;}
+.btn-launch:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-nextday{display:block;width:calc(100% - 32px);margin:0 16px 16px;background:linear-gradient(135deg,var(--red),var(--orange));border:none;border-radius:16px;padding:18px;font-family:'Bangers',cursive;font-size:22px;letter-spacing:3px;color:white;cursor:pointer;}
+.btn-nextday:disabled{opacity:0.4;cursor:not-allowed;}
+.info-box{margin:0 16px 16px;background:rgba(0,238,255,0.05);border:1px solid rgba(0,238,255,0.2);border-radius:14px;padding:12px 16px;font-size:13px;color:var(--cyan);font-weight:700;}
+.warning-box{margin:0 16px 16px;background:rgba(255,107,26,0.05);border:1px solid rgba(255,107,26,0.2);border-radius:14px;padding:12px 16px;font-size:12px;color:var(--muted);line-height:1.6;}
+.player-row{background:var(--card);border-radius:16px;margin:0 16px 10px;padding:14px 16px;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.player-row.validated{border-color:rgba(0,255,136,0.2);}
+.player-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.player-info{flex:1;min-width:0;}
+.player-name-row{font-weight:900;font-size:15px;margin-bottom:2px;}
+.player-challenge-row{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.player-power-row{font-size:11px;font-weight:700;margin-top:3px;}
+.player-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.score-box{text-align:center;}
+.score-val{font-weight:900;font-size:16px;color:var(--yellow);}
+.score-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;}
+.check-box{width:34px;height:34px;border-radius:10px;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0;}
+.check-box.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 16px rgba(0,255,136,0.5);}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,45,75,0.2),transparent);margin:20px 16px;}
+.back-link{display:block;text-align:center;color:var(--muted);font-size:13px;font-weight:700;text-decoration:none;padding:16px;}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;gap:16px;}
+.spinner{width:40px;height:40px;border:2px solid rgba(255,45,75,0.15);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:3px;font-size:11px;}
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);color:white;font-weight:900;padding:14px 28px;border-radius:50px;font-size:14px;z-index:9999;transition:transform 0.4s;white-space:nowrap;}
+.loading p{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:2px;font-size:11px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);color:white;font-weight:900;padding:12px 24px;border-radius:40px;font-size:14px;z-index:999;transition:transform 0.3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
-.leaderboard{padding:0 16px;}
-.lb-card{background:var(--card);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);}
-.lb-header-row{display:grid;grid-template-columns:40px 1fr 60px 60px 50px;gap:8px;padding:10px 16px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);}
-.lb-header-row span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;text-align:center;font-weight:700;}
-.lb-header-row span:nth-child(2){text-align:left;}
-.lb-row{display:grid;grid-template-columns:40px 1fr 60px 60px 50px;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.03);}
-.lb-row:last-child{border-bottom:none;}
-.lb-rank{font-family:'Bangers',cursive;font-size:20px;text-align:center;}
-.lb-name{font-weight:900;font-size:14px;}
-.lb-stat{text-align:center;}
-.lb-val{font-weight:900;font-size:15px;}
-.lb-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;}
 </style>
 </head>
 <body>
-<canvas id="particle-canvas"></canvas>
 <div class="app">
 <div id="root"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
 </div>
-<div id="shield-container"></div>
 <div class="toast" id="toast"></div>
 <script>
-(function(){
-  var canvas=document.getElementById('particle-canvas');
-  if(!canvas)return;
-  var ctx=canvas.getContext('2d');
-  var colors=['#FF2D4B','#FF6B1A','#FFD700','#00FF88','#00EEFF','#BF00FF'];
-  var particles=[];
-  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-  resize();window.addEventListener('resize',resize);
-  for(var i=0;i<50;i++){particles.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.5+0.3,color:colors[Math.floor(Math.random()*colors.length)],vx:(Math.random()-0.5)*0.3,vy:-Math.random()*0.4-0.1,alpha:Math.random()*0.5+0.1});}
-  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(function(p){ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color+Math.floor(p.alpha*255).toString(16).padStart(2,'0');ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.y<-5){p.y=canvas.height+5;p.x=Math.random()*canvas.width;}if(p.x<-5)p.x=canvas.width+5;if(p.x>canvas.width+5)p.x=-5;});requestAnimationFrame(draw);}
-  draw();
-})();
-
 var CONFIG={
-db_system:‘354403dde0e380aa85bfe7d9fd139be5’,
-db_challenges:‘354403dde0e3804f8644d242a0ec6bf6’,
-db_assignments:‘354403dde0e380f797ccfb85ad5a072e’
+  db_system:'354403dde0e380aa85bfe7d9fd139be5',
+  db_challenges:'354403dde0e3804f8644d242a0ec6bf6',
+  db_assignments:'354403dde0e380f797ccfb85ad5a072e'
 };
 var PLAYERS=[
-{name:‘Banuu’,emoji:’\u{1F335}’,color:’#00FF88’,colorDark:‘rgba(0,255,136,0.15)’},
-{name:‘Luzz’,emoji:’\u{1F525}’,color:’#FF2D4B’,colorDark:‘rgba(255,45,75,0.15)’},
-{name:‘Y’,emoji:’\u26A1’,color:’#FFD700’,colorDark:‘rgba(255,215,0,0.15)’},
-{name:‘Nicooo’,emoji:’\u{1F4B0}’,color:’#FF6B1A’,colorDark:‘rgba(255,107,26,0.15)’}
+  {name:'Banuu',emoji:'\u{1F335}',color:'#00FF88'},
+  {name:'Luzz',emoji:'\u{1F525}',color:'#FF2D4B'},
+  {name:'Y',emoji:'\u26A1',color:'#FFD700'},
+  {name:'Nicooo',emoji:'\u{1F4B0}',color:'#FF6B1A'}
 ];
-var POWERS={
-‘Entourloupeur’:{color:’#BF00FF’,bg:‘rgba(191,0,255,0.12)’,border:‘rgba(191,0,255,0.4)’,desc:‘Copy someone challenge. Complete it before them to steal their points!’,needsTarget:true,targetSelf:false,reactive:false},
-‘Swap’:{color:’#00EEFF’,bg:‘rgba(0,238,255,0.1)’,border:‘rgba(0,238,255,0.4)’,desc:‘Force a challenge swap with someone.’,needsTarget:true,targetSelf:false,reactive:false},
-‘Bridage’:{color:’#FF2D4B’,bg:‘rgba(255,45,75,0.1)’,border:‘rgba(255,45,75,0.4)’,desc:‘x0.5 points today. Target yourself or someone else.’,needsTarget:true,targetSelf:true,reactive:false},
-‘Pas si vite’:{color:’#FFD700’,bg:‘rgba(255,215,0,0.1)’,border:‘rgba(255,215,0,0.4)’,desc:‘Upgrade or downgrade someone challenge difficulty.’,needsTarget:true,targetSelf:false,reactive:false,needsUpDown:true},
-‘Shield’:{color:’#00EEFF’,bg:‘rgba(0,238,255,0.08)’,border:‘rgba(0,238,255,0.3)’,desc:‘Block any power when targeted. Reactive.’,needsTarget:false,reactive:true},
-‘Roulette’:{color:’#FF6B1A’,bg:‘rgba(255,107,26,0.1)’,border:‘rgba(255,107,26,0.4)’,desc:‘x0, x1 or x2 random at end of day.’,needsTarget:false,reactive:true},
-‘Copier-Coller’:{color:’#00FF88’,bg:‘rgba(0,255,136,0.1)’,border:‘rgba(0,255,136,0.4)’,desc:‘Share your challenge. Both complete it = x2 each!’,needsTarget:true,targetSelf:false,reactive:false},
-‘Extincteur’:{color:’#FF2D4B’,bg:‘rgba(255,45,75,0.1)’,border:‘rgba(255,45,75,0.4)’,desc:‘Reset someone streak to 0.’,needsTarget:true,targetSelf:false,reactive:false}
-};
-var SPICE_PTS={Mild:1,Spicy:2,Hot:3,Atomic:5};
-
-function getPowerKey(pt){
-if(!pt)return null;
-var keys=Object.keys(POWERS);
-for(var i=0;i<keys.length;i++){if(pt.indexOf(keys[i])>=0)return keys[i];}
-return null;
-}
-
-var STATE={
-dayCounter:1,systemPageId:null,challenges:{},assignments:[],allChallengeIds:[],
-defiLaunched:false,revealPhase:false,revealOrder:[],revealStep:0,
-effectLog:[],pendingShield:null,selectedTarget:null,selectedUpgradeDir:null
-};
+var ALL_POWERS=['\u{1F9B9} Entourloupeur','\u{1F504} Swap','\u{1F480} Bridage','\u26A1 Pas si vite','\u{1F6E1}\uFE0F Shield','\u{1F3B0} Roulette','\u{1F46F} Copier-Coller','\u{1F525} Extincteur'];
+var STATE={dayCounter:1,sysId:null,challenges:{},players:[],ids:[],launched:false};
 
 function query(dbId){
 return fetch(’/api/notion/databases/’+dbId+’/query’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:’{}’}).then(function(r){return r.json();}).then(function(d){return d.results;});
 }
 function patch(pageId,props){
 return fetch(’/api/notion/pages/’+pageId,{method:‘PATCH’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({properties:props})}).then(function(r){return r.json();});
-}
-function notionCreate(dbId,props){
-return fetch(’/api/notion/pages’,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({parent:{database_id:dbId},properties:props})}).then(function(r){return r.json();});
 }
 function getProp(page,name,type){
 var p=page.properties[name];
@@ -206,25 +92,141 @@ t.classList.add(‘show’);
 setTimeout(function(){t.classList.remove(‘show’);},3000);
 }
 
-function loadData(){
-return query(CONFIG.db_system).then(function(sysPages){
-var sys=sysPages[0];
-STATE.systemPageId=sys.id;
-STATE.dayCounter=getProp(sys,‘Day_Counter’,‘number’)||1;
-STATE.defiLaunched=getProp(sys,‘Defis_Launched’,‘checkbox’);
-return query(CONFIG.db_challenges);
-}).then(function(chPages){
-STATE.challenges={};STATE.allChallengeIds=[];
-for(var i=0;i<chPages.length;i++){
-var p=chPages[i];
-var id=getProp(p,‘ID_Global’,‘number’);
-if(!id)continue;
-STATE.challenges[id]={id:id,name:getProp(p,‘Name’,‘title’)||’’,points:getProp(p,‘Points’,‘number’)||0,spice:getProp(p,‘Spice_Level’,‘formula_string’)||getProp(p,‘Spice_Level’,‘select’)||’’};
-STATE.allChallengeIds.push(id);
+window.toggleValidation=function(pageId,cur){
+var nv=!cur;
+patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
+var a=STATE.players.find(function(x){return x.pageId===pageId;});
+if(a)a.isValidated=nv;
+render();
+showToast(nv?‘Validated!’:‘Removed’,nv?’#00FF88’:’#FF2D4B’);
+});
+};
+
+window.launchDay=function(){
+var btn=document.getElementById(‘btn-launch’);
+if(btn)btn.disabled=true;
+var nonShield=ALL_POWERS.filter(function(p){return p.indexOf(‘Shield’)<0;});
+var shuffled=nonShield.slice().sort(function(){return Math.random()-0.5;});
+var shieldIdx=Math.floor(Math.random()*PLAYERS.length);
+var powers=PLAYERS.map(function(_,i){
+if(i===shieldIdx)return ‘\u{1F6E1}\uFE0F Shield’;
+var off=i<shieldIdx?i:i-1;
+return shuffled[off]||shuffled[0];
+});
+var chain=Promise.resolve();
+STATE.players.forEach(function(a){
+var power=powers[a.playerIndex]||’\u274C None’;
+chain=chain.then(function(){
+return patch(a.pageId,{
+Power_Type:{select:{name:power}},
+Power_Used:{checkbox:false},
+Power_Target:{rich_text:[{text:{content:’’}}]},
+Roulette_Multiplier:{number:1}
+});
+}).then(function(){a.powerType=power;});
+});
+chain.then(function(){
+showToast(‘Powers assigned!’,’#00FF88’);
+render();
+}).catch(function(e){
+showToast(‘Error: ‘+e.message,’#FF2D4B’);
+if(btn)btn.disabled=false;
+});
+};
+
+window.nextDay=function(){
+var btn=document.getElementById(‘btn-nextday’);
+if(btn)btn.disabled=true;
+var chain=Promise.resolve();
+STATE.players.forEach(function(a){
+chain=chain.then(function(){
+var cid=a.rerollId>0?a.rerollId:a.challengeId;
+var ch=STATE.challenges[cid]||{pts:0};
+var pts=a.isValidated?ch.pts:0;
+var bonus=a.isValidated?(a.winStreak>=10?3:a.winStreak>=5?2:a.winStreak>=3?1:0):0;
+return patch(a.pageId,{
+Total_Score:{number:a.totalScore+(a.isValidated?pts+bonus:0)},
+Win_Streak:{number:a.isValidated?a.winStreak+1:0},
+Defis_Reussis:{number:a.isValidated?a.defisReussis+1:a.defisReussis},
+Is_Validated:{checkbox:false},
+Has_Rerolled:{checkbox:false},
+Reroll_Challenge_ID:{number:0},
+Power_Type:{select:{name:’\u274C None’}},
+Power_Used:{checkbox:false},
+Power_Target:{rich_text:[{text:{content:’’}}]},
+Roulette_Multiplier:{number:1},
+Shield_Used_Today:{checkbox:false}
+});
+});
+});
+chain.then(function(){
+return patch(STATE.sysId,{Day_Counter:{number:STATE.dayCounter+1},Defis_Launched:{checkbox:false}});
+}).then(function(){
+showToast(‘Day ‘+(STATE.dayCounter+1)+’ ready!’,’#FF6B1A’);
+return loadAndRender();
+}).catch(function(e){
+showToast(‘Error: ‘+e.message,’#FF2D4B’);
+if(btn)btn.disabled=false;
+});
+};
+
+function render(){
+var powersAssigned=STATE.players.some(function(a){return a.powerType&&a.powerType.indexOf(‘None’)<0&&a.powerType.indexOf(’\u274C’)<0;});
+var html=’’;
+html+=’<div class="header"><span class="header-mascot">\u2699\uFE0F</span><h1>ADMIN PANEL</h1><div class="header-sub">Game Master Only</div><div class="day-badge">Day ‘+STATE.dayCounter+’</div></div>’;
+
+if(!powersAssigned&&!STATE.launched){
+html+=’<button class="btn-launch" id="btn-launch" onclick="launchDay()">LAUNCH DAY</button>’;
+html+=’<div class="warning-box">Assigns random powers. Players then do the Morning Reveal on the main page.</div>’;
 }
+if(powersAssigned&&!STATE.launched){
+html+=’<div class="info-box">Powers assigned! Players are doing the Morning Reveal on the main page.</div>’;
+}
+if(STATE.launched){
+html+=’<div class="warning-box">Next Day saves all scores and resets for Day ‘+(STATE.dayCounter+1)+’.</div>’;
+html+=’<button class="btn-nextday" id="btn-nextday" onclick="nextDay()">NEXT DAY</button>’;
+}
+
+html+=’<div class="section-title">Validations</div>’;
+STATE.players.forEach(function(a){
+var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
+var cid=a.rerollId>0?a.rerollId:a.challengeId;
+var ch=STATE.challenges[cid]||{name:’?’,pts:0};
+var hasPower=a.powerType&&a.powerType.indexOf(‘None’)<0&&a.powerType.indexOf(’\u274C’)<0;
+html+=’<div class="player-row'+(a.isValidated?' validated':'')+'">’
++’<div class="player-left">’
++’<span style="font-size:28px">’+pl.emoji+’</span>’
++’<div class="player-info">’
++’<div class="player-name-row" style="color:'+pl.color+'">’+pl.name+’</div>’
++’<div class="player-challenge-row">’+ch.name+’</div>’
++(hasPower?’<div class="player-power-row" style="color:#FFD700">’+a.powerType+(a.powerUsed?’ (used)’:’’)+’</div>’:’’)
++’</div></div>’
++’<div class="player-right">’
++’<div class="score-box"><div class="score-val">’+a.totalScore+’</div><div class="score-lbl">pts</div></div>’
++’<div class="check-box'+(a.isValidated?' checked':'')+'" onclick="toggleValidation(\''+a.pageId+'\','+a.isValidated+')">’+(a.isValidated?’\u2713’:’’)+’</div>’
++’</div></div>’;
+});
+
+html+=’<div class="divider"></div>’;
+html+=’<a href="/" class="back-link">Back to player view</a>’;
+document.getElementById(‘root’).innerHTML=html;
+}
+
+function loadAndRender(){
+return query(CONFIG.db_system).then(function(sys){
+STATE.sysId=sys[0].id;
+STATE.dayCounter=getProp(sys[0],‘Day_Counter’,‘number’)||1;
+STATE.launched=getProp(sys[0],‘Defis_Launched’,‘checkbox’);
+return query(CONFIG.db_challenges);
+}).then(function(chs){
+chs.forEach(function(p){
+var id=getProp(p,‘ID_Global’,‘number’);
+if(!id)return;
+STATE.challenges[id]={name:getProp(p,‘Name’,‘title’)||’’,pts:getProp(p,‘Points’,‘number’)||0};
+});
 return query(CONFIG.db_assignments);
-}).then(function(asgPages){
-STATE.assignments=asgPages.map(function(p){
+}).then(function(asgs){
+STATE.players=asgs.map(function(p){
 return{
 pageId:p.id,
 playerIndex:getProp(p,‘Player_Index’,‘number’)||0,
@@ -234,418 +236,16 @@ defisReussis:getProp(p,‘Defis_Reussis’,‘number’)||0,
 isValidated:getProp(p,‘Is_Validated’,‘checkbox’),
 challengeId:getProp(p,‘Challenge_ID_Today’,‘formula_number’)||0,
 hasRerolled:getProp(p,‘Has_Rerolled’,‘checkbox’),
-rerollChallengeId:getProp(p,‘Reroll_Challenge_ID’,‘number’)||0,
+rerollId:getProp(p,‘Reroll_Challenge_ID’,‘number’)||0,
 powerType:getProp(p,‘Power_Type’,‘select’)||’’,
-powerTarget:getProp(p,‘Power_Target’,‘text’)||’’,
-powerUsed:getProp(p,‘Power_Used’,‘checkbox’),
-rouletteMultiplier:getProp(p,‘Roulette_Multiplier’,‘number’)||1,
-shieldUsedToday:getProp(p,‘Shield_Used_Today’,‘checkbox’),
-effectBridage:false,effectUpgrade:null
+powerUsed:getProp(p,‘Power_Used’,‘checkbox’)
 };
 }).sort(function(a,b){return a.playerIndex-b.playerIndex;});
-
-```
-STATE.effectLog=[];
-STATE.assignments.forEach(function(asg){
-  if(!asg.powerUsed)return;
-  var pk=getPowerKey(asg.powerType);
-  if(!pk)return;
-  var pw=POWERS[pk];
-  var pl=PLAYERS[asg.playerIndex];
-  if(!pw||!pl)return;
-  STATE.effectLog.push({msg:pl.emoji+' '+pl.name+' used '+pk+(asg.powerTarget?' on '+asg.powerTarget.split('|')[0]:''),color:pw.color});
-  if(pk==='Bridage'){
-    var tgt=asg.powerTarget==='myself'?asg:STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===asg.powerTarget;});
-    if(tgt)tgt.effectBridage=true;
-  }
-  if(pk==='Pas si vite'&&asg.powerTarget){
-    var parts=asg.powerTarget.split('|');
-    var tgt2=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===parts[0];});
-    if(tgt2)tgt2.effectUpgrade=parts[1]||null;
-  }
-});
-
-if(!STATE.defiLaunched){
-  var hasPowers=STATE.assignments.some(function(a){return getPowerKey(a.powerType)!==null;});
-  if(hasPowers){
-    var allDone=STATE.assignments.every(function(a){return a.powerUsed||!getPowerKey(a.powerType);});
-    if(!allDone&&!STATE.revealPhase){
-      var order=[];
-      for(var j=0;j<PLAYERS.length;j++)order.push((j+STATE.dayCounter-1)%PLAYERS.length);
-      STATE.revealOrder=order;
-      var step=0;
-      for(var s=0;s<order.length;s++){
-        var asgS=STATE.assignments.find(function(a){return a.playerIndex===order[s];});
-        if(asgS&&!asgS.powerUsed&&getPowerKey(asgS.powerType))break;
-        step=s+1;
-      }
-      STATE.revealStep=step;
-      STATE.revealPhase=true;
-    }
-  }
-}
-```
-
-});
-}
-
-function getBaseChallenge(asg){return(asg.rerollChallengeId&&asg.rerollChallengeId>0)?asg.rerollChallengeId:asg.challengeId;}
-function getEffectiveChallengeId(asg){
-var playerName=PLAYERS[asg.playerIndex]?PLAYERS[asg.playerIndex].name:null;
-var swapper=STATE.assignments.find(function(a){return a.powerUsed&&getPowerKey(a.powerType)===‘Swap’&&a.powerTarget===playerName&&a.playerIndex!==asg.playerIndex;});
-if(swapper)return getBaseChallenge(swapper);
-if(asg.powerUsed&&getPowerKey(asg.powerType)===‘Swap’&&asg.powerTarget){
-var tgt=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===asg.powerTarget;});
-if(tgt)return getBaseChallenge(tgt);
-}
-return getBaseChallenge(asg);
-}
-
-function getCurrentRevealAsg(){
-var idx=STATE.revealOrder[STATE.revealStep];
-return STATE.assignments.find(function(a){return a.playerIndex===idx;});
-}
-
-window.selectTarget=function(name){
-STATE.selectedTarget=name;
-document.querySelectorAll(’.target-btn’).forEach(function(b){b.classList.toggle(‘selected’,b.dataset.name===name);});
-};
-window.selectUpgradeDir=function(dir,btn){
-STATE.selectedUpgradeDir=dir;
-document.querySelectorAll(’.upgrade-btn’).forEach(function(b){b.classList.remove(‘selected’);});
-btn.classList.add(‘selected’);
-};
-window.activatePower=function(){
-var asg=getCurrentRevealAsg();
-var pk=getPowerKey(asg.powerType);
-var pw=POWERS[pk];
-if(pw.needsTarget&&!STATE.selectedTarget){showToast(‘Select a target!’,’#FF6B1A’);return;}
-if(pw.needsUpDown&&!STATE.selectedUpgradeDir){showToast(‘Choose upgrade or downgrade!’,’#FF6B1A’);return;}
-var target=STATE.selectedTarget;
-if(target&&target!==‘myself’){
-var targetAsg=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
-if(targetAsg&&getPowerKey(targetAsg.powerType)===‘Shield’&&!targetAsg.powerUsed&&!targetAsg.shieldUsedToday){
-STATE.pendingShield={attackerAsg:asg,targetAsg:targetAsg,target:target,upgradeDir:STATE.selectedUpgradeDir};
-showShieldPrompt(asg,targetAsg);return;
-}
-}
-doActivatePower(asg,target,STATE.selectedUpgradeDir);
-};
-function showShieldPrompt(attackerAsg,targetAsg){
-var attacker=PLAYERS[attackerAsg.playerIndex];
-var target=PLAYERS[targetAsg.playerIndex];
-document.getElementById(‘shield-container’).innerHTML=
-‘<div class="shield-overlay"><div class="shield-modal">’
-+’<span class="shield-big-icon">\u{1F6E1}\uFE0F</span>’
-+’<div class="shield-pass-to">Pass phone to</div>’
-+’<div class="shield-player-name" style="color:'+target.color+'">’+target.emoji+’ ‘+target.name+’</div>’
-+’<div class="shield-desc">’+attacker.emoji+’ ‘+attacker.name+’ used ‘+attackerAsg.powerType+’ on you!<br>Activate your Shield?</div>’
-+’<div class="shield-btns">’
-+’<button class="shield-yes-btn" onclick="resolveShield(true)">ACTIVATE!</button>’
-+’<button class="shield-no-btn" onclick="resolveShield(false)">Allow it</button>’
-+’</div></div></div>’;
-}
-window.resolveShield=function(activate){
-document.getElementById(‘shield-container’).innerHTML=’’;
-var pd=STATE.pendingShield;
-var shieldPl=PLAYERS[pd.targetAsg.playerIndex];
-var attackPl=PLAYERS[pd.attackerAsg.playerIndex];
-if(activate){
-patch(pd.targetAsg.pageId,{Power_Used:{checkbox:true},Shield_Used_Today:{checkbox:true}}).then(function(){
-pd.targetAsg.powerUsed=true;pd.targetAsg.shieldUsedToday=true;
-STATE.effectLog.push({msg:shieldPl.emoji+’ ‘+shieldPl.name+’ blocked ‘+attackPl.name+’!’,color:’#00EEFF’});
-showToast(‘Shield activated!’,’#00EEFF’);
-STATE.pendingShield=null;STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
-nextRevealStep();
-});
-} else {
-patch(pd.targetAsg.pageId,{Shield_Used_Today:{checkbox:true}}).then(function(){});
-pd.targetAsg.shieldUsedToday=true;
-STATE.pendingShield=null;
-doActivatePower(pd.attackerAsg,pd.target,pd.upgradeDir);
-}
-};
-function doActivatePower(asg,target,upgradeDir){
-var pk=getPowerKey(asg.powerType);
-var pw=POWERS[pk];
-var pl=PLAYERS[asg.playerIndex];
-var updates={Power_Used:{checkbox:true}};
-if(target)updates.Power_Target={rich_text:[{text:{content:target}}]};
-if(pk===‘Extincteur’&&target&&target!==‘myself’){
-var tgt=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
-if(tgt){patch(tgt.pageId,{Win_Streak:{number:0}}).then(function(){});tgt.winStreak=0;}
-STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ wiped ‘+target+‘s streak!’,color:pw.color});
-}
-if(pk===‘Bridage’){
-var tgt2=target===‘myself’?asg:STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
-if(tgt2)tgt2.effectBridage=true;
-STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ bridaged ‘+(target===‘myself’?‘themselves’:target)+’!’,color:pw.color});
-}
-if(pk===‘Pas si vite’&&target&&upgradeDir){
-var tgt3=STATE.assignments.find(function(a){return PLAYERS[a.playerIndex]&&PLAYERS[a.playerIndex].name===target;});
-if(tgt3)tgt3.effectUpgrade=upgradeDir;
-updates.Power_Target={rich_text:[{text:{content:target+’|’+upgradeDir}}]};
-STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ ‘+upgradeDir+‘d ‘+target+‘s challenge!’,color:pw.color});
-}
-if(pk===‘Roulette’){
-var mult=[0,1,2][Math.floor(Math.random()*3)];
-updates.Roulette_Multiplier={number:mult};asg.rouletteMultiplier=mult;
-STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ rolled x’+mult+’!’,color:mult===2?’#00FF88’:mult===0?’#FF2D4B’:’#FFD700’});
-}
-if(pk===‘Entourloupeur’||pk===‘Swap’||pk===‘Copier-Coller’){
-STATE.effectLog.push({msg:pl.emoji+’ ‘+pl.name+’ used ‘+pk+(target?’ on ‘+target:’’)+’!’,color:pw.color});
-}
-patch(asg.pageId,updates).then(function(){
-asg.powerUsed=true;asg.powerTarget=target||’’;
-STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
-nextRevealStep();
-});
-}
-window.skipPower=function(){nextRevealStep();};
-function nextRevealStep(){
-STATE.revealStep++;STATE.selectedTarget=null;STATE.selectedUpgradeDir=null;
-if(STATE.revealStep>=STATE.revealOrder.length){
-patch(STATE.systemPageId,{Defis_Launched:{checkbox:true}}).then(function(){
-STATE.defiLaunched=true;STATE.revealPhase=false;
-showToast(‘All revealed! Lets go!’,’#00FF88’);
 render();
 });
-return;
-}
-render();
-}
-window.toggleValidation=function(pageId,cur){
-var nv=!cur;
-patch(pageId,{Is_Validated:{checkbox:nv}}).then(function(){
-var a=STATE.assignments.find(function(x){return x.pageId===pageId;});
-if(a)a.isValidated=nv;
-render();
-showToast(nv?‘Challenge done!’:‘Removed’,nv?’#00FF88’:’#FF2D4B’);
-});
-};
-window.reroll=function(pageId){
-var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
-if(!asg||asg.hasRerolled)return;
-var current=getEffectiveChallengeId(asg);
-var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
-if(available.length===0){showToast(‘No other challenges!’,’#FF6B1A’);return;}
-var newId=available[Math.floor(Math.random()*available.length)];
-patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}).then(function(){
-asg.hasRerolled=true;asg.rerollChallengeId=newId;
-render();showToast(‘Rerolled!’,’#BF00FF’);
-});
-};
-window.rerollReveal=function(pageId){
-var asg=STATE.assignments.find(function(a){return a.pageId===pageId;});
-if(!asg||asg.hasRerolled)return;
-var current=getEffectiveChallengeId(asg);
-var available=STATE.allChallengeIds.filter(function(id){return id!==current;});
-if(available.length===0){showToast(‘No other challenges!’,’#FF6B1A’);return;}
-var newId=available[Math.floor(Math.random()*available.length)];
-patch(pageId,{Has_Rerolled:{checkbox:true},Reroll_Challenge_ID:{number:newId}}).then(function(){
-asg.hasRerolled=true;asg.rerollChallengeId=newId;
-showToast(‘Rerolled! Power lost!’,’#BF00FF’);
-nextRevealStep();
-});
-};
-window.suggestChallenge=function(){
-var nameEl=document.getElementById(‘suggest-name’);
-var spiceEl=document.querySelector(‘input[name=“spice”]:checked’);
-if(!nameEl||!nameEl.value.trim()){showToast(‘Enter a name!’,’#FF6B1A’);return;}
-if(!spiceEl){showToast(‘Pick spice level!’,’#FF6B1A’);return;}
-var name=nameEl.value.trim();
-var spice=spiceEl.value;
-var pts=SPICE_PTS[spice]||1;
-var confirm=document.createElement(‘div’);
-confirm.style.cssText=‘position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;’;
-confirm.innerHTML=’<div style="background:#0A0A18;border:1px solid rgba(0,255,136,0.3);border-radius:24px;padding:28px 24px;width:100%;max-width:380px;text-align:center">’
-+’<div style="font-size:40px;margin-bottom:12px">💡</div>’
-+’<div style="font-family:Bangers,cursive;font-size:24px;letter-spacing:2px;color:#00FF88;margin-bottom:8px">CONFIRM SUGGESTION</div>’
-+’<div style="font-weight:900;font-size:16px;margin-bottom:6px">’+name+’</div>’
-+’<div style="font-size:13px;color:#6B7280;margin-bottom:24px">’+spice+’ - ‘+pts+‘pt’+(pts>1?‘s’:’’)+’</div>’
-+’<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">’
-+’<button onclick="this.closest('div[style]').remove()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px;font-family:Bangers,cursive;font-size:18px;color:#6B7280;cursor:pointer">CANCEL</button>’
-+’<button id="confirm-send" style="background:linear-gradient(135deg,#00FF88,#00EEFF);border:none;border-radius:14px;padding:14px;font-family:Bangers,cursive;font-size:18px;color:#000;cursor:pointer">SEND IT!</button>’
-+’</div></div>’;
-document.body.appendChild(confirm);
-confirm.querySelector(’#confirm-send’).onclick=function(){
-confirm.remove();
-var btn=document.getElementById(‘btn-suggest’);if(btn){btn.disabled=true;btn.textContent=‘Sending…’;}
-notionCreate(CONFIG.db_challenges,{Name:{title:[{text:{content:name}}]},Points:{number:pts},Status:{select:{name:‘Pending’}}}).then(function(){
-showToast(‘Suggestion sent!’,’#00FF88’);
-if(nameEl)nameEl.value=’’;if(spiceEl)spiceEl.checked=false;
-if(btn){btn.disabled=false;btn.textContent=‘SUGGEST CHALLENGE’;}
-}).catch(function(e){showToast(‘Error: ‘+e.message,’#FF2D4B’);if(btn){btn.disabled=false;btn.textContent=‘SUGGEST CHALLENGE’;}});
-};
-};
-function toggleSection(id){
-var el=document.getElementById(id);
-if(el)el.classList.toggle(‘open’);
 }
 
-function render(){
-var root=document.getElementById(‘root’);
-
-if(STATE.revealPhase){
-var asg=getCurrentRevealAsg();
-if(!asg){nextRevealStep();return;}
-var player=PLAYERS[asg.playerIndex];
-var effectiveId=getEffectiveChallengeId(asg);
-var challenge=STATE.challenges[effectiveId];
-var pts=challenge?challenge.points:0;
-var pk=getPowerKey(asg.powerType);
-var pw=pk?POWERS[pk]:null;
-var hasPower=pk!==null;
-var otherPlayers=PLAYERS.filter(function(_,i){return i!==asg.playerIndex;});
-var dots=STATE.revealOrder.map(function(pIdx,step){
-var cls=‘progress-dot’+(step<STATE.revealStep?’ done’:’’)+(step===STATE.revealStep?’ active’:’’);
-return ‘<div class="'+cls+'"></div>’;
-}).join(’’);
-var targetHTML=’’;
-if(hasPower&&pw&&!pw.reactive&&pw.needsTarget){
-targetHTML=’<div class="target-section"><div class="target-label">Choose target:</div><div class="target-grid">’;
-if(pw.targetSelf)targetHTML+=’<button class="target-btn '+(STATE.selectedTarget==='myself'?'selected':'')+'" data-name="myself" onclick="selectTarget(\'myself\')"><span style="font-size:22px">’+player.emoji+’</span> Myself</button>’;
-otherPlayers.forEach(function(p){targetHTML+=’<button class="target-btn '+(STATE.selectedTarget===p.name?'selected':'')+'" data-name="'+p.name+'" onclick="selectTarget(\''+p.name+'\')"><span style="font-size:22px">’+p.emoji+’</span> ‘+p.name+’</button>’;});
-targetHTML+=’</div></div>’;
-}
-var upgradeHTML=’’;
-if(hasPower&&pw&&pw.needsUpDown){
-upgradeHTML=’<div class="upgrade-grid">’
-+’<button class="upgrade-btn '+(STATE.selectedUpgradeDir==='upgrade'?'selected':'')+'" style="background:rgba(0,255,136,0.15);color:#00FF88;border:1px solid rgba(0,255,136,0.4)" onclick="selectUpgradeDir(\'upgrade\',this)">UPGRADE</button>’
-+’<button class="upgrade-btn '+(STATE.selectedUpgradeDir==='downgrade'?'selected':'')+'" style="background:rgba(255,45,75,0.15);color:#FF2D4B;border:1px solid rgba(255,45,75,0.4)" onclick="selectUpgradeDir(\'downgrade\',this)">DOWNGRADE</button>’
-+’</div>’;
-}
-root.innerHTML=’’
-+’<div class="header"><span class="header-mascot">\u{1F305}</span><h1>MORNING REVEAL</h1><div class="header-sub">Day ‘+STATE.dayCounter+’</div></div>’
-+’<div class="reveal-phase">’
-+’<div class="reveal-progress">’+dots+’</div>’
-+(STATE.effectLog.length>0?’<div style="margin-bottom:12px">’+STATE.effectLog.map(function(e){return’<div class="effect-item"><span style="color:'+e.color+'">●</span>’+e.msg+’</div>’;}).join(’’)+’</div>’:’’)
-+’<div class="reveal-card" style="border-color:'+player.color+'30">’
-+’<div class="reveal-cover" style="background:linear-gradient(135deg,'+player.colorDark+',transparent)">’
-+’<div class="reveal-step">Step ‘+(STATE.revealStep+1)+’ of ‘+STATE.revealOrder.length+’</div>’
-+’<span class="reveal-emoji-big">’+player.emoji+’</span>’
-+’<div class="reveal-player-name" style="color:'+player.color+'">’+player.name+’</div>’
-+’</div>’
-+’<div class="reveal-body">’
-+’<div class="reveal-challenge-box"><div class="reveal-challenge-label">Your Challenge</div>’
-+’<div class="reveal-challenge-name">’+(challenge?challenge.name:’…’)+’</div>’
-+’<span class="spice-badge">’+(challenge?challenge.spice:’’)+’ - ‘+pts+‘pts</span></div>’
-+(hasPower&&pw?
-‘<div class="reveal-power-box" style="background:'+pw.bg+';border-color:'+pw.border+';color:'+pw.color+'">’
-+’<div class="reveal-power-label">Your Power</div>’
-+’<div class="reveal-power-name">’+asg.powerType+’</div>’
-+’<div class="reveal-power-desc">’+pw.desc+’</div></div>’
-+(!pw.reactive?
-targetHTML+upgradeHTML
-+’<div class="reveal-actions">’
-+’<button class="btn-activate" onclick="activatePower()">USE POWER</button>’
-+’<button class="btn-skip-reveal" onclick="skipPower()">Skip - Save for later</button>’
-+’<button class="btn-reroll-reveal" onclick="rerollReveal(\''+asg.pageId+'\')">Reroll (lose power)</button>’
-+’</div>’
-:’<div class="reveal-actions">’
-+’<button class="btn-skip-reveal" style="background:'+pw.bg+';border:1px solid '+pw.border+';color:'+pw.color+'" onclick="skipPower()">Keep ‘+pk+’ - OK</button>’
-+’<button class="btn-reroll-reveal" onclick="rerollReveal(\''+asg.pageId+'\')">Reroll (lose power)</button>’
-+’</div>’)
-:’<div class="reveal-actions"><button class="btn-skip-reveal" onclick="skipPower()">No power - Continue</button></div>’)
-+’</div></div></div>’;
-return;
-}
-
-var html=’’
-+’<div class="header"><span class="header-mascot">\u{1F336}\uFE0F</span><h1>ZEST YOUR DAY</h1><div class="header-sub">Mexico Edition</div><div class="day-badge">Day ‘+STATE.dayCounter+’</div></div>’;
-
-if(STATE.effectLog.length>0){
-html+=’<div style="padding:0 16px;margin-bottom:16px">’;
-STATE.effectLog.forEach(function(e){html+=’<div class="effect-item"><span style="color:'+e.color+'">●</span>’+e.msg+’</div>’;});
-html+=’</div>’;
-}
-
-html+=’<div class="section-title">Challenges</div><div class="cards">’;
-STATE.assignments.forEach(function(asg){
-var player=PLAYERS[asg.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’,colorDark:‘rgba(255,255,255,0.05)’};
-var effectiveId=getEffectiveChallengeId(asg);
-var ch=STATE.challenges[effectiveId]||{name:’?’,points:0,spice:’’};
-var pk=getPowerKey(asg.powerType);
-var pw=pk?POWERS[pk]:null;
-var hasPower=pk!==null;
-var bonus=asg.winStreak>=10?3:asg.winStreak>=5?2:asg.winStreak>=3?1:0;
-html+=’<div class="card '+(asg.isValidated?'validated':'')+'">’
-+’<div class="card-band" style="background:'+player.color+'"></div>’
-+’<div class="card-cover">’
-+’<span style="font-size:36px">’+player.emoji+’</span>’
-+’<span class="player-name-big" style="color:'+player.color+'">’+player.name+’</span>’
-+(hasPower&&pw?’<span style="position:absolute;right:16px;font-size:13px;font-weight:900;color:'+pw.color+';background:'+pw.bg+';border:1px solid '+pw.border+';border-radius:8px;padding:3px 8px">’+asg.powerType+’</span>’:’’)
-+’</div>’
-+’<div class="card-body">’
-+’<div class="pills">’
-+’<div class="pill pill-streak">\u{1F525} ‘+asg.winStreak+(bonus>0?’ +’+bonus+‘pt’:’’)+’</div>’
-+(asg.rerollChallengeId>0?’<div class="pill" style="background:rgba(191,0,255,0.1);border:1px solid rgba(191,0,255,0.3);color:#e879f9">Rerolled</div>’:’’)
-+(asg.effectBridage?’<div class="pill" style="background:rgba(255,45,75,0.1);border:1px solid rgba(255,45,75,0.3);color:#FF2D4B">x0.5 pts</div>’:’’)
-+(asg.effectUpgrade?’<div class="pill" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:#FFD700">’+(asg.effectUpgrade===‘upgrade’?‘Upgraded’:‘Downgraded’)+’</div>’:’’)
-+’</div>’
-+’<div class="challenge-box">’
-+’<div class="challenge-name">’+ch.name+’</div>’
-+’<span class="spice-badge">’+ch.spice+’ - ‘+ch.points+‘pts</span>’
-+’</div>’
-+’<div class="card-actions">’
-+’<div style="display:flex;align-items:center;gap:8px"><span class="done-label">Done?</span>’
-+’<div class="check-box'+(asg.isValidated?' checked':'')+'" onclick="toggleValidation(\''+asg.pageId+'\','+asg.isValidated+')">’+(asg.isValidated?’\u2713’:’’)+’</div></div>’
-+’<button class=“btn-reroll” onclick=“reroll('’+asg.pageId+’')” ‘+(asg.hasRerolled?‘disabled’:’’)+’>Reroll</button>’
-+’</div></div></div>’;
-});
-html+=’</div>’;
-
-html+=’<div class="divider"></div>’;
-html+=’<div class="section-title">Leaderboard</div>’;
-var lb=STATE.assignments.slice().sort(function(a,b){return (b.totalScore||0)-(a.totalScore||0);});
-var medals=[‘1’,‘2’,‘3’,‘4’];
-html+=’<div class="leaderboard"><div class="lb-card">’;
-html+=’<div class="lb-header-row"><span>#</span><span>Player</span><span>Score</span><span>Streak</span><span>Done</span></div>’;
-lb.forEach(function(a,i){
-var pl=PLAYERS[a.playerIndex]||{name:’?’,emoji:’?’,color:’#fff’};
-html+=’<div class="lb-row">’
-+’<div class="lb-rank">’+(medals[i]||i+1)+’</div>’
-+’<div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">’+pl.emoji+’</span><span class="lb-name" style="color:'+pl.color+'">’+pl.name+’</span></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#FFD700">’+(a.totalScore||0)+’</div><div class="lb-lbl">pts</div></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#FF6B1A">’+(a.winStreak||0)+’</div><div class="lb-lbl">streak</div></div>’
-+’<div class="lb-stat"><div class="lb-val" style="color:#00FF88">’+(a.defisReussis||0)+’</div><div class="lb-lbl">done</div></div>’
-+’</div>’;
-});
-html+=’</div></div>’;
-html+=’<div class="divider"></div>’;
-html+=’<div class="section-title">Suggest</div>’;
-html+=’<div class="collapsible-card">’
-+’<div class="collapsible-header" onclick="toggleSection(\'suggest-body\')">’
-+’<h3 style="color:#00FF88">NEW CHALLENGE</h3><span style="color:var(--muted)">v</span></div>’
-+’<div class="collapsible-body" id="suggest-body"><div class="collapsible-inner">’
-+’<div class="form-group"><label class="form-label">Name</label><input class="form-input" id="suggest-name" type="text" placeholder="e.g. Sing your order..." maxlength="100"/></div>’
-+’<div class="form-group"><label class="form-label">Spice</label><div class="spice-selector">’
-+’<input type="radio" name="spice" id="s1" value="Mild" class="spice-option"><label for="s1"><span class="spice-emoji">\u{1F331}</span>Mild<br><small>1pt</small></label>’
-+’<input type="radio" name="spice" id="s2" value="Spicy" class="spice-option"><label for="s2"><span class="spice-emoji">\u{1F336}\uFE0F</span>Spicy<br><small>2pts</small></label>’
-+’<input type="radio" name="spice" id="s3" value="Hot" class="spice-option"><label for="s3"><span class="spice-emoji">\u{1F525}</span>Hot<br><small>3pts</small></label>’
-+’<input type="radio" name="spice" id="s4" value="Atomic" class="spice-option"><label for="s4"><span class="spice-emoji">\u26A1</span>Atomic<br><small>5pts</small></label>’
-+’</div></div>’
-+’<button class="btn-suggest" id="btn-suggest" onclick="suggestChallenge()">SUGGEST CHALLENGE</button>’
-+’</div></div></div>’;
-
-html+=’<div class="divider"></div>’;
-html+=’<div class="section-title">Rules</div>’;
-html+=’<div class="collapsible-card">’
-+’<div class="collapsible-header" onclick="toggleSection(\'rules-body\')">’
-+’<h3 style="color:#FF2D4B">HOW IT WORKS</h3><span style="color:var(--muted)">v</span></div>’
-+’<div class="collapsible-body" id="rules-body"><div class="collapsible-inner">’
-+’<div class="rule-item"><div class="rule-icon">\u{1F3AF}</div><div><div class="rule-title">One challenge per day</div><div class="rule-desc">Each player gets a unique challenge every day.</div></div></div>’
-+’<div class="rule-item"><div class="rule-icon">\u{1F336}\uFE0F</div><div><div class="rule-title">Spice = Points</div><div class="rule-desc">Mild 1pt, Spicy 2pts, Hot 3pts, Atomic 5pts</div></div></div>’
-+’<div class="rule-item"><div class="rule-icon">\u{1F525}</div><div><div class="rule-title">Streak bonuses</div><div class="rule-desc">3 days +1pt, 5 days +2pts, 10 days +3pts</div></div></div>’
-+’<div class="rule-item"><div class="rule-icon">\u{1F305}</div><div><div class="rule-title">Morning Reveal</div><div class="rule-desc">Each morning, players reveal their challenge and activate powers.</div></div></div>’
-+’<div class="rule-item"><div class="rule-icon">\u{1F6E1}\uFE0F</div><div><div class="rule-title">Shield</div><div class="rule-desc">When targeted, a prompt asks if you want to block the power.</div></div></div>’
-+’<div class="rule-item"><div class="rule-icon">\u{1F3B2}</div><div><div class="rule-title">Reroll</div><div class="rule-desc">Reroll your challenge once — but you LOSE your power!</div></div></div>’
-+’</div></div></div>’;
-
-root.innerHTML=html;
-}
-
-loadData().then(function(){render();}).catch(function(e){
+loadAndRender().catch(function(e){
 document.getElementById(‘root’).innerHTML=’<div style="padding:20px;color:#FF2D4B;font-weight:700">ERROR: ‘+e.message+’</div>’;
 });
 </script>
